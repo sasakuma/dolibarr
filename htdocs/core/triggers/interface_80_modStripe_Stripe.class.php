@@ -35,6 +35,9 @@ require_once DOL_DOCUMENT_ROOT.'/core/triggers/dolibarrtriggers.class.php';
  */
 class InterfaceStripe
 {
+    /**
+     * @var DoliDB Database handler.
+     */
     public $db;
 
     /**
@@ -173,6 +176,10 @@ class InterfaceStripe
 			if ($customer) {
 				$customer->delete();
 			}
+
+			$sql = "DELETE FROM ".MAIN_DB_PREFIX."societe_account";
+			$sql.= " WHERE site='stripe' AND fk_soc = " . $object->id;
+			$this->db->query($sql);
 		}
 
 		// If payment mode is linked to Strip, we update/delete Stripe too

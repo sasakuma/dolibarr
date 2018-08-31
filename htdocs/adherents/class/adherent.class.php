@@ -41,8 +41,16 @@ require_once DOL_DOCUMENT_ROOT.'/categories/class/categorie.class.php';
  */
 class Adherent extends CommonObject
 {
+	/**
+	 * @var string ID to identify managed object
+	 */
 	public $element='member';
+
+	/**
+	 * @var string Name of table without prefix where object is stored
+	 */
 	public $table_element='adherent';
+
 	public $ismultientitymanaged = 1;  // 0=No test on entity, 1=Test with field entity, 2=Test with link by societe
 
 	var $mesgs;
@@ -530,6 +538,13 @@ class Adherent extends CommonObject
 						$luser->lastname=$this->lastname;
 						$luser->pass=$this->pass;
 						$luser->societe_id=$this->societe;
+
+						$luser->birth=$this->birth;
+                                                $luser->address=$this->address;
+                                                $luser->zip=$this->zip;
+                                                $luser->town=$this->town;
+                                                $luser->country_id=$this->country_id;
+                                                $luser->state_id=$this->state_id;
 
 						$luser->email=$this->email;
 						$luser->skype=$this->skype;
