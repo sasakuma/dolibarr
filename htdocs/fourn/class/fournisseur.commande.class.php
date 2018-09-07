@@ -4,11 +4,11 @@
  * Copyright (C) 2005-2012	Regis Houssin			<regis.houssin@capnetworks.com>
  * Copyright (C) 2007		Franky Van Liedekerke	<franky.van.liedekerke@telenet.be>
  * Copyright (C) 2010-2014	Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2010-2016	Philippe Grand			<philippe.grand@atoo-net.com>
+ * Copyright (C) 2010-2018	Philippe Grand			<philippe.grand@atoo-net.com>
  * Copyright (C) 2012-2015  Marcos García           <marcosgdf@gmail.com>
  * Copyright (C) 2013       Florian Henry		  	<florian.henry@open-concept.pro>
  * Copyright (C) 2013       Cédric Salvador         <csalvador@gpcsolutions.fr>
- * Copyright (C) 2018      Nicolas ZABOURI			<info@inovea-conseil.com>
+ * Copyright (C) 2018       Nicolas ZABOURI			<info@inovea-conseil.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,8 +50,16 @@ class CommandeFournisseur extends CommonOrder
 	 */
 	public $table_element='commande_fournisseur';
 
-    public $table_element_line = 'commande_fournisseurdet';
-    public $fk_element = 'fk_commande';
+    /**
+	 * @var int    Name of subtable line
+	 */
+	public $table_element_line = 'commande_fournisseurdet';
+
+    /**
+	 * @var int Field with ID of parent key if this field has a parent
+	 */
+	public $fk_element = 'fk_commande';
+
     public $picto='order';
 
     /**
@@ -71,7 +79,10 @@ class CommandeFournisseur extends CommonOrder
      */
     protected $table_ref_field = 'ref';
 
-    public $id;
+    /**
+	 * @var int ID
+	 */
+	public $id;
 
 	/**
 	 * Supplier order reference
@@ -100,17 +111,20 @@ class CommandeFournisseur extends CommonOrder
      * Delivery date
      */
     public $date_livraison;
+
     public $total_ht;
     public $total_tva;
     public $total_localtax1;   // Total Local tax 1
     public $total_localtax2;   // Total Local tax 2
     public $total_ttc;
     public $source;
+
 	/**
 	 * @deprecated
 	 * @see note_private, note_public
 	 */
     public $note;
+
 	public $note_private;
     public $note_public;
     public $model_pdf;
@@ -136,6 +150,7 @@ class CommandeFournisseur extends CommonOrder
 	 * @var CommandeFournisseurLigne[]
 	 */
 	public $lines = array();
+
 	//Add for supplier_proposal
     public $origin;
     public $origin_id;
@@ -153,34 +168,42 @@ class CommandeFournisseur extends CommonOrder
 	 * Draft status
 	 */
 	const STATUS_DRAFT = 0;
+
 	/**
 	 * Validated status
 	 */
 	const STATUS_VALIDATED = 1;
+
 	/**
 	 * Accepted
 	 */
 	const STATUS_ACCEPTED = 2;
+
 	/**
 	 * Order sent, shipment on process
 	 */
 	const STATUS_ORDERSENT = 3;
+
 	/**
 	 * Received partially
 	 */
 	const STATUS_RECEIVED_PARTIALLY = 4;
+
 	/**
 	 * Received completely
 	 */
 	const STATUS_RECEIVED_COMPLETELY = 5;
+
 	/**
 	 * Order canceled
 	 */
 	const STATUS_CANCELED = 6;
+
 	/**
 	 * Order canceled/never received
 	 */
 	const STATUS_CANCELED_AFTER_ORDER = 7;
+
 	/**
 	 * Refused
 	 */
@@ -209,7 +232,7 @@ class CommandeFournisseur extends CommonOrder
      * 	@param	string	$ref		Ref of object
      *	@return int 		        >0 if OK, <0 if KO, 0 if not found
      */
-    public function fetch($id,$ref='')
+    public function fetch($id, $ref='')
     {
         global $conf;
 
@@ -342,6 +365,7 @@ class CommandeFournisseur extends CommonOrder
      * @param		int		$only_product	Return only physical products
      * @return		int						<0 if KO, >0 if OK
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function fetch_lines($only_product=0)
     {
     	//$result=$this->fetch_lines();
@@ -583,6 +607,7 @@ class CommandeFournisseur extends CommonOrder
      *  @param  int     $billed     1=Billed
      *  @return string				Label of status
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function LibStatut($statut,$mode=0,$billed=0)
     {
     	global $conf, $langs;
@@ -1045,6 +1070,7 @@ class CommandeFournisseur extends CommonOrder
      *	@param	int		$idwarehouse	Id warehouse to use for stock change (not used for supplier orders).
      * 	@return	int						>0 if Ok, <0 if Ko
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function Cancel($user, $idwarehouse=-1)
     {
         global $langs,$conf;
@@ -1107,6 +1133,7 @@ class CommandeFournisseur extends CommonOrder
      * 	@param		string	$comment	Comment
      * 	@return		int			        <0 if KO, >0 if OK
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     public function commande($user, $date, $methode, $comment='')
     {
         global $langs;
@@ -1961,6 +1988,7 @@ class CommandeFournisseur extends CommonOrder
      *
      *	@return 0 if Ok, <0 if Ko
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function get_methodes_commande()
     {
         $sql = "SELECT rowid, libelle";
@@ -2050,6 +2078,7 @@ class CommandeFournisseur extends CommonOrder
      *	@param	string	$comment	Comment
      *	@return	int					<0 if KO, >0 if OK
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function Livraison($user, $date, $type, $comment)
     {
     	global $conf, $langs;
@@ -2165,6 +2194,7 @@ class CommandeFournisseur extends CommonOrder
      *  @param     	int				$notrigger			1=Does not execute triggers, 0= execute triggers
      *	@return     int         						<0 if KO, >0 if OK
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function set_date_livraison($user, $date_livraison, $notrigger=0)
     {
         if ($user->rights->fournisseur->commande->creer)
@@ -2229,6 +2259,7 @@ class CommandeFournisseur extends CommonOrder
      *  @param     	int				$notrigger			1=Does not execute triggers, 0= execute triggers
      *	@return     int         						<0 si ko, >0 si ok
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function set_id_projet($user, $id_projet, $notrigger=0)
     {
         if ($user->rights->fournisseur->commande->creer)
@@ -2685,6 +2716,7 @@ class CommandeFournisseur extends CommonOrder
      *
      *	@return     int         <0 si ko, >0 si ok
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function load_state_board()
     {
         global $conf, $user;
@@ -2727,6 +2759,7 @@ class CommandeFournisseur extends CommonOrder
      *	@param          User	$user   Objet user
      *	@return WorkboardResponse|int 	<0 if KO, WorkboardResponse if OK
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function load_board($user)
     {
         global $conf, $langs;
@@ -2823,7 +2856,7 @@ class CommandeFournisseur extends CommonOrder
 	 *  @param      int			$hidedetails    Hide details of lines
 	 *  @param      int			$hidedesc       Hide description
 	 *  @param      int			$hideref        Hide ref
-         *  @param   null|array  $moreparams     Array to provide more information
+     *  @param      null|array  $moreparams     Array to provide more information
 	 *  @return     int          				0 if KO, 1 if OK
 	 */
 	public function generateDocument($modele, $outputlangs, $hidedetails=0, $hidedesc=0, $hideref=0, $moreparams=null)
@@ -3493,4 +3526,3 @@ class CommandeFournisseurLigne extends CommonOrderLine
         }
     }
 }
-

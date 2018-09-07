@@ -52,15 +52,26 @@ class Commande extends CommonOrder
 	 */
 	public $table_element='commande';
 
+	/**
+	 * @var int    Name of subtable line
+	 */
 	public $table_element_line = 'commandedet';
+
 	public $class_element_line = 'OrderLine';
+
+	/**
+	 * @var int Field with ID of parent key if this field has a parent
+	 */
 	public $fk_element = 'fk_commande';
+
 	public $picto = 'order';
+
 	/**
 	 * 0=No test on entity, 1=Test with field entity, 2=Test with link by societe
 	 * @var int
 	 */
 	public $ismultientitymanaged = 1;
+
 	/**
 	 * 0=Default, 1=View may be restricted to sales representative only if no permission to see all or to company of external user if external user
 	 * @var integer
@@ -87,6 +98,7 @@ class Commande extends CommonOrder
 	 * @var int
 	 */
 	public $statut;
+
 	/**
 	 * Billed
 	 * @var int
@@ -109,21 +121,25 @@ class Commande extends CommonOrder
 	 * @var int
 	 */
 	public $mode_reglement_id;
+
 	/**
 	 * Payment mode code
 	 * @var string
 	 */
 	public $mode_reglement_code;
+
 	/**
 	 * Availability delivery time id
 	 * @var int
 	 */
 	public $availability_id;
+
 	/**
 	 * Availability delivery time code
 	 * @var string
 	 */
 	public $availability_code;
+
 	/**
 	 * Label of availability delivery time. Use it in case translation cannot be found.
 	 * @var string
@@ -133,11 +149,13 @@ class Commande extends CommonOrder
 	public $demand_reason_id;   // Source reason. Why we receive order (after a phone campaign, ...)
 	public $demand_reason_code;
 	public $date;				// Date commande
+
 	/**
 	 * @deprecated
 	 * @see date
 	 */
 	public $date_commande;
+
 	public $date_livraison;	    // Date expected of shipment (date starting shipment, not the reception that occurs some days after)
 	public $fk_remise_except;
 	public $remise_percent;
@@ -436,6 +454,7 @@ class Commande extends CommonOrder
 	 *	@param	int		$idwarehouse	Warehouse ID to use for stock change (Used only if option STOCK_CALCULATE_ON_VALIDATE_ORDER is on)
 	 *	@return	int						<0 if KO, >0 if OK
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function set_draft($user, $idwarehouse=-1)
 	{
 		global $conf,$langs;
@@ -517,6 +536,7 @@ class Commande extends CommonOrder
 	 *	@param      User	$user       Object user that change status
 	 *	@return     int         		<0 if KO, 0 if nothing is done, >0 if OK
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function set_reopen($user)
 	{
 		$error=0;
@@ -870,7 +890,7 @@ class Commande extends CommonOrder
 						$line->fk_unit,
 						$this->element,
 						$line->id
-						);
+					);
 					if ($result < 0)
 					{
 						if ($result != self::STOCK_NOT_ENOUGH_FOR_ORDER)
@@ -1488,6 +1508,7 @@ class Commande extends CommonOrder
 	 *	TODO	Remplacer les appels a cette fonction par generation objet Ligne
 	 *			insere dans tableau $this->products
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function add_product($idproduct, $qty, $remise_percent=0.0, $date_start='', $date_end='')
 	{
 		global $conf, $mysoc;
@@ -1508,56 +1529,57 @@ class Commande extends CommonOrder
 			$localtax2_tx=get_localtax($tva_tx,2,$this->thirdparty,$mysoc,$tva_npr);
 
 			// multiprix
-			if($conf->global->PRODUIT_MULTIPRICES && $this->thirdparty->price_level)
+			if($conf->global->PRODUIT_MULTIPRICES && $this->thirdparty->price_level) {
 				$price = $prod->multiprices[$this->thirdparty->price_level];
-				else
-					$price = $prod->price;
+			} else {
+				$price = $prod->price;
+			}
 
-					$line=new OrderLine($this->db);
+			$line=new OrderLine($this->db);
 
-					$line->context = $this->context;
+			$line->context = $this->context;
 
-					$line->fk_product=$idproduct;
-					$line->desc=$prod->description;
-					$line->qty=$qty;
-					$line->subprice=$price;
-					$line->remise_percent=$remise_percent;
-					$line->vat_src_code=$vat_src_code;
-					$line->tva_tx=$tva_tx;
-					$line->localtax1_tx=$localtax1_tx;
-					$line->localtax2_tx=$localtax2_tx;
-					$line->ref=$prod->ref;
-					$line->libelle=$prod->label;
-					$line->product_desc=$prod->description;
-					$line->fk_unit=$prod->fk_unit;
+			$line->fk_product=$idproduct;
+			$line->desc=$prod->description;
+			$line->qty=$qty;
+			$line->subprice=$price;
+			$line->remise_percent=$remise_percent;
+			$line->vat_src_code=$vat_src_code;
+			$line->tva_tx=$tva_tx;
+			$line->localtax1_tx=$localtax1_tx;
+			$line->localtax2_tx=$localtax2_tx;
+			$line->ref=$prod->ref;
+			$line->libelle=$prod->label;
+			$line->product_desc=$prod->description;
+			$line->fk_unit=$prod->fk_unit;
 
-					// Added by Matelli (See http://matelli.fr/showcases/patchs-dolibarr/add-dates-in-order-lines.html)
-					// Save the start and end date of the line in the object
-					if ($date_start) { $line->date_start = $date_start; }
-					if ($date_end)   { $line->date_end = $date_end; }
+			// Added by Matelli (See http://matelli.fr/showcases/patchs-dolibarr/add-dates-in-order-lines.html)
+			// Save the start and end date of the line in the object
+			if ($date_start) { $line->date_start = $date_start; }
+			if ($date_end)   { $line->date_end = $date_end; }
 
-					$this->lines[] = $line;
+			$this->lines[] = $line;
 
-					/** POUR AJOUTER AUTOMATIQUEMENT LES SOUSPRODUITS a LA COMMANDE
-					 if (! empty($conf->global->PRODUIT_SOUSPRODUITS))
-					 {
-					 $prod = new Product($this->db);
-					 $prod->fetch($idproduct);
-					 $prod -> get_sousproduits_arbo();
-					 $prods_arbo = $prod->get_arbo_each_prod();
-					 if(count($prods_arbo) > 0)
-					 {
-					 foreach($prods_arbo as $key => $value)
-					 {
-					 // print "id : ".$value[1].' :qty: '.$value[0].'<br>';
-					 if(! in_array($value[1],$this->products))
-					 $this->add_product($value[1], $value[0]);
+			/** POUR AJOUTER AUTOMATIQUEMENT LES SOUSPRODUITS a LA COMMANDE
+			 if (! empty($conf->global->PRODUIT_SOUSPRODUITS))
+			 {
+			 $prod = new Product($this->db);
+			 $prod->fetch($idproduct);
+			 $prod -> get_sousproduits_arbo();
+			 $prods_arbo = $prod->get_arbo_each_prod();
+			 if(count($prods_arbo) > 0)
+			 {
+			 foreach($prods_arbo as $key => $value)
+			 {
+			 // print "id : ".$value[1].' :qty: '.$value[0].'<br>';
+			 if(! in_array($value[1],$this->products))
+			 $this->add_product($value[1], $value[0]);
 
-					 }
-					 }
+			 }
+			 }
 
-					 }
-					 **/
+			 }
+			 **/
 		}
 	}
 
@@ -1717,6 +1739,7 @@ class Commande extends CommonOrder
 	 *	@param     int	$idremise			Id de la remise fixe
 	 *	@return    int          			>0 si ok, <0 si ko
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function insert_discount($idremise)
 	{
 		global $langs;
@@ -1794,6 +1817,7 @@ class Commande extends CommonOrder
 	 *	@param		int		$only_product	Return only physical products
 	 *	@return		int						<0 if KO, >0 if OK
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function fetch_lines($only_product=0)
 	{
 		$this->lines=array();
@@ -2020,6 +2044,7 @@ class Commande extends CommonOrder
 	 *
 	 * TODO deprecate, move to Shipping class
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function nb_expedition()
 	{
 		$sql = 'SELECT count(*)';
@@ -2046,6 +2071,7 @@ class Commande extends CommonOrder
 	 *
 	 *	TODO		FONCTION NON FINIE A FINIR
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function stock_array($filtre_statut=self::STATUS_CANCELED)
 	{
 		$this->stocks = array();
@@ -2162,6 +2188,7 @@ class Commande extends CommonOrder
 	 * 	@param     	int			$notrigger	1=Does not execute triggers, 0= execute triggers
 	 *	@return		int 					<0 if KO, >0 if OK
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function set_remise($user, $remise, $notrigger=0)
 	{
 		$remise=trim($remise)?trim($remise):0;
@@ -2228,6 +2255,7 @@ class Commande extends CommonOrder
 	 * 		@param     	int			$notrigger	1=Does not execute triggers, 0= execute triggers
 	 *		@return		int 					<0 if KO, >0 if OK
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function set_remise_absolue($user, $remise, $notrigger=0)
 	{
 		$remise=trim($remise)?trim($remise):0;
@@ -2294,6 +2322,7 @@ class Commande extends CommonOrder
 	 * 	@param     	int		$notrigger	1=Does not execute triggers, 0= execute triggers
 	 *	@return     int         		<0 if KO, >0 if OK
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function set_date($user, $date, $notrigger=0)
 	{
 		if ($user->rights->commande->creer)
@@ -2358,6 +2387,7 @@ class Commande extends CommonOrder
 	 *  @param     	int		$notrigger			1=Does not execute triggers, 0= execute triggers
 	 *	@return     int         				<0 si ko, >0 si ok
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function set_date_livraison($user, $date_livraison, $notrigger=0)
 	{
 		if ($user->rights->commande->creer)
@@ -2427,6 +2457,7 @@ class Commande extends CommonOrder
 	 *  @param    	string	$sortorder		Sort order
 	 *  @return     int             		-1 if KO, array with result if OK
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function liste_array($shortlist=0, $draft=0, $excluser='', $socid=0, $limit=0, $offset=0, $sortfield='c.date_commande', $sortorder='DESC')
 	{
 		global $user;
@@ -2564,6 +2595,7 @@ class Commande extends CommonOrder
 	 *  @param     	int		$notrigger			1=Does not execute triggers, 0= execute triggers
 	 *  @return     int        			 		>0 if ok, <0 if ko
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function demand_reason($demand_reason_id, $notrigger=0)
 	{
 		global $user;
@@ -2635,6 +2667,7 @@ class Commande extends CommonOrder
 	 *  @param     	int		$notrigger		1=Does not execute triggers, 0= execute triggers
 	 *	@return     int             		<0 if KO, >0 if OK
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function set_ref_client($user, $ref_client, $notrigger=0)
 	{
 		if ($user->rights->commande->creer)
@@ -3245,6 +3278,7 @@ class Commande extends CommonOrder
 	 *	@param		User	$user   Object user
 	 *	@return WorkboardResponse|int <0 if KO, WorkboardResponse if OK
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function load_board($user)
 	{
 		global $conf, $langs;
@@ -3333,6 +3367,7 @@ class Commande extends CommonOrder
 	 *  @param      int     $donotshowbilled  Do not show billed status after order status
 	 *  @return     string					  Label of status
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function LibStatut($statut,$billed,$mode,$donotshowbilled=0)
 	{
 		global $langs, $conf;
@@ -3411,7 +3446,6 @@ class Commande extends CommonOrder
 			if ($statut==self::STATUS_CLOSED && ($billed && empty($conf->global->WORKFLOW_BILL_ON_SHIPMENT))) return '<span class="hideonsmartphone">'.$langs->trans('StatusOrderProcessed').$billedtext.' </span>'.img_picto($langs->trans('StatusOrderProcessed').$billedtext,'statut6');
 			if ($statut==self::STATUS_CLOSED && (! empty($conf->global->WORKFLOW_BILL_ON_SHIPMENT))) return '<span class="hideonsmartphone">'.$langs->trans('StatusOrderDelivered').' </span>'.img_picto($langs->trans('StatusOrderDelivered'),'statut6');
 		}
-
 	}
 
 
@@ -3440,60 +3474,60 @@ class Commande extends CommonOrder
 		if (!$user->rights->commande->lire)
 			$option = 'nolink';
 
-			if ($option !== 'nolink')
+		if ($option !== 'nolink')
+		{
+			// Add param to save lastsearch_values or not
+			$add_save_lastsearch_values=($save_lastsearch_value == 1 ? 1 : 0);
+			if ($save_lastsearch_value == -1 && preg_match('/list\.php/',$_SERVER["PHP_SELF"])) $add_save_lastsearch_values=1;
+			if ($add_save_lastsearch_values) $url.='&save_lastsearch_values=1';
+		}
+
+		if ($short) return $url;
+
+		$label = '';
+
+		if ($user->rights->commande->lire) {
+			$label = '<u>'.$langs->trans("ShowOrder").'</u>';
+			$label .= '<br><b>'.$langs->trans('Ref').':</b> '.$this->ref;
+			$label .= '<br><b>'.$langs->trans('RefCustomer').':</b> '.($this->ref_customer ? $this->ref_customer : $this->ref_client);
+			if (!empty($this->total_ht)) {
+				$label .= '<br><b>'.$langs->trans('AmountHT').':</b> '.price($this->total_ht, 0, $langs, 0, -1, -1, $conf->currency);
+			}
+			if (!empty($this->total_tva)) {
+				$label .= '<br><b>'.$langs->trans('VAT').':</b> '.price($this->total_tva, 0, $langs, 0, -1, -1,	$conf->currency);
+			}
+			if (!empty($this->total_ttc)) {
+				$label .= '<br><b>'.$langs->trans('AmountTTC').':</b> '.price($this->total_ttc, 0, $langs, 0, -1, -1, $conf->currency);
+			}
+		}
+
+		$linkclose='';
+		if (empty($notooltip) && $user->rights->commande->lire)
+		{
+			if (! empty($conf->global->MAIN_OPTIMIZEFORTEXTBROWSER))
 			{
-				// Add param to save lastsearch_values or not
-				$add_save_lastsearch_values=($save_lastsearch_value == 1 ? 1 : 0);
-				if ($save_lastsearch_value == -1 && preg_match('/list\.php/',$_SERVER["PHP_SELF"])) $add_save_lastsearch_values=1;
-				if ($add_save_lastsearch_values) $url.='&save_lastsearch_values=1';
+				$label=$langs->trans("ShowOrder");
+				$linkclose.=' alt="'.dol_escape_htmltag($label, 1).'"';
 			}
+			$linkclose.= ' title="'.dol_escape_htmltag($label, 1).'"';
+			$linkclose.=' class="classfortooltip"';
+		}
 
-			if ($short) return $url;
+		$linkstart = '<a href="'.$url.'"';
+		$linkstart.=$linkclose.'>';
+		$linkend='</a>';
 
-			$label = '';
+		if ($option === 'nolink') {
+			$linkstart = '';
+			$linkend = '';
+		}
 
-			if ($user->rights->commande->lire) {
-				$label = '<u>'.$langs->trans("ShowOrder").'</u>';
-				$label .= '<br><b>'.$langs->trans('Ref').':</b> '.$this->ref;
-				$label .= '<br><b>'.$langs->trans('RefCustomer').':</b> '.($this->ref_customer ? $this->ref_customer : $this->ref_client);
-				if (!empty($this->total_ht)) {
-					$label .= '<br><b>'.$langs->trans('AmountHT').':</b> '.price($this->total_ht, 0, $langs, 0, -1, -1, $conf->currency);
-				}
-				if (!empty($this->total_tva)) {
-					$label .= '<br><b>'.$langs->trans('VAT').':</b> '.price($this->total_tva, 0, $langs, 0, -1, -1,	$conf->currency);
-				}
-				if (!empty($this->total_ttc)) {
-					$label .= '<br><b>'.$langs->trans('AmountTTC').':</b> '.price($this->total_ttc, 0, $langs, 0, -1, -1, $conf->currency);
-				}
-			}
+		$result .= $linkstart;
+		if ($withpicto) $result.=img_object(($notooltip?'':$label), $this->picto, ($notooltip?(($withpicto != 2) ? 'class="paddingright"' : ''):'class="'.(($withpicto != 2) ? 'paddingright ' : '').'classfortooltip"'), 0, 0, $notooltip?0:1);
+		if ($withpicto != 2) $result.= $this->ref;
+		$result .= $linkend;
 
-			$linkclose='';
-			if (empty($notooltip) && $user->rights->commande->lire)
-			{
-				if (! empty($conf->global->MAIN_OPTIMIZEFORTEXTBROWSER))
-				{
-					$label=$langs->trans("ShowOrder");
-					$linkclose.=' alt="'.dol_escape_htmltag($label, 1).'"';
-				}
-				$linkclose.= ' title="'.dol_escape_htmltag($label, 1).'"';
-				$linkclose.=' class="classfortooltip"';
-			}
-
-			$linkstart = '<a href="'.$url.'"';
-			$linkstart.=$linkclose.'>';
-			$linkend='</a>';
-
-			if ($option === 'nolink') {
-				$linkstart = '';
-				$linkend = '';
-			}
-
-			$result .= $linkstart;
-			if ($withpicto) $result.=img_object(($notooltip?'':$label), $this->picto, ($notooltip?(($withpicto != 2) ? 'class="paddingright"' : ''):'class="'.(($withpicto != 2) ? 'paddingright ' : '').'classfortooltip"'), 0, 0, $notooltip?0:1);
-			if ($withpicto != 2) $result.= $this->ref;
-			$result .= $linkend;
-
-			return $result;
+		return $result;
 	}
 
 
@@ -3649,6 +3683,7 @@ class Commande extends CommonOrder
 	 *
 	 *	@return     int         <0 si ko, >0 si ok
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function load_state_board()
 	{
 		global $user;
@@ -3815,7 +3850,7 @@ class OrderLine extends CommonOrderLine
 	var $fk_facture;
 
 	/**
-	 * @var string proper name for given parameter
+	 * @var string Order lines label
 	 */
 	public $label;
 
@@ -4280,10 +4315,12 @@ class OrderLine extends CommonOrderLine
 	}
 
 	/**
-	 *	Update totals of order into database
+	 *	Update DB line fields total_xxx
+	 *	Used by migration
 	 *
-	 *	@return		int		<0 if ko, >0 if ok
+	 *	@return		int		<0 if KO, >0 if OK
 	 */
+	// phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function update_total()
 	{
 		$this->db->begin();

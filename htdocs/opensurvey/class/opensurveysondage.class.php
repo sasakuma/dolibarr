@@ -52,6 +52,10 @@ class Opensurveysondage extends CommonObject
 	 * @see description
 	 */
 	public $commentaires;
+
+	/**
+	 * @var string description
+	 */
 	public $description;
 
 	public $mail_admin;
@@ -472,6 +476,7 @@ class Opensurveysondage extends CommonObject
 	 *
 	 * @return 	int		<0 if KO, >0 if OK
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function fetch_lines()
 	{
 		$ret=array();
@@ -629,6 +634,7 @@ class Opensurveysondage extends CommonObject
 	 *	@param      int		$mode        	  0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 *  @return     string					  Label of status
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function LibStatut($status,$mode)
 	{
 	    global $langs, $conf;
@@ -671,5 +677,4 @@ class Opensurveysondage extends CommonObject
 	        if ($status==self::STATUS_CLOSED) return '<span class="hideonsmartphone">'.$langs->trans('Closed').' </span>'.img_picto($langs->trans('Closed'),'statut6');
 	    }
 	}
-
 }

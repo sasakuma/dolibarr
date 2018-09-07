@@ -43,7 +43,10 @@ class Menubase
      */
     public $errors = array();
 
-    public $id;
+    /**
+	 * @var int ID
+	 */
+	public $id;
 
     public $menu_handler;
     public $module;
@@ -694,5 +697,4 @@ class Menubase
             }
         }
    }
-
 }

@@ -34,38 +34,42 @@ class PaymentVarious extends CommonObject
 	 * @var string ID to identify managed object
 	 */
 	public $element='variouspayment';
-	
+
 	/**
 	 * @var string Name of table without prefix where object is stored
 	 */
 	public $table_element='payment_various';
-	
+
 	public $picto = 'bill';
 
 	/**
 	 * @var int ID
 	 */
 	public $id;
-	
-	var $ref;
-	var $tms;
-	var $datep;
-	var $datev;
-	var $sens;
-	var $amount;
-	var $type_payment;
-	var $num_payment;
-	
+
 	/**
-     * @var string proper name for given parameter
+	 * @var string Ref
+	 */
+	public $ref;
+
+	public $tms;
+	public $datep;
+	public $datev;
+	public $sens;
+	public $amount;
+	public $type_payment;
+	public $num_payment;
+
+	/**
+     * @var string various payments label
      */
     public $label;
-    
-	var $accountancy_code;
-	var $fk_project;
-	var $fk_bank;
-	var $fk_user_author;
-	var $fk_user_modif;
+
+	public $accountancy_code;
+	public $fk_project;
+	public $fk_bank;
+	public $fk_user_author;
+	public $fk_user_modif;
 
 
 	/**
@@ -457,6 +461,7 @@ class PaymentVarious extends CommonObject
 	 *  @param  int     $id_bank    Id bank account
 	 *	@return int                 <0 if KO, >0 if OK
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function update_fk_bank($id_bank)
 	{
 		$sql = 'UPDATE '.MAIN_DB_PREFIX.'payment_various SET fk_bank = '.$id_bank;
@@ -492,6 +497,7 @@ class PaymentVarious extends CommonObject
 	 *  @param  int		$mode       0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto
 	 *  @return string      		Libelle
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function LibStatut($statut,$mode=0)
 	{
 		global $langs;
@@ -599,5 +605,4 @@ class PaymentVarious extends CommonObject
 			dol_print_error($this->db);
 		}
 	}
-
 }

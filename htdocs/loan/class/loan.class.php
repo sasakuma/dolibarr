@@ -43,7 +43,11 @@ class Loan extends CommonObject
 
 	public $picto = 'bill';
 
+	/**
+	 * @var int ID
+	 */
 	public $rowid;
+
 	public $datestart;
 	public $dateend;
 	public $label;
@@ -286,7 +290,6 @@ class Loan extends CommonObject
 			$this->db->rollback();
 			return -1;
 		}
-
 	}
 
 
@@ -340,6 +343,7 @@ class Loan extends CommonObject
 	 *  @param	User	$user	Object user making change
 	 *  @return	int				<0 if KO, >0 if OK
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function set_paid($user)
 	{
 		$sql = "UPDATE ".MAIN_DB_PREFIX."loan SET";
@@ -374,6 +378,7 @@ class Loan extends CommonObject
 	 *  @param  integer	$alreadypaid	0=No payment already done, >0=Some payments were already done (we recommand to put here amount payed if you have it, 1 otherwise)
 	 *  @return string					Label
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function LibStatut($statut,$mode=0,$alreadypaid=-1)
 	{
 		global $langs;

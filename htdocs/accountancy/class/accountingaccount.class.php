@@ -37,6 +37,9 @@ class AccountingAccount extends CommonObject
 	 */
 	public $table_element='accounting_account';
 
+	/**
+	 * @var string String with name of icon for myobject. Must be the part after the 'object_' into object_myobject.png
+	 */
 	public $picto = 'billr';
 
 	/**
@@ -71,14 +74,19 @@ class AccountingAccount extends CommonObject
 	 */
 	public $id;
 
-	var $rowid;
-	var $datec; // Creation date
-	var $fk_pcg_version;
-	var $pcg_type;
-	var $pcg_subtype;
-	var $account_number;
-	var $account_parent;
-	var $account_category;
+	/**
+	 * @var int ID
+	 */
+	public $rowid;
+
+	public $datec; // Creation date
+	public $fk_pcg_version;
+	public $pcg_type;
+	public $pcg_subtype;
+	public $account_number;
+	public $account_parent;
+	public $account_category;
+	public $status;
 
     /**
      * @var string Label of account
@@ -95,8 +103,7 @@ class AccountingAccount extends CommonObject
      */
     public $fk_user_modif;
 
-    var $active;       // duplicate with status
-	var $status;
+    public $active;       // duplicate with status
 
 
 	/**
@@ -534,6 +541,7 @@ class AccountingAccount extends CommonObject
 	 * @param  int  $id         Id
 	 * @return int              <0 if KO, >0 if OK
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function account_desactivate($id)
     {
 		$result = $this->checkUsage();
@@ -567,6 +575,7 @@ class AccountingAccount extends CommonObject
 	 * @param  int  $id         Id
 	 * @return int              <0 if KO, >0 if OK
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function account_activate($id)
     {
 		$this->db->begin();
@@ -606,6 +615,7 @@ class AccountingAccount extends CommonObject
 	 *  @param  int     $mode       0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 *  @return string              Label of status
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function LibStatut($statut,$mode=0)
 	{
 		global $langs;

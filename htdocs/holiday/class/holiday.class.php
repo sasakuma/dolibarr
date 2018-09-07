@@ -36,12 +36,12 @@ class Holiday extends CommonObject
 	 * @var string ID to identify managed object
 	 */
 	public $element='holiday';
-	
+
 	/**
 	 * @var string Name of table without prefix where object is stored
 	 */
 	public $table_element='holiday';
-	
+
 	public $ismultientitymanaged = 0;	// 0=No test on entity, 1=Test with field entity, 2=Test with link by societe
 	var $fk_element = 'fk_holiday';
 	public $picto = 'holiday';
@@ -52,9 +52,18 @@ class Holiday extends CommonObject
 	 */
 	var $rowid;
 
-	var $fk_user;
+	/**
+	 * @var int User ID
+	 */
+	public $fk_user;
+
 	var $date_create='';
-	var $description;
+
+	/**
+	 * @var string description
+	 */
+	public $description;
+
 	var $date_debut='';			// Date start in PHP server TZ
 	var $date_fin='';			// Date end in PHP server TZ
 	var $date_debut_gmt='';		// Date start in GMT
@@ -929,6 +938,7 @@ class Holiday extends CommonObject
 	 *  @param		date	$startdate	Date holiday should start
 	 *	@return     string      		Label
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function LibStatut($statut, $mode=0, $startdate='')
 	{
 		global $langs;
@@ -1018,7 +1028,6 @@ class Holiday extends CommonObject
 
 		$statut.= '</select>'."\n";
 		print $statut;
-
 	}
 
 	/**
@@ -1248,7 +1257,6 @@ class Holiday extends CommonObject
 				return -1;
 			}
 		}
-
 	}
 
 	/**
@@ -1326,7 +1334,6 @@ class Holiday extends CommonObject
 		$sql.= " WHERE fk_user = '".$user_id."'";
 
 		$this->db->query($sql);
-
 	}
 
 
@@ -1588,6 +1595,7 @@ class Holiday extends CommonObject
 	 *
 	 * @return  array       Array of user ids
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function fetch_users_approver_holiday()
 	{
 		$users_validator=array();
@@ -1881,5 +1889,4 @@ class Holiday extends CommonObject
 		$this->halfday=0;
 		$this->fk_type=1;
 	}
-
 }

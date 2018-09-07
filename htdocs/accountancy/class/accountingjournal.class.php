@@ -30,20 +30,36 @@ class AccountingJournal extends CommonObject
 	 * @var string ID to identify managed object
 	 */
 	public $element='accounting_journal';
-	
+
 	/**
 	 * @var string Name of table without prefix where object is stored
 	 */
 	public $table_element='accounting_journal';
-	
+
+	/**
+	 * @var int Field with ID of parent key if this field has a parent
+	 */
 	public $fk_element = '';
+
 	public $ismultientitymanaged = 0;	// 0=No test on entity, 1=Test with field entity, 2=Test with link by societe
+
+	/**
+	 * @var string String with name of icon for myobject. Must be the part after the 'object_' into object_myobject.png
+	 */
 	public $picto = 'generic';
 
-	var $rowid;
+	/**
+	 * @var int ID
+	 */
+	public $rowid;
 
 	public $code;
-	public $label;
+
+	/**
+     * @var string Accounting Journal label
+     */
+    public $label;
+
 	public $nature;		// 1:various operations, 2:sale, 3:purchase, 4:bank, 5:expense-report, 8:inventory, 9: has-new
 	public $active;
 
@@ -262,6 +278,7 @@ class AccountingJournal extends CommonObject
 	 *  @param  int		$mode		  	0=libelle long, 1=libelle court
 	 *  @return string 				   	Label of type
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function LibType($nature,$mode=0)
 	{
 		global $langs;

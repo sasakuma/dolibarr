@@ -60,14 +60,22 @@ class CommandeFournisseurDispatch extends CommonObject
 	public $table_element='commande_fournisseur_dispatch';		//!< Name of table without prefix where object is stored
 	public $lines=array();
 
-    public $id;
+    /**
+	 * @var int ID
+	 */
+	public $id;
 
 	public $fk_commande;
 	public $fk_product;
 	public $fk_commandefourndet;
 	public $qty;
 	public $fk_entrepot;
+
+	/**
+	 * @var int User ID
+	 */
 	public $fk_user;
+
 	public $datec='';
 	public $comment;
 	public $status;
@@ -486,6 +494,7 @@ class CommandeFournisseurDispatch extends CommonObject
      *  @param  int		$mode       0=Long label, 1=Short label, 2=Picto + Short label, 3=Picto, 4=Picto + Long label, 5=Short label + Picto
      *  @return string				Label of status
      */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function LibStatut($statut,$mode=0)
     {
         global $langs;
@@ -547,8 +556,6 @@ class CommandeFournisseurDispatch extends CommonObject
 		$this->batch='';
 		$this->eatby='';
 		$this->sellby='';
-
-
 	}
 
 	/**
@@ -646,5 +653,4 @@ class CommandeFournisseurDispatch extends CommonObject
 			return - 1;
 		}
 	}
-
 }

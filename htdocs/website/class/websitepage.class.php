@@ -39,12 +39,12 @@ class WebsitePage extends CommonObject
 	 * @var string Id to identify managed objects
 	 */
 	public $element = 'websitepage';
-	
+
 	/**
 	 * @var string Name of table without prefix where object is stored
 	 */
 	public $table_element = 'website_page';
-	
+
 	/**
 	 * @var string String with name of icon for websitepage. Must be the part after the 'object_' into object_myobject.png
 	 */
@@ -55,7 +55,12 @@ class WebsitePage extends CommonObject
 	public $aliasalt;
 	public $type_container;
 	public $title;
+
+	/**
+	 * @var string description
+	 */
 	public $description;
+
 	public $keywords;
 	public $htmlheader;
 	public $content;
@@ -474,6 +479,7 @@ class WebsitePage extends CommonObject
 	 *  @param  int		$mode          	0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 *  @return string 			       	Label of status
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function LibStatut($status,$mode=0)
 	{
 		global $langs;
@@ -538,5 +544,4 @@ class WebsitePage extends CommonObject
 		$this->date_creation = $now - (24 * 30 * 3600);
 		$this->date_modification = $now - (24 * 7 * 3600);
 	}
-
 }

@@ -40,22 +40,36 @@ class EcmFiles extends CommonObject
 	 * @var string Id to identify managed objects
 	 */
 	public $element = 'ecmfiles';
-	
+
 	/**
 	 * @var string Name of table without prefix where object is stored
 	 */
 	public $table_element = 'ecm_files';
-	
+
 	public $picto = 'generic';
 
-	public $ref;					// hash of file path
+	/**
+	 * @var string Ref hash of file path
+	 */
+	public $ref;
+
 	public $label;					// hash of file content (md5_file(dol_osencode($destfull))
 	public $share;					// hash for file sharing, empty by default (example: getRandomPassword(true))
+
+	/**
+	 * @var int Entity
+	 */
 	public $entity;
+
 	public $filename;
 	public $filepath;
 	public $fullpath_orig;
+
+	/**
+	 * @var string description
+	 */
 	public $description;
+
 	public $keywords;
 	public $cover;
 	public $position;
@@ -68,7 +82,7 @@ class EcmFiles extends CommonObject
 	public $acl;
 	public $src_object_type;
 	public $src_object_id;
-	
+
 
 	/**
 	 * Constructor
@@ -339,7 +353,7 @@ class EcmFiles extends CommonObject
 		else {
 			$sql .= ' AND t.rowid = '.$this->db->escape($id);					// rowid already unique
 		}
-		
+
 		$this->db->plimit(1);	// When we search on src or on hash of content (hashforfile) to solve hash conflict when several files has same content, we take first one only
 		$this->db->order('t.rowid', 'ASC');
 
@@ -786,6 +800,7 @@ class EcmFiles extends CommonObject
 	 *  @param  int		$mode          	0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 5=Long label + Picto
 	 *  @return string 			       	Label of status
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	static function LibStatut($status,$mode=0)
 	{
 		global $langs;
@@ -830,11 +845,21 @@ class EcmFiles extends CommonObject
 class EcmfilesLine
 {
 	public $label;
+
+	/**
+	 * @var int Entity
+	 */
 	public $entity;
+
 	public $filename;
 	public $filepath;
 	public $fullpath_orig;
+
+	/**
+	 * @var string description
+	 */
 	public $description;
+
 	public $keywords;
 	public $cover;
 	public $position;

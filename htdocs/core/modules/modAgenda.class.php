@@ -113,9 +113,9 @@ class modAgenda extends DolibarrModules
 
 		// Cronjobs
 		//------------
+		$datestart=dol_now();
 		$this->cronjobs = array(
-			0=>array('label'=>'SendEmailsReminders', 'jobtype'=>'method', 'class'=>'comm/action/class/actioncomm.class.php', 'objectname'=>'ActionComm', 'method'=>'sendEmailsReminder', 'parameters'=>'', 'comment'=>'SendEMailsReminder', 'frequency'=>10, 'unitfrequency'=>60, 'priority'=>10, 'status'=>1, 'test'=>'1'),
-		    // 1=>array('label'=>'My label', 'jobtype'=>'command', 'command'=>'', 'parameters'=>'', 'comment'=>'Comment', 'frequency'=>1, 'unitfrequency'=>3600*24)
+			0=>array('label'=>'SendEmailsReminders', 'jobtype'=>'method', 'class'=>'comm/action/class/actioncomm.class.php', 'objectname'=>'ActionComm', 'method'=>'sendEmailsReminder', 'parameters'=>'', 'comment'=>'SendEMailsReminder', 'frequency'=>10, 'unitfrequency'=>60, 'priority'=>10, 'status'=>1, 'test'=>'1', 'datestart'=>$datestart),
 		);
 
 		// Permissions
@@ -419,7 +419,5 @@ class modAgenda extends DolibarrModules
 		if (empty($user->rights->societe->client->voir)) $this->export_sql_end[$r] .=' AND (sc.fk_user = '.(empty($user)?0:$user->id).' OR ac.fk_soc IS NULL)';
 		if (empty($user->rights->agenda->allactions->read)) $this->export_sql_end[$r] .=' AND acr.fk_element = '.(empty($user)?0:$user->id);
 		$this->export_sql_end[$r] .=' ORDER BY ac.datep';
-
 	}
-
 }

@@ -39,6 +39,7 @@ class BlockedLog
 	 * @var int
 	 */
 	public $id;
+
 	/**
 	 * Entity
 	 * @var int
@@ -46,7 +47,7 @@ class BlockedLog
 	public $entity;
 
 	public $error = '';
-	
+
 	/**
 	 * @var string[] Error codes (or messages)
 	 */
@@ -283,7 +284,6 @@ class BlockedLog
 		}
 
 		return '<i class="opacitymedium">'.$langs->trans('ImpossibleToReloadObject', $this->element, $this->fk_object).'</i>';
-
 	}
 
 	/**
@@ -676,7 +676,6 @@ class BlockedLog
 			$this->error=$this->db->error();
 			return -1;
 		}
-
 	}
 
 
@@ -716,8 +715,6 @@ class BlockedLog
 		if($res===false) return false;
 
 		return true;
-
-
 	}
 
 	/**
@@ -1060,5 +1057,4 @@ class BlockedLog
 
 		return $result;
 	}
-
 }

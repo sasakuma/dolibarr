@@ -37,14 +37,14 @@ class ImportXlsx extends ModeleImports
      * @var DoliDB Database handler.
      */
     public $db;
-    
+
     var $datatoimport;
 
 	/**
 	 * @var string Error code (or message)
 	 */
 	public $error='';
-	
+
 	/**
 	 * @var string[] Error codes (or messages)
 	 */
@@ -54,29 +54,29 @@ class ImportXlsx extends ModeleImports
 	 * @var int ID
 	 */
 	public $id;
-	
+
 	/**
-     * @var string proper name for given parameter
+     * @var string label
      */
     public $label;
-    
-	var $extension;    // Extension of files imported by driver
-	var $version;      // Version of driver
 
-	var $label_lib;    // Label of external lib used by driver
-	var $version_lib;  // Version of external lib used by driver
+	public $extension;    // Extension of files imported by driver
+	public $version;      // Version of driver
 
-	var $separator;
+	public $label_lib;    // Label of external lib used by driver
+	public $version_lib;  // Version of external lib used by driver
 
-    var $file;      // Path of file
-	var $handle;    // Handle fichier
+	public $separator;
 
-	var $cacheconvert=array();      // Array to cache list of value found after a convertion
-	var $cachefieldtable=array();   // Array to cache list of value found into fields@tables
+    public $file;      // Path of file
+	public $handle;    // Handle fichier
 
-	var $workbook; // temporary import file
-	var $record; // current record
-	var $headers;
+	public $cacheconvert=array();      // Array to cache list of value found after a convertion
+	public $cachefieldtable=array();   // Array to cache list of value found into fields@tables
+
+	public $workbook; // temporary import file
+	public $record; // current record
+	public $headers;
 
 
 	/**
@@ -121,6 +121,7 @@ class ImportXlsx extends ModeleImports
 	 * 	@param	Translate	$outputlangs		Output language
 	 *  @return	string
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function write_header_example($outputlangs)
 	{
 	  global $user,$conf,$langs;
@@ -153,6 +154,7 @@ class ImportXlsx extends ModeleImports
 	 *  @param	array		$headerlinefields	Array of fields name
 	 * 	@return	string
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function write_title_example($outputlangs,$headerlinefields)
 	{
 		global $conf;
@@ -177,6 +179,7 @@ class ImportXlsx extends ModeleImports
 	 * 	@param	array		$contentlinevalues	Array of lines
 	 * 	@return	string
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function write_record_example($outputlangs,$contentlinevalues)
 	{
 		$col = 0;
@@ -195,6 +198,7 @@ class ImportXlsx extends ModeleImports
 	 * 	@param	Translate	$outputlangs		Output language
 	 *  @return	string
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function write_footer_example($outputlangs)
 	{
 		// return te file content as a string
@@ -217,6 +221,7 @@ class ImportXlsx extends ModeleImports
 	 *	@param	string	$file		Path of filename
 	 *	@return	int					<0 if KO, >=0 if OK
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function import_open_file($file)
 	{
 		global $langs;
@@ -239,6 +244,7 @@ class ImportXlsx extends ModeleImports
 	 *	@param	string	$file		Path of filename
 	 * 	@return		int		<0 if KO, >=0 if OK
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function import_get_nb_of_lines($file)
 	{
 		$reader = new PHPExcel_Reader_Excel2007();
@@ -258,6 +264,7 @@ class ImportXlsx extends ModeleImports
 	 *
 	 * 	@return		int		<0 if KO, >=0 if OK
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function import_read_header()
 	{
 		// This is not called by the import code !!!
@@ -275,6 +282,7 @@ class ImportXlsx extends ModeleImports
 	 *
 	 * 	@return		Array		Array of field values. Data are UTF8 encoded. [fieldpos] => (['val']=>val, ['type']=>-1=null,0=blank,1=not empty string)
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function import_read_record()
 	{
 		global $conf;
@@ -298,6 +306,7 @@ class ImportXlsx extends ModeleImports
 	 *
 	 *  @return	integer
 	 */
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function import_close_file()
 	{
 		$this->workbook->disconnectWorksheets();
@@ -316,7 +325,8 @@ class ImportXlsx extends ModeleImports
 	 * @param	array	$updatekeys						Array of keys to use to try to do an update first before insert. This field are defined into the module descriptor.
 	 * @return	int										<0 if KO, >0 if OK
 	 */
-	// What is this doing here ? it is common to all imports, is should be in the parent class
+    // What is this doing here ? it is common to all imports, is should be in the parent class
+    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function import_insert($arrayrecord,$array_match_file_to_database,$objimport,$maxfields,$importid,$updatekeys)
 	{
 		global $langs,$conf,$user;
@@ -782,5 +792,4 @@ class ImportXlsx extends ModeleImports
 
 		return 1;
 	}
-
 }
