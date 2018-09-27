@@ -29,13 +29,30 @@ require_once DOL_DOCUMENT_ROOT .'/core/modules/supplier_payment/modules_supplier
  */
 class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
 {
-	var $version='dolibarr';		// 'development', 'experimental', 'dolibarr'
-	var $prefix='SPAY';
+	/**
+     * Dolibarr version of the loaded document
+     * @public string
+     */
+	public $version = 'dolibarr';		// 'development', 'experimental', 'dolibarr'
+
+	public $prefix='SPAY';
+
 	/**
 	 * @var string Error code (or message)
 	 */
 	public $error='';
-	var $nom='Bronan';
+
+	/**
+	 * @var string Nom du modele
+	 * @deprecated
+	 * @see name
+	 */
+	public $nom='Bronan';
+
+	/**
+	 * @var string model name
+	 */
+	public $name='Bronan';
 
 
     /**
@@ -138,6 +155,7 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Return next free value
 	 *
@@ -145,9 +163,9 @@ class mod_supplier_payment_bronan extends ModeleNumRefSupplierPayments
 	 * 	@param	string		$objforref	Object for number to search
 	 *  @return string      			Next free value
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function payment_get_num($objsoc,$objforref)
 	{
+        // phpcs:enable
 		return $this->getNextValue($objsoc,$objforref);
 	}
 }

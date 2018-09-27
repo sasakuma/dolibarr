@@ -45,17 +45,23 @@ class CommActionRapport
 	 */
 	public $description;
 
-	var $date_edition;
-	var $year;
-	var $month;
+	public $date_edition;
 
-	var $title;
-	var $subject;
+	public $year;
 
-	var $marge_gauche;
-	var	$marge_droite;
-	var	$marge_haute;
-	var	$marge_basse;
+	public $month;
+
+	public $title;
+
+	public $subject;
+
+	public $marge_gauche;
+
+	public	$marge_droite;
+
+	public	$marge_haute;
+
+	public	$marge_basse;
 
 
 	/**
@@ -67,9 +73,10 @@ class CommActionRapport
 	 */
 	function __construct($db, $month, $year)
 	{
-		global $conf,$langs;
-		$langs->load("commercial");
-		$langs->load("projects");
+		global $conf, $langs;
+
+		// Load translation files required by the page
+        $langs->loadLangs(array("commercial","projects"));
 
 		$this->db = $db;
 		$this->description = "";
@@ -92,6 +99,7 @@ class CommActionRapport
         $this->subject=$langs->transnoentitiesnoconv("ActionsReport").' '.$this->year."-".$this->month;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
      *      Write the object to document file to disk
      *
@@ -100,9 +108,9 @@ class CommActionRapport
      *      @param  Translate	$outputlangs    Lang object for output language
      *      @return int             			1=OK, 0=KO
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function write_file($socid = 0, $catid = 0, $outputlangs='')
 	{
+        // phpcs:enable
 		global $user,$conf,$langs,$hookmanager;
 
 		if (! is_object($outputlangs)) $outputlangs=$langs;

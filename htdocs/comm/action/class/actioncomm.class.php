@@ -35,9 +35,9 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/commonobject.class.php';
 class ActionComm extends CommonObject
 {
     /**
-	 * @var string ID to identify managed object
-	 */
-	public $element='action';
+     * @var string ID to identify managed object
+     */
+    public $element='action';
 
     /**
      * @var string Name of table without prefix where object is stored
@@ -47,9 +47,9 @@ class ActionComm extends CommonObject
     public $table_rowid = 'id';
 
     /**
-	 * @var string String with name of icon for myobject. Must be the part after the 'object_' into object_myobject.png
-	 */
-	public $picto='action';
+     * @var string String with name of icon for myobject. Must be the part after the 'object_' into object_myobject.png
+     */
+    public $picto = 'action';
 
     /**
      * 0=No test on entity, 1=Test with field entity, 2=Test with link by societe
@@ -67,7 +67,7 @@ class ActionComm extends CommonObject
      * Id of the event
      * @var int
      */
-	public $id;
+	  public $id;
 
     /**
      * Id of the event. Use $id as possible
@@ -698,14 +698,15 @@ class ActionComm extends CommonObject
 		}
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     /**
      *    Initialize this->userassigned array with list of id of user assigned to event
      *
      *    @return	int				<0 if KO, >0 if OK
      */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function fetch_userassigned()
     {
+        // phpcs:enable
         $sql ="SELECT fk_actioncomm, element_type, fk_element, answer_status, mandatory, transparency";
 		$sql.=" FROM ".MAIN_DB_PREFIX."actioncomm_resources";
 		$sql.=" WHERE element_type = 'user' AND fk_actioncomm = ".$this->id;
@@ -1021,6 +1022,7 @@ class ActionComm extends CommonObject
         }
     }
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     /**
      * Load indicators for dashboard (this->nbtodo and this->nbtodolate)
      *
@@ -1028,10 +1030,10 @@ class ActionComm extends CommonObject
      * @param	int		$load_state_board	Charge indicateurs this->nb de tableau de bord
      * @return WorkboardResponse|int <0 if KO, WorkboardResponse if OK
      */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function load_board($user, $load_state_board=0)
     {
-    	global $conf, $langs;
+        // phpcs:enable
+        global $conf, $langs;
 
     	if(empty($load_state_board)) $sql = "SELECT a.id, a.datep as dp";
     	else {
@@ -1146,6 +1148,7 @@ class ActionComm extends CommonObject
         return $this->LibStatut($this->percentage,$mode,$hidenastatus,$this->datep);
     }
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     /**
      *		Return label of action status
      *
@@ -1155,66 +1158,66 @@ class ActionComm extends CommonObject
      *      @param  int     $datestart      Date start of event
      *    	@return string		    		Label
      */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function LibStatut($percent,$mode,$hidenastatus=0,$datestart='')
     {
+        // phpcs:enable
         global $langs;
 
         if ($mode == 0)
         {
         	if ($percent==-1 && ! $hidenastatus) return $langs->trans('StatusNotApplicable');
-        	else if ($percent==0) return $langs->trans('StatusActionToDo').' (0%)';
-        	else if ($percent > 0 && $percent < 100) return $langs->trans('StatusActionInProcess').' ('.$percent.'%)';
-        	else if ($percent >= 100) return $langs->trans('StatusActionDone').' (100%)';
+        	elseif ($percent==0) return $langs->trans('StatusActionToDo').' (0%)';
+        	elseif ($percent > 0 && $percent < 100) return $langs->trans('StatusActionInProcess').' ('.$percent.'%)';
+        	elseif ($percent >= 100) return $langs->trans('StatusActionDone').' (100%)';
         }
-        else if ($mode == 1)
+        elseif ($mode == 1)
         {
         	if ($percent==-1 && ! $hidenastatus) return $langs->trans('StatusNotApplicable');
-        	else if ($percent==0) return $langs->trans('StatusActionToDo');
-        	else if ($percent > 0 && $percent < 100) return $percent.'%';
-        	else if ($percent >= 100) return $langs->trans('StatusActionDone');
+        	elseif ($percent==0) return $langs->trans('StatusActionToDo');
+        	elseif ($percent > 0 && $percent < 100) return $percent.'%';
+        	elseif ($percent >= 100) return $langs->trans('StatusActionDone');
         }
-        else if ($mode == 2)
+        elseif ($mode == 2)
         {
         	if ($percent==-1 && ! $hidenastatus) return img_picto($langs->trans('StatusNotApplicable'),'statut9').' '.$langs->trans('StatusNotApplicable');
-        	else if ($percent==0) return img_picto($langs->trans('StatusActionToDo'),'statut1').' '.$langs->trans('StatusActionToDo');
-        	else if ($percent > 0 && $percent < 100) return img_picto($langs->trans('StatusActionInProcess'),'statut3').' '. $percent.'%';
-        	else if ($percent >= 100) return img_picto($langs->trans('StatusActionDone'),'statut6').' '.$langs->trans('StatusActionDone');
+        	elseif ($percent==0) return img_picto($langs->trans('StatusActionToDo'),'statut1').' '.$langs->trans('StatusActionToDo');
+        	elseif ($percent > 0 && $percent < 100) return img_picto($langs->trans('StatusActionInProcess'),'statut3').' '. $percent.'%';
+        	elseif ($percent >= 100) return img_picto($langs->trans('StatusActionDone'),'statut6').' '.$langs->trans('StatusActionDone');
         }
-        else if ($mode == 3)
+        elseif ($mode == 3)
         {
         	if ($percent==-1 && ! $hidenastatus) return img_picto($langs->trans("Status").': '.$langs->trans('StatusNotApplicable'),'statut9');
-        	else if ($percent==0) return img_picto($langs->trans("Status").': '.$langs->trans('StatusActionToDo').' (0%)','statut1');
-        	else if ($percent > 0 && $percent < 100) return img_picto($langs->trans("Status").': '.$langs->trans('StatusActionInProcess').' ('.$percent.'%)','statut3');
-        	else if ($percent >= 100) return img_picto($langs->trans("Status").': '.$langs->trans('StatusActionDone').' (100%)','statut6');
+        	elseif ($percent==0) return img_picto($langs->trans("Status").': '.$langs->trans('StatusActionToDo').' (0%)','statut1');
+        	elseif ($percent > 0 && $percent < 100) return img_picto($langs->trans("Status").': '.$langs->trans('StatusActionInProcess').' ('.$percent.'%)','statut3');
+        	elseif ($percent >= 100) return img_picto($langs->trans("Status").': '.$langs->trans('StatusActionDone').' (100%)','statut6');
         }
-        else if ($mode == 4)
+        elseif ($mode == 4)
         {
         	if ($percent==-1 && ! $hidenastatus) return img_picto($langs->trans('StatusNotApplicable'),'statut9').' '.$langs->trans('StatusNotApplicable');
-        	else if ($percent==0) return img_picto($langs->trans('StatusActionToDo'),'statut1').' '.$langs->trans('StatusActionToDo').' (0%)';
-        	else if ($percent > 0 && $percent < 100) return img_picto($langs->trans('StatusActionInProcess'),'statut3').' '.$langs->trans('StatusActionInProcess').' ('.$percent.'%)';
-        	else if ($percent >= 100) return img_picto($langs->trans('StatusActionDone'),'statut6').' '.$langs->trans('StatusActionDone').' (100%)';
+        	elseif ($percent==0) return img_picto($langs->trans('StatusActionToDo'),'statut1').' '.$langs->trans('StatusActionToDo').' (0%)';
+        	elseif ($percent > 0 && $percent < 100) return img_picto($langs->trans('StatusActionInProcess'),'statut3').' '.$langs->trans('StatusActionInProcess').' ('.$percent.'%)';
+        	elseif ($percent >= 100) return img_picto($langs->trans('StatusActionDone'),'statut6').' '.$langs->trans('StatusActionDone').' (100%)';
         }
-        else if ($mode == 5)
+        elseif ($mode == 5)
         {
         	if ($percent==-1 && ! $hidenastatus) return img_picto($langs->trans('StatusNotApplicable'),'statut9');
-        	else if ($percent==0) return '0% '.img_picto($langs->trans('StatusActionToDo'),'statut1');
-        	else if ($percent > 0 && $percent < 100) return $percent.'% '.img_picto($langs->trans('StatusActionInProcess').' - '.$percent.'%','statut3');
-        	else if ($percent >= 100) return $langs->trans('StatusActionDone').' '.img_picto($langs->trans('StatusActionDone'),'statut6');
+        	elseif ($percent==0) return '0% '.img_picto($langs->trans('StatusActionToDo'),'statut1');
+        	elseif ($percent > 0 && $percent < 100) return $percent.'% '.img_picto($langs->trans('StatusActionInProcess').' - '.$percent.'%','statut3');
+        	elseif ($percent >= 100) return $langs->trans('StatusActionDone').' '.img_picto($langs->trans('StatusActionDone'),'statut6');
         }
-        else if ($mode == 6)
+        elseif ($mode == 6)
         {
         	if ($percent==-1 && ! $hidenastatus) return $langs->trans('StatusNotApplicable').' '.img_picto($langs->trans('StatusNotApplicable'),'statut9');
-        	else if ($percent==0) return $langs->trans('StatusActionToDo').' (0%) '.img_picto($langs->trans('StatusActionToDo'),'statut1');
-        	else if ($percent > 0 && $percent < 100) return $langs->trans('StatusActionInProcess').' ('.$percent.'%) '.img_picto($langs->trans('StatusActionInProcess').' - '.$percent.'%','statut3');
-        	else if ($percent >= 100) return $langs->trans('StatusActionDone').' (100%) '.img_picto($langs->trans('StatusActionDone'),'statut6');
+        	elseif ($percent==0) return $langs->trans('StatusActionToDo').' (0%) '.img_picto($langs->trans('StatusActionToDo'),'statut1');
+        	elseif ($percent > 0 && $percent < 100) return $langs->trans('StatusActionInProcess').' ('.$percent.'%) '.img_picto($langs->trans('StatusActionInProcess').' - '.$percent.'%','statut3');
+        	elseif ($percent >= 100) return $langs->trans('StatusActionDone').' (100%) '.img_picto($langs->trans('StatusActionDone'),'statut6');
         }
-        else if ($mode == 7)
+        elseif ($mode == 7)
         {
             if ($percent==-1 && ! $hidenastatus) return img_picto($langs->trans('StatusNotApplicable'),'statut9');
-            else if ($percent==0) return '0% '.img_picto($langs->trans('StatusActionToDo'),'statut1');
-            else if ($percent > 0 && $percent < 100) return $percent.'% '.img_picto($langs->trans('StatusActionInProcess').' - '.$percent.'%','statut3');
-            else if ($percent >= 100) return img_picto($langs->trans('StatusActionDone'),'statut6');
+            elseif ($percent==0) return '0% '.img_picto($langs->trans('StatusActionToDo'),'statut1');
+            elseif ($percent > 0 && $percent < 100) return $percent.'% '.img_picto($langs->trans('StatusActionInProcess').' - '.$percent.'%','statut3');
+            elseif ($percent >= 100) return img_picto($langs->trans('StatusActionDone'),'statut6');
         }
 
         return '';
@@ -1355,6 +1358,7 @@ class ActionComm extends CommonObject
     }
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     /**
      *		Export events from database into a cal file.
      *
@@ -1365,9 +1369,9 @@ class ActionComm extends CommonObject
      *		@param	array		$filters		Array of filters. Exemple array('notolderthan'=>99, 'year'=>..., 'idfrom'=>..., 'notactiontype'=>'systemauto', 'project'=>123, ...)
      *		@return int     					<0 if error, nb of events in new file if ok
      */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function build_exportfile($format,$type,$cachedelay,$filename,$filters)
     {
+        // phpcs:enable
         global $conf,$langs,$dolibarr_main_url_root,$mysoc;
 
         require_once DOL_DOCUMENT_ROOT ."/core/lib/xcal.lib.php";
@@ -1560,8 +1564,8 @@ class ActionComm extends CommonObject
 
             // Write file
             if ($format == 'vcal') $result=build_calfile($format,$title,$desc,$eventarray,$outputfiletmp);
-            if ($format == 'ical') $result=build_calfile($format,$title,$desc,$eventarray,$outputfiletmp);
-            if ($format == 'rss')  $result=build_rssfile($format,$title,$desc,$eventarray,$outputfiletmp);
+            elseif ($format == 'ical') $result=build_calfile($format,$title,$desc,$eventarray,$outputfiletmp);
+            elseif ($format == 'rss')  $result=build_rssfile($format,$title,$desc,$eventarray,$outputfiletmp);
 
             if ($result >= 0)
             {

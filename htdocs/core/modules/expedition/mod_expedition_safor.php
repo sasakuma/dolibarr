@@ -28,13 +28,30 @@ require_once DOL_DOCUMENT_ROOT .'/core/modules/expedition/modules_expedition.php
  */
 class mod_expedition_safor extends ModelNumRefExpedition
 {
-	var $version='dolibarr';
-	var $prefix='SH';
+	/**
+     * Dolibarr version of the loaded document
+     * @public string
+     */
+	public $version = 'dolibarr';
+
+	public $prefix='SH';
+
 	/**
 	 * @var string Error code (or message)
 	 */
 	public $error='';
-	var $nom='Safor';
+
+	/**
+	 * @var string Nom du modele
+	 * @deprecated
+	 * @see name
+	 */
+	public $nom='Safor';
+
+	/**
+	 * @var string model name
+	 */
+	public $name='Safor';
 
 
 	/**
@@ -133,6 +150,7 @@ class mod_expedition_safor extends ModelNumRefExpedition
 		return $this->prefix.$yymm."-".$num;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *  Return next free value
 	 *
@@ -140,9 +158,9 @@ class mod_expedition_safor extends ModelNumRefExpedition
 	 *	@param	Object		$objforref	Shipment object
 	 *	@return string      			Next free value
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function expedition_get_num($objsoc,$objforref)
 	{
+        // phpcs:enable
 		return $this->getNextValue($objsoc,$objforref);
 	}
 }

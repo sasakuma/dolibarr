@@ -37,21 +37,31 @@ class ExportExcel extends ModeleExports
 	 */
 	public $id;
 
-	/**
+    /**
      * @var string Export Excel label
      */
     public $label;
 
 	public $extension;
-	public $version;
+
+	/**
+     * Dolibarr version of the loaded document
+     * @public string
+     */
+	public $version = 'dolibarr';
 
 	public $label_lib;
+
 	public $version_lib;
 
-	public $workbook;      // Handle fichier
-	public $worksheet;     // Handle onglet
+	public $workbook;      // Handle file
+
+	public $worksheet;     // Handle sheet
+
 	public $row;
+
 	public $col;
+
     public $file;          // To save filename
 
 
@@ -168,6 +178,7 @@ class ExportExcel extends ModeleExports
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Open output file
 	 *
@@ -175,9 +186,9 @@ class ExportExcel extends ModeleExports
 	 *  @param		Translate	$outputlangs	Output language object
 	 *	@return		int							<0 if KO, >=0 if OK
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function open_file($file,$outputlangs)
 	{
+        // phpcs:enable
 		global $user,$conf,$langs;
 
 		if (! empty($conf->global->MAIN_USE_PHP_WRITEEXCEL))
@@ -238,21 +249,23 @@ class ExportExcel extends ModeleExports
 		return $ret;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
-	 *	Write header
+	 *  Write header
 	 *
-     *	@param      Translate	$outputlangs        Object lang to translate values
+     *  @param      Translate	$outputlangs        Object lang to translate values
 	 * 	@return		int								<0 if KO, >0 if OK
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function write_header($outputlangs)
 	{
+        // phpcs:enable
 		//$outputlangs->charset_output='ISO-8859-1';	// Because Excel 5 format is ISO
 
 		return 0;
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
      *  Output title line into file
      *
@@ -262,9 +275,9 @@ class ExportExcel extends ModeleExports
      *  @param		array		$array_types					Array with types of fields
 	 * 	@return		int											<0 if KO, >0 if OK
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function write_title($array_export_fields_label,$array_selected_sorted,$outputlangs,$array_types)
 	{
+        // phpcs:enable
 		global $conf;
 
 		// Create a format for the column headings
@@ -309,6 +322,7 @@ class ExportExcel extends ModeleExports
 		return 0;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
      *  Output record line into file
      *
@@ -318,9 +332,9 @@ class ExportExcel extends ModeleExports
      *  @param		array		$array_types				Array with types of fields
 	 * 	@return		int										<0 if KO, >0 if OK
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function write_record($array_selected_sorted,$objp,$outputlangs,$array_types)
 	{
+        // phpcs:enable
 		global $conf;
 
 		// Create a format for the column headings
@@ -428,27 +442,29 @@ class ExportExcel extends ModeleExports
 	}
 
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
      *	Write footer
      *
 	 * 	@param		Translate	$outputlangs	Output language object
 	 * 	@return		int							<0 if KO, >0 if OK
      */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function write_footer($outputlangs)
 	{
+        // phpcs:enable
 		return 0;
 	}
 
 
-	/**
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
+    /**
      *	Close Excel file
      *
 	 * 	@return		int							<0 if KO, >0 if OK
      */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function close_file()
 	{
+        // phpcs:enable
 		global $conf;
 
 		if (! empty($conf->global->MAIN_USE_PHP_WRITEEXCEL))
@@ -467,15 +483,16 @@ class ExportExcel extends ModeleExports
 	}
 
 
-	/**
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
+    /**
      * Clean a cell to respect rules of Excel file cells
      *
      * @param 	string	$newvalue	String to clean
      * @return 	string				Value cleaned
      */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
     function excel_clean($newvalue)
     {
+        // phpcs:enable
 		// Rule Dolibarr: No HTML
     	$newvalue=dol_string_nohtmltag($newvalue);
 

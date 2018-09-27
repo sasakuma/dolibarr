@@ -56,7 +56,6 @@ class Productbatch extends CommonObject
     function __construct($db)
     {
         $this->db = $db;
-        return 1;
     }
 
 
@@ -73,7 +72,7 @@ class Productbatch extends CommonObject
 		$error=0;
 
 		// Clean parameters
-		$this->clean_param();
+		$this->cleanParam();
 
 		// Check parameters
 		// Put here code to add control on parameters values
@@ -204,7 +203,7 @@ class Productbatch extends CommonObject
 		$error=0;
 
 		// Clean parameters
-		$this->clean_param();
+		$this->cleanParam();
 
 		// TODO Check qty is ok for stock move. Negative may not be allowed.
 		if ($this->qty < 0)
@@ -402,8 +401,7 @@ class Productbatch extends CommonObject
 	 *
 	 *  @return	void
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.ScopeNotCamelCaps
-	private function clean_param()
+	private function cleanParam()
 	{
 		if (isset($this->fk_product_stock)) $this->fk_product_stock=(int) trim($this->fk_product_stock);
 		if (isset($this->batch)) $this->batch=trim($this->batch);

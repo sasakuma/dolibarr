@@ -105,9 +105,9 @@ function checkLoginPassEntity($usertotest,$passwordtotest,$entitytotest,$authmod
     			{
     				dol_syslog("Authentification ko - failed to load file '".$authfile."'", LOG_ERR);
     				sleep(1);
-    				$langs->load('main');
-    				$langs->load('other');
-    				$langs->load('errors');
+    				// Load translation files required by the page
+                    $langs->loadLangs(array('other', 'main', 'errors'));
+
     				$_SESSION["dol_loginmesg"]=$langs->trans("ErrorFailedToLoadLoginFileForMode", $mode);
     			}
     		}
@@ -228,11 +228,11 @@ if (! function_exists('dol_loginfunction'))
 
 		if (! empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_small))
 		{
-			$urllogo=DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('thumbs/'.$mysoc->logo_small);
+			$urllogo=DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/thumbs/'.$mysoc->logo_small);
 		}
 		elseif (! empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo))
 		{
-			$urllogo=DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode($mysoc->logo);
+			$urllogo=DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=mycompany&amp;file='.urlencode('logos/'.$mysoc->logo);
 			$width=128;
 		}
 		elseif (is_readable(DOL_DOCUMENT_ROOT.'/theme/'.$conf->theme.'/img/dolibarr_logo.png'))

@@ -70,3 +70,11 @@ ALTER TABLE llx_payment_salary ADD COLUMN fk_projet integer DEFAULT NULL after a
 
 ALTER TABLE llx_categorie ADD COLUMN ref_ext varchar(255);
 
+ALTER TABLE llx_societe ADD COLUMN twitter  varchar(255) after skype;
+ALTER TABLE llx_societe ADD COLUMN facebook varchar(255) after skype;
+ALTER TABLE llx_socpeople ADD COLUMN twitter  varchar(255) after skype;
+ALTER TABLE llx_socpeople ADD COLUMN facebook varchar(255) after skype;
+
+
+ALTER TABLE llx_website CHANGE COLUMN fk_user_create fk_user_creat integer;
+ALTER TABLE llx_website_page CHANGE COLUMN fk_user_create fk_user_creat integer;

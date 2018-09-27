@@ -44,15 +44,25 @@ class ExportExcel2007 extends ExportExcel
     public $label;
 
 	public $extension;
-	public $version;
+
+	/**
+     * Dolibarr version of the loaded document
+     * @public string
+     */
+	public $version = 'dolibarr';
 
 	public $label_lib;
+
 	public $version_lib;
 
 	public $workbook;      // Handle fichier
+
 	public $worksheet;     // Handle onglet
+
 	public $row;
+
 	public $col;
+
     public $file;          // To save filename
 
 	/**
@@ -98,14 +108,15 @@ class ExportExcel2007 extends ExportExcel
 	}
 
 
-	/**
-     *	Close Excel file
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
+    /**
+     *  Close Excel file
      *
-	 * 	@return		int							<0 if KO, >0 if OK
+	 *  @return		int							<0 if KO, >0 if OK
      */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function close_file()
 	{
+        // phpcs:enable
 		global $conf;
 
 		if (! empty($conf->global->MAIN_USE_PHP_WRITEEXCEL))

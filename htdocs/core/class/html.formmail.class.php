@@ -132,18 +132,17 @@ class FormMail extends Form
 		$this->withbodyreadonly=0;
 		$this->withdeliveryreceiptreadonly=0;
 		$this->withfckeditor=-1;	// -1 = Auto
-
-		return 1;
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Clear list of attached files in send mail form (also stored in session)
 	 *
 	 * @return	void
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function clear_attached_files()
 	{
+        // phpcs:enable
 		global $conf,$user;
 		require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 
@@ -158,6 +157,7 @@ class FormMail extends Form
 		unset($_SESSION["listofmimes".$keytoavoidconflict]);
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Add a file into the list of attached files (stored in SECTION array)
 	 *
@@ -166,9 +166,9 @@ class FormMail extends Form
 	 * @param 	string   $type   Mime type (can be dol_mimetype($file))
 	 * @return	void
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function add_attached_files($path, $file='', $type='')
 	{
+        // phpcs:enable
 		$listofpaths=array();
 		$listofnames=array();
 		$listofmimes=array();
@@ -191,15 +191,16 @@ class FormMail extends Form
 		}
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Remove a file from the list of attached files (stored in SECTION array)
 	 *
 	 * @param  	string	$keytodelete     Key in file array (0, 1, 2, ...)
 	 * @return	void
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function remove_attached_files($keytodelete)
 	{
+        // phpcs:enable
 		$listofpaths=array();
 		$listofnames=array();
 		$listofmimes=array();
@@ -220,14 +221,15 @@ class FormMail extends Form
 		}
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 * Return list of attached files (stored in SECTION array)
 	 *
 	 * @return	array       array('paths'=> ,'names'=>, 'mimes'=> )
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function get_attached_files()
 	{
+        // phpcs:enable
 		$listofpaths=array();
 		$listofnames=array();
 		$listofmimes=array();
@@ -239,6 +241,7 @@ class FormMail extends Form
 		return array('paths'=>$listofpaths, 'names'=>$listofnames, 'mimes'=>$listofmimes);
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Show the form to input an email
 	 *  this->withfile: 0=No attaches files, 1=Show attached files, 2=Can add new attached files
@@ -248,12 +251,13 @@ class FormMail extends Form
 	 *	@param	string	$removefileaction	Name of action when removing file attachments
 	 *	@return	void
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function show_form($addfileaction='addfile',$removefileaction='removefile')
 	{
+        // phpcs:enable
 		print $this->get_form($addfileaction,$removefileaction);
 	}
 
+    // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
 	 *	Get the form to input an email
 	 *  this->withfile: 0=No attaches files, 1=Show attached files, 2=Can add new attached files
@@ -264,16 +268,15 @@ class FormMail extends Form
 	 *	@param	string	$removefileaction	Name of action when removing file attachments
 	 *	@return string						Form to show
 	 */
-    // phpcs:ignore PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	function get_form($addfileaction='addfile', $removefileaction='removefile')
 	{
+        // phpcs:enable
 		global $conf, $langs, $user, $hookmanager, $form;
 
 		if (! is_object($form)) $form=new Form($this->db);
 
-		$langs->load("other");
-		$langs->load("mails");
-
+		// Load translation files required by the page
+        $langs->loadLangs(array('other', 'mails'));
 
 		// Clear temp files. Must be done at beginning, before call of triggers
 		if (GETPOST('mode','alpha') == 'init' || (GETPOST('modelmailselected','alpha') && GETPOST('modelmailselected','alpha') != '-1'))
@@ -954,7 +957,8 @@ class FormMail extends Form
 
 				if (count($validpaymentmethod) > 0 && $paymenturl)
 				{
-					$this->substit['__ONLINE_PAYMENT_TEXT_AND_URL__']=str_replace('\n',"\n",$langs->transnoentities("PredefinedMailContentLink", $paymenturl));
+					$langs->load('other');
+					$this->substit['__ONLINE_PAYMENT_TEXT_AND_URL__']=str_replace('\n', "\n", $langs->transnoentities("PredefinedMailContentLink", $paymenturl));
 					$this->substit['__ONLINE_PAYMENT_URL__']=$paymenturl;
 				}
 				else

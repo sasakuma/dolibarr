@@ -66,7 +66,7 @@ $domData .= ' data-product_type="'.$line->product_type.'"';
 ?>
 <?php $coldisplay=0; ?>
 <!-- BEGIN PHP TEMPLATE objectline_view.tpl.php -->
-<tr  id="row-<?php echo $line->id?> class="drag drop oddeven" <?php echo $domData; ?> >
+<tr  id="row-<?php echo $line->id?>" class="drag drop oddeven" <?php echo $domData; ?> >
 	<?php if (! empty($conf->global->MAIN_VIEW_LINE_NUMBER)) { ?>
 	<td class="linecolnum" align="center"><?php $coldisplay++; ?><?php echo ($i+1); ?></td>
 	<?php } ?>
@@ -260,13 +260,13 @@ $domData .= ' data-product_type="'.$line->product_type.'"';
 	<?php if ($line->special_code == 3)	{ ?>
 	<td align="right" class="linecoloption nowrap"><?php $coldisplay++; ?><?php echo $langs->trans('Option'); ?></td>
 	<?php } else { ?>
-	<td align="right" class="liencolht nowrap"><?php $coldisplay++; ?><?php echo price($line->total_ht); ?></td>
+	<td align="right" class="linecolht nowrap"><?php $coldisplay++; ?><?php echo price($line->total_ht); ?></td>
 		<?php if (!empty($conf->multicurrency->enabled) && $this->multicurrency_code != $conf->currency) { ?>
 		<td align="right" class="linecolutotalht_currency nowrap"><?php $coldisplay++; ?><?php echo price($line->multicurrency_total_ht); ?></td>
 		<?php } ?>
 	<?php } ?>
         <?php if ($outputalsopricetotalwithtax) { ?>
-        <td align="right" class="liencolht nowrap"><?php $coldisplay++; ?><?php echo price($line->total_ttc); ?></td>
+        <td align="right" class="linecolht nowrap"><?php $coldisplay++; ?><?php echo price($line->total_ttc); ?></td>
         <?php } ?>
 
 
