@@ -99,6 +99,10 @@ class SocieteAccount extends CommonObject
 		'import_key' => array('type'=>'varchar(14)', 'label'=>'ImportId', 'visible'=>-2, 'enabled'=>1, 'position'=>1000, 'notnull'=>-1, 'index'=>1,),
 		'status' => array('type'=>'integer', 'label'=>'Status', 'visible'=>1, 'enabled'=>1, 'position'=>1000, 'notnull'=>1, 'index'=>1, 'default'=>1, 'arrayofkeyval'=>array('1'=>'Active','0'=>'Disabled')),
 	);
+
+	/**
+	 * @var int ID
+	 */
 	public $rowid;
 
 	/**
@@ -123,10 +127,24 @@ class SocieteAccount extends CommonObject
 	public $note_private;
 	public $date_creation;
 	public $tms;
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_creat;
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_modif;
+
 	public $import_key;
+
+	/**
+	 * @var int Status
+	 */
 	public $status;
+
 	// END MODULEBUILDER PROPERTIES
 
 

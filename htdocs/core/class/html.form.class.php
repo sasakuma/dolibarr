@@ -58,15 +58,15 @@ class Form
 	 */
 	public $error='';
 
-	var $num;
+	public $num;
 
 	// Cache arrays
-	var $cache_types_paiements=array();
-	var $cache_conditions_paiements=array();
-	var $cache_availability=array();
-	var $cache_demand_reason=array();
-	var $cache_types_fees=array();
-	var $cache_vatrates=array();
+	public $cache_types_paiements=array();
+	public $cache_conditions_paiements=array();
+	public $cache_availability=array();
+	public $cache_demand_reason=array();
+	public $cache_types_fees=array();
+	public $cache_vatrates=array();
 
 
 	/**
@@ -663,15 +663,16 @@ class Form
 	 *  @param  string	$htmloption     	Options html on select object
 	 *  @param	integer	$maxlength			Max length for labels (0=no limit)
 	 *  @param	string	$morecss			More css class
-	 *  @param	string	$usecodeaskey		'code3'=Use code on 3 alpha as key, 'code2"=Use code on 2 alpha as key
+	 *  @param	string	$usecodeaskey		''=Use id as key (default), 'code3'=Use code on 3 alpha as key, 'code2"=Use code on 2 alpha as key
 	 *  @param	int		$showempty			Show empty choice
-	 *  @param	int		$disablefavorites	Disable favorites
+	 *  @param	int		$disablefavorites	1=Disable favorites,
+	 *  @param	int		$addspecialentries	1=Add dedicated entries for group of countries (like 'European Economic Community', ...)
 	 *  @return string           			HTML string with select
 	 */
-	function select_country($selected='', $htmlname='country_id', $htmloption='', $maxlength=0, $morecss='minwidth300', $usecodeaskey='', $showempty=1, $disablefavorites=0)
+	function select_country($selected='', $htmlname='country_id', $htmloption='', $maxlength=0, $morecss='minwidth300', $usecodeaskey='', $showempty=1, $disablefavorites=0, $addspecialentries=0)
 	{
         // phpcs:enable
-		global $conf,$langs;
+		global $conf,$langs,$mysoc;
 
 		$langs->load("dict");
 
@@ -713,15 +714,31 @@ class Form
 				if (empty($disablefavorites)) array_multisort($favorite, SORT_DESC, $label, SORT_ASC, $countryArray);
 				else $countryArray = dol_sort_array($countryArray, 'label');
 
+				if ($showempty)
+				{
+					$out.='<option value="">&nbsp;</option>'."\n";
+				}
+
+				if ($addspecialentries)	// Add dedicated entries for groups of countries
+				{
+					//if ($showempty) $out.= '<option value="" disabled class="selectoptiondisabledwhite">--------------</option>';
+					$out.= '<option value="special_allnotme"'.($selected == 'special_allnotme' ? ' selected' : '').'>'.$langs->trans("CountriesExceptMe", $langs->transnoentitiesnoconv("Country".$mysoc->country_code)).'</option>';
+					$out.= '<option value="special_eec"'.($selected == 'special_eec' ? ' selected' : '').'>'.$langs->trans("CountriesInEEC").'</option>';
+					if ($mysoc->isInEEC()) $out.= '<option value="special_eecnotme"'.($selected == 'special_eecnotme' ? ' selected' : '').'>'.$langs->trans("CountriesInEECExceptMe", $langs->transnoentitiesnoconv("Country".$mysoc->country_code)).'</option>';
+					$out.= '<option value="special_noteec"'.($selected == 'special_noteec' ? ' selected' : '').'>'.$langs->trans("CountriesNotInEEC").'</option>';
+					$out.= '<option value="" disabled class="selectoptiondisabledwhite">--------------</option>';
+				}
+
 				foreach ($countryArray as $row)
 				{
-					if (empty($showempty) && empty($row['rowid'])) continue;
+					//if (empty($showempty) && empty($row['rowid'])) continue;
+					if (empty($row['rowid'])) continue;
 
 					if (empty($disablefavorites) && $row['favorite'] && $row['code_iso']) $atleastonefavorite++;
 					if (empty($row['favorite']) && $atleastonefavorite)
 					{
 						$atleastonefavorite=0;
-						$out.= '<option value="" disabled class="selectoptiondisabledwhite">----------------------</option>';
+						$out.= '<option value="" disabled class="selectoptiondisabledwhite">--------------</option>';
 					}
 					if ($selected && $selected != '-1' && ($selected == $row['rowid'] || $selected == $row['code_iso'] || $selected == $row['code_iso3'] || $selected == $row['label']) )
 					{
@@ -3051,7 +3068,10 @@ class Form
 				$obj = $this->db->fetch_object($resql);
 
 				// Si traduction existe, on l'utilise, sinon on prend le libelle par defaut
-				$label=($langs->trans("DemandReasonType".$obj->code)!=("DemandReasonType".$obj->code)?$langs->trans("DemandReasonType".$obj->code):($obj->label!='-'?$obj->label:''));
+				$label=($obj->label!='-'?$obj->label:'');
+				if ($langs->trans("DemandReasonType".$obj->code) != ("DemandReasonType".$obj->code)) $label = $langs->trans("DemandReasonType".$obj->code); // So translation key DemandReasonTypeSRC_XXX will work
+				if ($langs->trans($obj->code) != $obj->code) $label=$langs->trans($obj->code);																// So translation key SRC_XXX will work
+
 				$tmparray[$obj->rowid]['id']   =$obj->rowid;
 				$tmparray[$obj->rowid]['code'] =$obj->code;
 				$tmparray[$obj->rowid]['label']=$label;
@@ -3100,7 +3120,8 @@ class Form
 			{
 				print '<option value="'.$arraydemandreason['id'].'">';
 			}
-			print $arraydemandreason['label'];
+			$label=$arraydemandreason['label'];	// Translation of label was already done into the ->loadCacheInputReason
+			print $langs->trans($label);
 			print '</option>';
 		}
 		print '</select>';
@@ -3422,7 +3443,7 @@ class Form
 			            if ($obj->situation_final != 1) {
 							//Not prov?
 			                if (substr($obj->facnumber, 1, 4) != 'PROV') {
-			                    if ($selected == $obj->situation_final) {
+			                    if ($selected == $obj->rowid) {
 			                        $opt .= '<option value="' . $obj->rowid . '" selected>' . $obj->facnumber . '</option>';
 								} else {
 								    $opt .= '<option value="' . $obj->rowid . '">' . $obj->facnumber . '</option>';
@@ -3723,7 +3744,7 @@ class Form
 	 *     @param	int			$disableformtag		1=Disable form tag. Can be used if we are already inside a <form> section.
 	 *     @return 	string      	    			HTML ajax code if a confirm ajax popup is required, Pure HTML code if it's an html form
 	 */
-	function formconfirm($page, $title, $question, $action, $formquestion='', $selectedchoice='', $useajax=0, $height=200, $width=500, $disableformtag=0)
+	function formconfirm($page, $title, $question, $action, $formquestion='', $selectedchoice='', $useajax=0, $height=210, $width=500, $disableformtag=0)
 	{
 		global $langs,$conf;
 		global $useglobalvars;
@@ -4506,21 +4527,23 @@ class Form
 	 * 	@param	int		$showtype		Show third party type in combolist (customer, prospect or supplier)
 	 * 	@param	int		$forcecombo		Force to use combo box
 	 *  @param	array	$events			Event options. Example: array(array('method'=>'getContacts', 'url'=>dol_buildpath('/core/ajax/contacts.php',1), 'htmlname'=>'contactid', 'params'=>array('add-customer-contact'=>'disabled')))
+	 *  @param  int     $nooutput       No print output. Return it only.
 	 *  @return	void
 	 */
-	function form_thirdparty($page, $selected='', $htmlname='socid', $filter='',$showempty=0, $showtype=0, $forcecombo=0, $events=array())
+	function form_thirdparty($page, $selected='', $htmlname='socid', $filter='',$showempty=0, $showtype=0, $forcecombo=0, $events=array(), $nooutput=0)
 	{
         // phpcs:enable
 		global $langs;
 
+		$out = '';
 		if ($htmlname != "none")
 		{
-			print '<form method="post" action="'.$page.'">';
-			print '<input type="hidden" name="action" value="set_thirdparty">';
-			print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-			print $this->select_company($selected, $htmlname, $filter, $showempty, $showtype, $forcecombo, $events);
-			print '<input type="submit" class="button valignmiddle" value="'.$langs->trans("Modify").'">';
-			print '</form>';
+			$out.='<form method="post" action="'.$page.'">';
+			$out.= '<input type="hidden" name="action" value="set_thirdparty">';
+			$out.= '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+			$out.= $this->select_company($selected, $htmlname, $filter, $showempty, $showtype, $forcecombo, $events);
+			$out.= '<input type="submit" class="button valignmiddle" value="'.$langs->trans("Modify").'">';
+			$out.= '</form>';
 		}
 		else
 		{
@@ -4529,13 +4552,16 @@ class Form
 				require_once DOL_DOCUMENT_ROOT .'/societe/class/societe.class.php';
 				$soc = new Societe($this->db);
 				$soc->fetch($selected);
-				print $soc->getNomUrl($langs);
+				$out.= $soc->getNomUrl($langs);
 			}
 			else
 			{
-				print "&nbsp;";
+				$out.= "&nbsp;";
 			}
 		}
+
+		if ($nooutput) return $out;
+		else print $out;
 	}
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
@@ -6507,7 +6533,7 @@ class Form
 	 *  @param	int      	$useempty		1=Add empty line
 	 *	@return	string						See option
 	 */
-	function selectyesno($htmlname, $value='', $option=0, $disabled=false, $useempty='')
+	function selectyesno($htmlname, $value='', $option=0, $disabled=false, $useempty=0)
 	{
 		global $langs;
 

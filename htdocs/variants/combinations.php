@@ -25,10 +25,8 @@ require_once DOL_DOCUMENT_ROOT.'/variants/class/ProductAttributeValue.class.php'
 require_once DOL_DOCUMENT_ROOT.'/variants/class/ProductCombination.class.php';
 require_once DOL_DOCUMENT_ROOT.'/variants/class/ProductCombination2ValuePair.class.php';
 
-$langs->load("products");
-$langs->load("other");
+$langs->loadLangs(array("products", "other"));
 
-$var = false;
 $id = GETPOST('id', 'int');
 $valueid = GETPOST('valueid', 'int');
 $ref = GETPOST('ref');
@@ -328,7 +326,7 @@ if (! empty($id) || ! empty($ref))
 
 		if ($action == 'add') {
 			$title = $langs->trans('NewProductCombination');
-			print dol_fiche_head();
+			//print dol_fiche_head();
 			$features = $_SESSION['addvariant_'.$object->id];
 			//First, sanitize
 			print '<div id="parttoaddvariant">';
@@ -349,7 +347,8 @@ if (! empty($id) || ! empty($ref))
 				}
 			}
 			print '</div>';
-			print dol_fiche_end();
+			print '<br><br>';
+			//print dol_fiche_end();
 		} else {
 			$title = $langs->trans('EditProductCombination');
 		}
@@ -635,11 +634,13 @@ if (! empty($id) || ! empty($ref))
 		print '<div class="tabsAction">';
 
 		print '	<div class="inline-block divButAction">';
-		if ($productCombinations) {
-		    print '<a href="combinations.php?id='.$object->id.'&action=copy" class="butAction">'.$langs->trans('PropagateVariant').'</a>';
-		}
 
 		print '<a href="combinations.php?id='.$object->id.'&action=add" class="butAction">'.$langs->trans('NewProductCombination').'</a>'; // NewVariant
+
+		if ($productCombinations)
+		{
+			print '<a href="combinations.php?id='.$object->id.'&action=copy" class="butAction">'.$langs->trans('PropagateVariant').'</a>';
+		}
 
 		// Too much bugged page.
 		/*

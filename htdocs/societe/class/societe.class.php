@@ -66,6 +66,7 @@ class Societe extends CommonObject
 	 * @var int
 	 */
 	public $ismultientitymanaged = 1;
+
 	/**
 	 * 0=Default, 1=View may be restricted to sales representative only if no permission to see all or to company of external user if external user
 	 * @var integer
@@ -103,7 +104,7 @@ class Societe extends CommonObject
 	 * Thirdparty name
 	 * @var string
 	 * @deprecated Use $name instead
-	 * @see name
+	 * @see $name
 	 */
 	public $nom;
 
@@ -119,7 +120,12 @@ class Societe extends CommonObject
 	public $name_alias;
 
 	public $particulier;
+
+	/**
+	 * @var string Address
+	 */
 	public $address;
+
 	public $zip;
 	public $town;
 
@@ -148,21 +154,21 @@ class Societe extends CommonObject
 	 * State code
 	 * @var string
 	 * @deprecated Use state_code instead
-	 * @see state_code
+	 * @see $state_code
 	 */
 	public $departement_code;
 
 	/**
 	 * @var string
 	 * @deprecated Use state instead
-	 * @see state
+	 * @see $state
 	 */
 	public $departement;
 
 	/**
 	 * @var string
 	 * @deprecated Use country instead
-	 * @see country
+	 * @see $country
 	 */
 	public $pays;
 
@@ -275,7 +281,12 @@ class Societe extends CommonObject
 	public $remise_supplier_percent;
 	public $mode_reglement_supplier_id;
 	public $cond_reglement_supplier_id;
+
+	/**
+     * @var int ID
+     */
 	public $fk_prospectlevel;
+
 	public $name_bis;
 
 	//Log data
@@ -338,6 +349,12 @@ class Societe extends CommonObject
 	 */
 	public $code_compta;
 
+    /**
+     * Accounting code for client
+     * @var string
+     */
+    public $code_compta_client;
+
 	/**
 	 * Accounting code for suppliers
 	 * @var string
@@ -347,7 +364,7 @@ class Societe extends CommonObject
 	/**
 	 * @var string
 	 * @deprecated Note is split in public and private notes
-	 * @see note_public, note_private
+	 * @see $note_public, $note_private
 	 */
 	public $note;
 
@@ -437,12 +454,20 @@ class Societe extends CommonObject
 	public $array_options;
 
 	// Incoterms
+	/**
+     * @var int ID
+     */
 	public $fk_incoterms;
+
 	public $location_incoterms;
 	public $libelle_incoterms;  //Used into tooltip
 
 	// Multicurrency
+	/**
+     * @var int ID
+     */
 	public $fk_multicurrency;
+
 	public $multicurrency_code;
 
 
@@ -1944,24 +1969,33 @@ class Societe extends CommonObject
 
 		if (! empty($conf->global->SOCIETE_ADD_REF_IN_LIST) && (!empty($withpicto)))
 		{
+			$code = '';
 			if (($this->client) && (! empty ( $this->code_client ))
 				&& ($conf->global->SOCIETE_ADD_REF_IN_LIST == 1
 				|| $conf->global->SOCIETE_ADD_REF_IN_LIST == 2
 				)
 			)
-			$code = $this->code_client . ' - ';
+			{
+				$code = $this->code_client . ' - ';
+			}
 
 			if (($this->fournisseur) && (! empty ( $this->code_fournisseur ))
 				&& ($conf->global->SOCIETE_ADD_REF_IN_LIST == 1
 				|| $conf->global->SOCIETE_ADD_REF_IN_LIST == 3
 				)
 			)
-			$code .= $this->code_fournisseur . ' - ';
+			{
+				$code .= $this->code_fournisseur . ' - ';
+			}
 
 			if ($conf->global->SOCIETE_ADD_REF_IN_LIST == 1)
+			{
 				$name =$code.' '.$name;
+			}
 			else
+			{
 				$name =$code;
+			}
 		}
 
 		if (!empty($this->name_alias)) $name .= ' ('.$this->name_alias.')';
@@ -2034,8 +2068,17 @@ class Societe extends CommonObject
 		}
 		if (! empty($this->country_code))
 			$label.= '<br><b>' . $langs->trans('Country') . ':</b> '. $this->country_code;
-		if (! empty($this->tva_intra))
+		if (! empty($this->tva_intra) || (! empty($conf->global->SOCIETE_SHOW_FIELD_IN_TOOLTIP) && strpos($conf->global->SOCIETE_SHOW_FIELD_IN_TOOLTIP, 'vatnumber') !== false))
 			$label.= '<br><b>' . $langs->trans('VATIntra') . ':</b> '. $this->tva_intra;
+		if (! empty($conf->global->SOCIETE_SHOW_FIELD_IN_TOOLTIP))
+		{
+			if (strpos($conf->global->SOCIETE_SHOW_FIELD_IN_TOOLTIP, 'profid1') !== false) $label.= '<br><b>' . $langs->trans('ProfId1'.$this->country_code) . ':</b> '. $this->idprof1;
+			if (strpos($conf->global->SOCIETE_SHOW_FIELD_IN_TOOLTIP, 'profid2') !== false) $label.= '<br><b>' . $langs->trans('ProfId2'.$this->country_code) . ':</b> '. $this->idprof2;
+			if (strpos($conf->global->SOCIETE_SHOW_FIELD_IN_TOOLTIP, 'profid3') !== false) $label.= '<br><b>' . $langs->trans('ProfId3'.$this->country_code) . ':</b> '. $this->idprof3;
+			if (strpos($conf->global->SOCIETE_SHOW_FIELD_IN_TOOLTIP, 'profid4') !== false) $label.= '<br><b>' . $langs->trans('ProfId4'.$this->country_code) . ':</b> '. $this->idprof4;
+			if (strpos($conf->global->SOCIETE_SHOW_FIELD_IN_TOOLTIP, 'profid5') !== false) $label.= '<br><b>' . $langs->trans('ProfId5'.$this->country_code) . ':</b> '. $this->idprof5;
+			if (strpos($conf->global->SOCIETE_SHOW_FIELD_IN_TOOLTIP, 'profid6') !== false) $label.= '<br><b>' . $langs->trans('ProfId6'.$this->country_code) . ':</b> '. $this->idprof6;
+		}
 		if (! empty($this->code_client) && $this->client)
 			$label.= '<br><b>' . $langs->trans('CustomerCode') . ':</b> '. $this->code_client;
 		if (! empty($this->code_fournisseur) && $this->fournisseur)
@@ -3135,8 +3178,12 @@ class Societe extends CommonObject
 		// Define if third party is treated as company (or not) when nature is unknown
 		$isacompany=empty($conf->global->MAIN_UNKNOWN_CUSTOMERS_ARE_COMPANIES)?0:1; // 0 by default
 		if (! empty($this->tva_intra)) $isacompany=1;
-		else if (! empty($this->typent_code) && in_array($this->typent_code,array('TE_PRIVATE'))) $isacompany=0;
-		else if (! empty($this->typent_code) && in_array($this->typent_code,array('TE_SMALL','TE_MEDIUM','TE_LARGE','TE_GROUP'))) $isacompany=1;
+		else if (! empty($this->typent_code) && $this->typent_code != 'TE_UNKNOWN')
+		{
+			// TODO Add a field is_a_company into dictionary
+			if (preg_match('/^TE_PRIVATE/', $this->typent_code)) $isacompany=0;
+			else $isacompany=1;
+		}
 
 		return $isacompany;
 	}

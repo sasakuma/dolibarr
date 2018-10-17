@@ -47,6 +47,10 @@ class Productlot extends CommonObject
 
 	public $picto='barcode';
 
+	/**
+	 * 0=No test on entity, 1=Test with field entity, 2=Test with link by societe
+	 * @var int
+	 */
     public $ismultientitymanaged = 1;
 
 	/**
@@ -59,14 +63,27 @@ class Productlot extends CommonObject
 	 */
 	public $entity;
 
+	/**
+     * @var int ID
+     */
 	public $fk_product;
+
 	public $batch;
 	public $eatby = '';
 	public $sellby = '';
 	public $datec = '';
 	public $tms = '';
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_creat;
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_modif;
+
 	public $import_key;
 
 

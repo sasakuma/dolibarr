@@ -1,7 +1,8 @@
 <?php
-/* Copyright (C) 2014-2017 Olivier Geffroy		<jeff@jeffinfo.com>
- * Copyright (C) 2015-2017 Alexandre Spangaro	<aspangaro@zendsi.com>
- * Copyright (C) 2015-2017 Florian Henry		<florian.henry@open-concept.pro>
+/* Copyright (C) 2014-2017  Olivier Geffroy		<jeff@jeffinfo.com>
+ * Copyright (C) 2015-2017  Alexandre Spangaro	<aspangaro@zendsi.com>
+ * Copyright (C) 2015-2017  Florian Henry		<florian.henry@open-concept.pro>
+ * Copyright (C) 2018       Frédéric France     <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,8 +71,17 @@ class BookKeeping extends CommonObject
 	public $date_lim_reglement;
 	public $doc_type;
 	public $doc_ref;
+
+	/**
+     * @var int ID
+     */
 	public $fk_doc;
+
+	/**
+     * @var int ID
+     */
 	public $fk_docdet;
+
 	public $thirdparty_code;
 	public $subledger_account;
 	public $subledger_label;
@@ -82,7 +92,12 @@ class BookKeeping extends CommonObject
 	public $credit;
 	public $montant;
 	public $sens;
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_author;
+
 	public $import_key;
 	public $code_journal;
 	public $journal_label;
@@ -718,6 +733,10 @@ class BookKeeping extends CommonObject
 		$sql .= " t.credit,";
 		$sql .= " t.montant,";
 		$sql .= " t.sens,";
+		$sql .= " t.multicurrency_amount,";
+		$sql .= " t.multicurrency_code,";
+		$sql .= " t.lettering_code,";
+		$sql .= " t.date_lettering,";
 		$sql .= " t.fk_user_author,";
 		$sql .= " t.import_key,";
 		$sql .= " t.code_journal,";
@@ -786,6 +805,10 @@ class BookKeeping extends CommonObject
 				$line->credit = $obj->credit;
 				$line->montant = $obj->montant;
 				$line->sens = $obj->sens;
+				$line->multicurrency_amount = $obj->multicurrency_amount;
+				$line->multicurrency_code = $obj->multicurrency_code;
+				$line->lettering_code = $obj->lettering_code;
+				$line->date_lettering = $obj->date_lettering;
 				$line->fk_user_author = $obj->fk_user_author;
 				$line->import_key = $obj->import_key;
 				$line->code_journal = $obj->code_journal;
@@ -994,16 +1017,21 @@ class BookKeeping extends CommonObject
 		}
 
 		$resql = $this->db->query($sql);
-		if ($resql) {
+		if ($resql)
+		{
 			$num = $this->db->num_rows($resql);
 
-			while ( $obj = $this->db->fetch_object($resql) ) {
+			$i = 0;
+			while (($obj = $this->db->fetch_object($resql)) && ($i < min($limit, $num)))
+			{
 				$line = new BookKeepingLine();
 
 				$line->numero_compte = $obj->numero_compte;
 				$line->debit = $obj->debit;
 				$line->credit = $obj->credit;
 				$this->lines[] = $line;
+
+				$i++;
 			}
 			$this->db->free($resql);
 
@@ -1613,9 +1641,9 @@ class BookKeeping extends CommonObject
 	/**
 	 * Transform transaction
 	 *
-	 * @param  number   $direction     If 0 tmp => real, if 1 real => tmp
-	 * @param  string   $piece_num     Piece num
-	 * @return void
+	 * @param  number   $direction      If 0 tmp => real, if 1 real => tmp
+	 * @param  string   $piece_num      Piece num
+	 * @return int                      int <0 if KO, >0 if OK
 	 */
 	public function transformTransaction($direction=0,$piece_num='')
 	{
@@ -1651,8 +1679,7 @@ class BookKeeping extends CommonObject
 				$this->errors[] = 'Error ' . $this->db->lasterror();
 				dol_syslog(__METHOD__ . ' ' . join(',', $this->errors), LOG_ERR);
 			}
-		}
-		if ($direction==1) {
+		} elseif ($direction==1) {
 			$sql = 'DELETE FROM ' . MAIN_DB_PREFIX . $this->table_element.'_tmp WHERE piece_num = '.$piece_num;
 			$resql = $this->db->query($sql);
 			if (! $resql) {
@@ -1871,8 +1898,17 @@ class BookKeepingLine
 	public $doc_date = '';
 	public $doc_type;
 	public $doc_ref;
+
+	/**
+     * @var int ID
+     */
 	public $fk_doc;
+
+	/**
+     * @var int ID
+     */
 	public $fk_docdet;
+
 	public $thirdparty_code;
 	public $subledger_account;
 	public $subledger_label;
@@ -1883,7 +1919,12 @@ class BookKeepingLine
 	public $credit;
 	public $montant;
 	public $sens;
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_author;
+
 	public $import_key;
 	public $code_journal;
 	public $journal_label;

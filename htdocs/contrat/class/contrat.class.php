@@ -312,10 +312,10 @@ class Contrat extends CommonObject
 
 		$this->db->begin();
 
+		$error=0;
+
 		// Load lines
 		$this->fetch_lines();
-
-		$error=0;
 
 		foreach($this->lines as $contratline)
 		{
@@ -1710,7 +1710,7 @@ class Contrat extends CommonObject
 			else
 			{
 				$this->db->rollback();
-				dol_syslog(get_class($this)."::updateligne Erreur -2");
+				dol_syslog(get_class($this)."::updateline Erreur -2");
 				return -2;
 			}
 		}
@@ -1718,7 +1718,7 @@ class Contrat extends CommonObject
 		{
 			$this->db->rollback();
 			$this->error=$this->db->error();
-			dol_syslog(get_class($this)."::updateligne Erreur -1");
+			dol_syslog(get_class($this)."::updateline Erreur -1");
 			return -1;
 		}
 	}
@@ -2519,8 +2519,16 @@ class ContratLigne extends CommonObjectLine
 
 	public $tms;
 
+	/**
+     * @var int ID
+     */
 	public $fk_contrat;
+
+	/**
+     * @var int ID
+     */
 	public $fk_product;
+
 	public $statut;					// 0 inactive, 4 active, 5 closed
 	public $type;						// 0 for product, 1 for service
 
@@ -2563,6 +2571,10 @@ class ContratLigne extends CommonObjectLine
 	public $qty;
 	public $remise_percent;
 	public $remise;
+
+	/**
+     * @var int ID
+     */
 	public $fk_remise_except;
 
 	public $subprice;					// Unit price HT
@@ -2582,13 +2594,30 @@ class ContratLigne extends CommonObjectLine
 	public $total_localtax2;
 	public $total_ttc;
 
+	/**
+     * @var int ID
+     */
 	public $fk_fournprice;
+
 	public $pa_ht;
 
 	public $info_bits;
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_author;
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_ouverture;
+
+	/**
+     * @var int ID
+     */
 	public $fk_user_cloture;
+
 	public $commentaire;
 
 	const STATUS_INITIAL = 0;

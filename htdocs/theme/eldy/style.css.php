@@ -264,7 +264,7 @@ body {
     <?php print 'direction: '.$langs->trans("DIRECTION").";\n"; ?>
 }
 
-.thumbstat, a.tab { font-weight: bold !important; }
+.thumbstat { font-weight: bold !important; }
 th a { font-weight: <?php echo ($useboldtitle?'bold':'normal'); ?> !important; }
 a.tab { font-weight: bold !important; }
 
@@ -553,7 +553,7 @@ form {
     margin:0px;
 }
 form#addproduct {
-    padding-top: 6px;
+    padding-top: 10px;
 }
 div.float
 {
@@ -695,6 +695,9 @@ textarea.centpercent {
 .listofinvoicetype {
 	height: 28px;
 	vertical-align: middle;
+}
+.divsocialnetwork:not(:first-child) {
+    padding-left: 20px;
 }
 div.divsearchfield {
 	float: <?php print $left; ?>;
@@ -1169,8 +1172,8 @@ td.showDragHandle {
 	table-layout: fixed;
 }
 #id-right, #id-left {
-	padding-top: 16px;
-	padding-bottom: 16px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 
 	display: table-cell;			/* DOL_XXX Empeche fonctionnement correct du scroll horizontal sur tableau, avec datatable ou CSS */
 	float: none;
@@ -1275,8 +1278,8 @@ div.fiche {
 
 
 div.fiche {
-	margin-<?php print $left; ?>: <?php print (GETPOST('optioncss','aZ09') == 'print'?6:(empty($conf->dol_optimize_smallscreen)?'25':'6')); ?>px;
-	margin-<?php print $right; ?>: <?php print (GETPOST('optioncss','aZ09') == 'print'?6:(empty($conf->dol_optimize_smallscreen)?'24':'6')); ?>px;
+	margin-<?php print $left; ?>: <?php print (GETPOST('optioncss','aZ09') == 'print'?6:(empty($conf->dol_optimize_smallscreen)?'30':'6')); ?>px;
+	margin-<?php print $right; ?>: <?php print (GETPOST('optioncss','aZ09') == 'print'?6:(empty($conf->dol_optimize_smallscreen)?'29':'6')); ?>px;
 	<?php if (! empty($dol_hide_leftmenu)) print 'margin-bottom: 12px;'."\n"; ?>
 	<?php if (! empty($dol_hide_leftmenu)) print 'margin-top: 12px;'."\n"; ?>
 }
@@ -1707,6 +1710,10 @@ div.mainmenu.cashdesk {
 	background-image: url(<?php echo dol_buildpath($path.'/theme/'.$theme.'/img/menus/pointofsale_over.png',1) ?>);
 }
 
+div.mainmenu.takepos {
+	background-image: url(<?php echo dol_buildpath($path.'/theme/'.$theme.'/img/menus/pointofsale_over.png',1) ?>);
+}
+
 div.mainmenu.companies {
 	background-image: url(<?php echo dol_buildpath($path.'/theme/'.$theme.'/img/menus/company_over.png',1) ?>);
 }
@@ -1776,7 +1783,7 @@ $mainmenuusedarray=array_unique(explode(',',$mainmenuused));
 
 $generic=1;
 // Put here list of menu entries when the div.mainmenu.menuentry was previously defined
-$divalreadydefined=array('home','companies','products','commercial','externalsite','accountancy','project','tools','members','agenda','ftp','holiday','hrm','bookmark','cashdesk','ecm','geoipmaxmind','gravatar','clicktodial','paypal','stripe','webservices','website');
+$divalreadydefined=array('home','companies','products','commercial','externalsite','accountancy','project','tools','members','agenda','ftp','holiday','hrm','bookmark','cashdesk','takepos','ecm','geoipmaxmind','gravatar','clicktodial','paypal','stripe','webservices','website');
 // Put here list of menu entries we are sure we don't want
 $divnotrequired=array('multicurrency','salaries','ticket','margin','opensurvey','paybox','expensereport','incoterm','prelevement','propal','workflow','notification','supplier_proposal','cron','product','productbatch','expedition');
 foreach($mainmenuusedarray as $val)
@@ -2335,6 +2342,7 @@ div.tabBar table.tableforservicepart2:last-child {
 }
 .tableforservicepart1 .tdhrthin {
 	height: unset;
+    padding-top: 0 !important;
 }
 
 div.popuptabset {
@@ -2376,7 +2384,7 @@ a.tabunactive {
 }
 a.tab:link, a.tab:visited, a.tab:hover, a.tab#active {
 	font-family: <?php print $fontlist ?>;
-	padding: 12px 9px 13px;
+	padding: 12px 14px 13px;
     margin: 0em 0.2em;
     text-decoration: none;
     white-space: nowrap;
@@ -5055,7 +5063,7 @@ dl.dropdown {
 .dropdown dd ul li {
 	white-space: nowrap;
 	font-weight: normal;
-	padding: 4px 8px 4px 8px;
+	padding: 7px 8px 7px 8px;
 	/* color: rgb(<?php print $colortext; ?>); */
 	color: #000;
 }
@@ -5073,7 +5081,7 @@ dl.dropdown {
 	color: #888;
 }
 .dropdown dd ul li a:hover {
-    background-color:#fff;
+    background-color:#eee;
 }
 
 

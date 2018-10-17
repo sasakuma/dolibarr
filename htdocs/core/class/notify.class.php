@@ -2,6 +2,7 @@
 /* Copyright (C) 2003-2005 Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2011 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) 2014	   Juanjo Menent		<jmenent@2byte.es>
+ * Copyright (C) 2018 	   Philippe Grand		<philippe.grand@atoo-net.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,17 +51,16 @@ class Notify
 	 */
 	public $errors = array();
 
-	var $author;
+	public $author;
+	public $ref;
+	public $date;
+	public $duree;
+	public $note;
 
 	/**
-	 * @var string Ref
-	 */
-	public $ref;
-
-	var $date;
-	var $duree;
-	var $note;
-	var $fk_project;
+     * @var int Project ID
+     */
+    public $fk_project;
 
 	// Les codes actions sont definis dans la table llx_notify_def
 
@@ -369,6 +369,14 @@ class Notify
 		if ($result)
 		{
 			$num = $this->db->num_rows($result);
+			$projtitle='';
+			if (! empty($object->fk_project))
+			{
+				require_once DOL_DOCUMENT_ROOT.'/projet/class/project.class.php';
+				$proj = new Project($this->db);
+				$proj->fetch($object->fk_project);
+				$projtitle='('.$proj->title.')';
+			}
 
 			if ($num > 0)
 			{
@@ -388,81 +396,82 @@ class Notify
 						{
 							$outputlangs = new Translate('', $conf);
 							$outputlangs->setDefaultLang($obj->default_lang);
+							$outputlangs->loadLangs(array("main","other"));
 						}
 
-						$subject = '['.$mysoc->name.'] '.$outputlangs->transnoentitiesnoconv("DolibarrNotification");
+						$subject = '['.$mysoc->name.'] '.$outputlangs->transnoentitiesnoconv("DolibarrNotification").($projtitle?' '.$projtitle:'');
 
 						switch ($notifcode) {
 							case 'BILL_VALIDATE':
 								$link='/compta/facture/card.php?facid='.$object->id;
 								$dir_output = $conf->facture->dir_output;
 								$object_type = 'facture';
-								$mesg = $langs->transnoentitiesnoconv("EMailTextInvoiceValidated",$newref);
+								$mesg = $outputlangs->transnoentitiesnoconv("EMailTextInvoiceValidated",$newref);
 								break;
 							case 'BILL_PAYED':
 								$link='/compta/facture/card.php?facid='.$object->id;
 								$dir_output = $conf->facture->dir_output;
 								$object_type = 'facture';
-								$mesg = $langs->transnoentitiesnoconv("EMailTextInvoicePayed",$newref);
+								$mesg = $outputlangs->transnoentitiesnoconv("EMailTextInvoicePayed",$newref);
 								break;
 							case 'ORDER_VALIDATE':
 								$link='/commande/card.php?id='.$object->id;
 								$dir_output = $conf->commande->dir_output;
 								$object_type = 'order';
-								$mesg = $langs->transnoentitiesnoconv("EMailTextOrderValidated",$newref);
+								$mesg = $outputlangs->transnoentitiesnoconv("EMailTextOrderValidated",$newref);
 								break;
 							case 'PROPAL_VALIDATE':
 								$link='/comm/propal/card.php?id='.$object->id;
 								$dir_output = $conf->propal->multidir_output[$object->entity];
 								$object_type = 'propal';
-								$mesg = $langs->transnoentitiesnoconv("EMailTextProposalValidated",$newref);
+								$mesg = $outputlangs->transnoentitiesnoconv("EMailTextProposalValidated",$newref);
 								break;
 							case 'PROPAL_CLOSE_SIGNED':
 								$link='/comm/propal/card.php?id='.$object->id;
 								$dir_output = $conf->propal->multidir_output[$object->entity];
 								$object_type = 'propal';
-								$mesg = $langs->transnoentitiesnoconv("EMailTextProposalClosedSigned",$newref);
+								$mesg = $outputlangs->transnoentitiesnoconv("EMailTextProposalClosedSigned",$newref);
 								break;
 							case 'FICHINTER_ADD_CONTACT':
 								$link='/fichinter/card.php?id='.$object->id;
 								$dir_output = $conf->ficheinter->dir_output;
 								$object_type = 'ficheinter';
-								$mesg = $langs->transnoentitiesnoconv("EMailTextInterventionAddedContact",$object->ref);
+								$mesg = $outputlangs->transnoentitiesnoconv("EMailTextInterventionAddedContact",$newref);
 								break;
 							case 'FICHINTER_VALIDATE':
 								$link='/fichinter/card.php?id='.$object->id;
 								$dir_output = $conf->ficheinter->dir_output;
 								$object_type = 'ficheinter';
-								$mesg = $langs->transnoentitiesnoconv("EMailTextInterventionValidated",$object->ref);
+								$mesg = $outputlangs->transnoentitiesnoconv("EMailTextInterventionValidated",$newref);
 								break;
 							case 'ORDER_SUPPLIER_VALIDATE':
 								$link='/fourn/commande/card.php?id='.$object->id;
 								$dir_output = $conf->fournisseur->commande->dir_output;
 								$object_type = 'order_supplier';
-								$mesg = $langs->transnoentitiesnoconv("Hello").",\n\n";
-								$mesg.= $langs->transnoentitiesnoconv("EMailTextOrderValidatedBy",$object->ref,$user->getFullName($langs));
-								$mesg.= "\n\n".$langs->transnoentitiesnoconv("Sincerely").".\n\n";
+								$mesg = $outputlangs->transnoentitiesnoconv("Hello").",\n\n";
+								$mesg.= $outputlangs->transnoentitiesnoconv("EMailTextOrderValidatedBy",$newref,$user->getFullName($langs));
+								$mesg.= "\n\n".$outputlangs->transnoentitiesnoconv("Sincerely").".\n\n";
 								break;
 							case 'ORDER_SUPPLIER_APPROVE':
 								$link='/fourn/commande/card.php?id='.$object->id;
 								$dir_output = $conf->fournisseur->commande->dir_output;
 								$object_type = 'order_supplier';
-								$mesg = $langs->transnoentitiesnoconv("Hello").",\n\n";
-								$mesg.= $langs->transnoentitiesnoconv("EMailTextOrderApprovedBy",$newref,$user->getFullName($langs));
-								$mesg.= "\n\n".$langs->transnoentitiesnoconv("Sincerely").".\n\n";
+								$mesg = $outputlangs->transnoentitiesnoconv("Hello").",\n\n";
+								$mesg.= $outputlangs->transnoentitiesnoconv("EMailTextOrderApprovedBy",$newref,$user->getFullName($langs));
+								$mesg.= "\n\n".$outputlangs->transnoentitiesnoconv("Sincerely").".\n\n";
 								break;
 							case 'ORDER_SUPPLIER_REFUSE':
 								$link='/fourn/commande/card.php?id='.$object->id;
 								$dir_output = $conf->fournisseur->commande->dir_output;
 								$object_type = 'order_supplier';
-								$mesg = $langs->transnoentitiesnoconv("Hello").",\n\n";
-								$mesg.= $langs->transnoentitiesnoconv("EMailTextOrderRefusedBy",$newref,$user->getFullName($langs));
-								$mesg.= "\n\n".$langs->transnoentitiesnoconv("Sincerely").".\n\n";
+								$mesg = $outputlangs->transnoentitiesnoconv("Hello").",\n\n";
+								$mesg.= $outputlangs->transnoentitiesnoconv("EMailTextOrderRefusedBy",$newref,$user->getFullName($langs));
+								$mesg.= "\n\n".$outputlangs->transnoentitiesnoconv("Sincerely").".\n\n";
 								break;
 							case 'SHIPPING_VALIDATE':
 								$dir_output = $conf->expedition->dir_output.'/sending/';
 								$object_type = 'order_supplier';
-								$mesg = $langs->transnoentitiesnoconv("EMailTextExpeditionValidated",$newref);
+								$mesg = $outputlangs->transnoentitiesnoconv("EMailTextExpeditionValidated",$newref);
 								break;
 						}
 						$ref = dol_sanitizeFileName($newref);
@@ -572,7 +581,7 @@ class Notify
 				$link = '';
 				$num++;
 
-				$subject = '['.$mysoc->name.'] '.$langs->transnoentitiesnoconv("DolibarrNotification");
+				$subject = '['.$mysoc->name.'] '.$langs->transnoentitiesnoconv("DolibarrNotification").($projtitle?' '.$projtitle:'');
 
 				switch ($notifcode) {
 					case 'BILL_VALIDATE':
@@ -671,6 +680,8 @@ class Notify
 				$message.= $langs->transnoentities("YouReceiveMailBecauseOfNotification2",$application,$mysoc->name)."\n";
 				$message.= "\n";
 				$message.= $mesg;
+				//if ($link) $message.= "\n" . $urlwithroot . $link;	// link already added around the ref into the text
+
 				$message = nl2br($message);
 
 				// Replace keyword __SUPERVISOREMAIL__
@@ -735,4 +746,3 @@ class Notify
 		else return -1 * $error;
 	}
 }
-
