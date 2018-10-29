@@ -230,7 +230,6 @@ if (GETPOST('button_removefilter_x','alpha') || GETPOST('button_removefilter','a
 	$toselect='';
 	$search_array_options=array();
 	$search_categ_cus=0;
-
 }
 
 if (empty($reshook))
@@ -310,7 +309,6 @@ if ($massaction == 'withdrawrequest')
 				else {
 					$listofbills[] = $objecttmp;    // $listofbills will only contains invoices with good payment method and no request already done
 				}
-
 			}
 		}
 
@@ -340,7 +338,6 @@ if ($massaction == 'withdrawrequest')
 			}
 		}
 	}
-
 }
 
 
@@ -422,7 +419,7 @@ if ($filtre)
 }
 if ($search_ref) $sql .= natural_search('f.facnumber', $search_ref);
 if ($search_refcustomer) $sql .= natural_search('f.ref_client', $search_refcustomer);
-if ($search_type != '') $sql.=" AND f.type IN (".$db->escape($search_type).")";
+if ($search_type != '' && $search_type != '-1') $sql.=" AND f.type IN (".$db->escape($search_type).")";
 if ($search_project) $sql .= natural_search('p.ref', $search_project);
 if ($search_societe) $sql .= natural_search('s.nom', $search_societe);
 if ($search_town)  $sql.= natural_search('s.town', $search_town);
@@ -1229,7 +1226,6 @@ if ($resql)
 			   else print '<td></td>';
 			}
 			print '</tr>';
-
 		}
 	}
 
