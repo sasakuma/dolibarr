@@ -55,7 +55,7 @@ $options['categorie'] = ((GETPOST('categorie', 'int')?GETPOST('categorie', 'int'
 $options['start']     = ((GETPOST('start', 'int')?GETPOST('start', 'int'):0) + 0);
 $options['end']       = ((GETPOST('end', 'int')?GETPOST('end', 'int'):0) + 0);
 $options['search']    = GETPOST('search_keyword', 'alpha');
-$dolistore            = new Dolistore();
+$dolistore            = new Dolistore(false);
 
 
 if (! $user->admin)
@@ -832,6 +832,8 @@ if ($mode == 'common')
     }
 
     dol_fiche_end();
+
+    print '<br>';
 
     // Show warning about external users
     print info_admin(showModulesExludedForExternal($modules))."\n";

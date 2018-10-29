@@ -6,6 +6,7 @@
  * Copyright (C) 2005-2013  Laurent Destailleur     <eldy@users.sourceforge.net>
  * Copyright (C) 2005-2012  Regis Houssin           <regis.houssin@capnetworks.com>
  * Copyright (C) 2014       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2018       Josep Lluís Amador      <joseplluis@lliuretic.cat>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -953,7 +954,7 @@ class DolibarrModules           // Can not be abstract, because we need to insta
 		$sql.= " WHERE ".$this->db->decrypt('name')." = '".$this->db->escape($this->const_name)."'";
 		$sql.= " AND entity IN (0, ".$entity.")";
 
-		dol_syslog(get_class($this)."::_active delect activation constant", LOG_DEBUG);
+		dol_syslog(get_class($this)."::_active delete activation constant", LOG_DEBUG);
 		$resql=$this->db->query($sql);
 		if (! $resql) $err++;
 
@@ -1322,11 +1323,11 @@ class DolibarrModules           // Can not be abstract, because we need to insta
 				$unitfrequency = isset($this->cronjobs[$key]['unitfrequency'])?$this->cronjobs[$key]['unitfrequency']:'';
 				$status = isset($this->cronjobs[$key]['status'])?$this->cronjobs[$key]['status']:'';
 				$priority = isset($this->cronjobs[$key]['priority'])?$this->cronjobs[$key]['priority']:'';
-				$test = isset($this->cronjobs[$key]['test'])?$this->cronjobs[$key]['test']:'';                              // Line must be visible
+				$test = isset($this->cronjobs[$key]['test'])?$this->cronjobs[$key]['test']:'';					// Line must be enabled or not (so visible or not)
 
 				// Search if boxes def already present
 				$sql = "SELECT count(*) as nb FROM ".MAIN_DB_PREFIX."cronjob";
-				$sql.= " WHERE module_name = '".$this->db->escape($this->rights_class)."'";
+				$sql.= " WHERE module_name = '".$this->db->escape(empty($this->rights_class)?strtolower($this->name):$this->rights_class)."'";
 				if ($class) $sql.= " AND classesname = '".$this->db->escape($class)."'";
 				if ($objectname) $sql.= " AND objectname = '".$this->db->escape($objectname)."'";
 				if ($method) $sql.= " AND methodename = '".$this->db->escape($method)."'";
@@ -1352,7 +1353,7 @@ class DolibarrModules           // Can not be abstract, because we need to insta
 							if(is_int($status)){ $sql.= ' status,'; }
 							$sql.= " entity, test)";
 							$sql.= " VALUES (";
-							$sql.= "'".$this->db->escape($this->rights_class)."', ";
+							$sql.= "'".$this->db->escape(empty($this->rights_class)?strtolower($this->name):$this->rights_class)."', ";
 							$sql.= "'".$this->db->idate($now)."', ";
 							$sql.= "'".$this->db->idate($now)."', ";
 							$sql.= "'".$this->db->escape($label)."', ";
@@ -1414,8 +1415,10 @@ class DolibarrModules           // Can not be abstract, because we need to insta
 		if (is_array($this->cronjobs))
 		{
 			$sql = "DELETE FROM ".MAIN_DB_PREFIX."cronjob";
-			$sql.= " WHERE module_name = '".$this->db->escape($this->rights_class)."'";
+			$sql.= " WHERE module_name = '".$this->db->escape(empty($this->rights_class)?strtolower($this->name):$this->rights_class)."'";
 			$sql.= " AND entity = ".$conf->entity;
+			$sql.= " AND test = '1'";		// We delete on lines that are not set with a complete test that is '$conf->module->enabled' so when module is disabled, the cron is also removed.
+											// For crons declared with a '$conf->module->enabled', there is no need to delete the line, so we don't loose setup if we reenable module.
 
 			dol_syslog(get_class($this)."::delete_cronjobs", LOG_DEBUG);
 			$resql=$this->db->query($sql);
@@ -1671,54 +1674,57 @@ class DolibarrModules           // Can not be abstract, because we need to insta
 					// Search if perm already present
 					$sql = "SELECT count(*) as nb FROM ".MAIN_DB_PREFIX."rights_def";
 					$sql.= " WHERE id = ".$r_id." AND entity = ".$entity;
-					$resqlselect=$this->db->query($sql);
 
-					$obj = $this->db->fetch_object($resqlselect);
-					if ($obj->nb == 0)
+					$resqlselect=$this->db->query($sql);
+					if ($resqlselect)
 					{
-						if (dol_strlen($r_perms) )
+						$objcount = $this->db->fetch_object($resqlselect);
+						if ($objcount && $objcount->nb == 0)
 						{
-							if (dol_strlen($r_subperms) )
+							if (dol_strlen($r_perms) )
 							{
-								$sql = "INSERT INTO ".MAIN_DB_PREFIX."rights_def";
-								$sql.= " (id, entity, libelle, module, type, bydefault, perms, subperms)";
-								$sql.= " VALUES ";
-								$sql.= "(".$r_id.",".$entity.",'".$this->db->escape($r_desc)."','".$r_modul."','".$r_type."',".$r_def.",'".$r_perms."','".$r_subperms."')";
+								if (dol_strlen($r_subperms) )
+								{
+									$sql = "INSERT INTO ".MAIN_DB_PREFIX."rights_def";
+									$sql.= " (id, entity, libelle, module, type, bydefault, perms, subperms)";
+									$sql.= " VALUES ";
+									$sql.= "(".$r_id.",".$entity.",'".$this->db->escape($r_desc)."','".$r_modul."','".$r_type."',".$r_def.",'".$r_perms."','".$r_subperms."')";
+								}
+								else
+								{
+									$sql = "INSERT INTO ".MAIN_DB_PREFIX."rights_def";
+									$sql.= " (id, entity, libelle, module, type, bydefault, perms)";
+									$sql.= " VALUES ";
+									$sql.= "(".$r_id.",".$entity.",'".$this->db->escape($r_desc)."','".$r_modul."','".$r_type."',".$r_def.",'".$r_perms."')";
+								}
 							}
 							else
 							{
-								$sql = "INSERT INTO ".MAIN_DB_PREFIX."rights_def";
-								$sql.= " (id, entity, libelle, module, type, bydefault, perms)";
-								$sql.= " VALUES ";
-								$sql.= "(".$r_id.",".$entity.",'".$this->db->escape($r_desc)."','".$r_modul."','".$r_type."',".$r_def.",'".$r_perms."')";
+								$sql = "INSERT INTO ".MAIN_DB_PREFIX."rights_def ";
+								$sql .= " (id, entity, libelle, module, type, bydefault)";
+								$sql .= " VALUES ";
+								$sql .= "(".$r_id.",".$entity.",'".$this->db->escape($r_desc)."','".$r_modul."','".$r_type."',".$r_def.")";
 							}
-						}
-						else
-						{
-							$sql = "INSERT INTO ".MAIN_DB_PREFIX."rights_def ";
-							$sql .= " (id, entity, libelle, module, type, bydefault)";
-							$sql .= " VALUES ";
-							$sql .= "(".$r_id.",".$entity.",'".$this->db->escape($r_desc)."','".$r_modul."','".$r_type."',".$r_def.")";
-						}
 
-						$resqlinsert=$this->db->query($sql,1);
+							$resqlinsert=$this->db->query($sql,1);
 
-						if (! $resqlinsert)
-						{
-							if ($this->db->errno() != "DB_ERROR_RECORD_ALREADY_EXISTS")
+							if (! $resqlinsert)
 							{
-								$this->error=$this->db->lasterror();
-								$err++;
-								break;
-							}
-							else dol_syslog(get_class($this)."::insert_permissions record already exists", LOG_INFO);
+								if ($this->db->errno() != "DB_ERROR_RECORD_ALREADY_EXISTS")
+								{
+									$this->error=$this->db->lasterror();
+									$err++;
+									break;
+								}
+								else dol_syslog(get_class($this)."::insert_permissions record already exists", LOG_INFO);
 
+							}
+
+							$this->db->free($resqlinsert);
 						}
 
-						$this->db->free($resqlinsert);
+						$this->db->free($resqlselect);
 					}
-
-					$this->db->free($resqlselect);
 
 					// If we want to init permissions on admin users
 					if ($reinitadminperms)
@@ -1737,23 +1743,33 @@ class DolibarrModules           // Can not be abstract, because we need to insta
 							{
 								$obj2=$this->db->fetch_object($resqlseladmin);
 								dol_syslog(get_class($this)."::insert_permissions Add permission to user id=".$obj2->rowid);
+
 								$tmpuser=new User($this->db);
-								$tmpuser->fetch($obj2->rowid);
-								if (!empty($tmpuser->id)) {
+								$result = $tmpuser->fetch($obj2->rowid);
+								if ($result > 0) {
 									$tmpuser->addrights($r_id, '', '', 0, 1);
+								}
+								else
+								{
+									dol_syslog(get_class($this)."::insert_permissions Failed to add the permission to user because fetch return an error", LOG_ERR);
 								}
 								$i++;
 							}
-							if (! empty($user->admin))  // Reload permission for current user if defined
-							{
-								// We reload permissions
-								$user->clearrights();
-								$user->getrights();
-							}
 						}
-						else dol_print_error($this->db);
+						else
+						{
+							dol_print_error($this->db);
+						}
 					}
 				}
+
+				if ($reinitadminperms && ! empty($user->admin))  // Reload permission for current user if defined
+				{
+					// We reload permissions
+					$user->clearrights();
+					$user->getrights();
+				}
+
 			}
 			$this->db->free($resql);
 		}
@@ -1779,7 +1795,7 @@ class DolibarrModules           // Can not be abstract, because we need to insta
 		$err=0;
 
 		$sql = "DELETE FROM ".MAIN_DB_PREFIX."rights_def";
-		$sql.= " WHERE module = '".$this->db->escape($this->rights_class)."'";
+		$sql.= " WHERE module = '".$this->db->escape(empty($this->rights_class)?strtolower($this->name):$this->rights_class)."'";
 		$sql.= " AND entity = ".$conf->entity;
 		dol_syslog(get_class($this)."::delete_permissions", LOG_DEBUG);
 		if (! $this->db->query($sql))
@@ -1817,7 +1833,7 @@ class DolibarrModules           // Can not be abstract, because we need to insta
 			$menu->menu_handler='all';
 
 			//$menu->module=strtolower($this->name);	TODO When right_class will be same than module name
-			$menu->module=$this->rights_class;
+			$menu->module=empty($this->rights_class)?strtolower($this->name):$this->rights_class;
 
 			if (! $this->menu[$key]['fk_menu'])
 			{
@@ -1913,7 +1929,7 @@ class DolibarrModules           // Can not be abstract, because we need to insta
 		$err=0;
 
 		//$module=strtolower($this->name);		TODO When right_class will be same than module name
-		$module=$this->rights_class;
+		$module=empty($this->rights_class)?strtolower($this->name):$this->rights_class;
 
 		$sql = "DELETE FROM ".MAIN_DB_PREFIX."menu";
 		$sql.= " WHERE module = '".$this->db->escape($module)."'";

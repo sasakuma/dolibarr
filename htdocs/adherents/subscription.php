@@ -330,7 +330,7 @@ if ($user->rights->adherent->cotisation->creer && $action == 'subscription' && !
 
         if (! $error)
         {
-//            $db->commit();
+            $db->commit();
         }
         else
         {
@@ -392,7 +392,9 @@ if ($user->rights->adherent->cotisation->creer && $action == 'subscription' && !
                 	$listofmimes=array(dol_mimetype($file));
                 }
 
-                $result=$object->send_an_email($texttosend, $subjecttosend, $listofpaths, $listofnames, $listofmimes, "", "", 0, -1);
+                $moreinheader='X-Dolibarr-Info: send_an_email by adherents/subscription.php'."\r\n";
+
+                $result=$object->send_an_email($texttosend, $subjecttosend, $listofpaths, $listofnames, $listofmimes, "", "", 0, -1, '', $moreinheader);
                 if ($result < 0)
                 {
                 	$errmsg=$object->error;

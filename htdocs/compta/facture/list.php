@@ -88,13 +88,15 @@ $search_country=GETPOST("search_country",'int');
 $search_type_thirdparty=GETPOST("search_type_thirdparty",'int');
 $search_user = GETPOST('search_user','int');
 $search_sale = GETPOST('search_sale','int');
-$search_day	= GETPOST('search_day','int');
+$search_day		= GETPOST('search_day','int');
 $search_month	= GETPOST('search_month','int');
 $search_year	= GETPOST('search_year','int');
-$search_day_lim	= GETPOST('search_day_lim','int');
+$search_day_lim		= GETPOST('search_day_lim','int');
 $search_month_lim	= GETPOST('search_month_lim','int');
 $search_year_lim	= GETPOST('search_year_lim','int');
 $search_categ_cus=trim(GETPOST("search_categ_cus",'int'));
+$search_btn=GETPOST('button_search','alpha');
+$search_remove_btn=GETPOST('button_removefilter','alpha');
 
 $option = GETPOST('search_option');
 if ($option == 'late') {
@@ -106,7 +108,7 @@ $limit = GETPOST('limit','int')?GETPOST('limit','int'):$conf->liste_limit;
 $sortfield = GETPOST("sortfield",'alpha');
 $sortorder = GETPOST("sortorder",'alpha');
 $page = GETPOST("page",'int');
-if (empty($page) || $page == -1) { $page = 0; }     // If $page is not defined, or '' or -1
+if (empty($page) || $page == -1 || !empty($search_btn) || !empty($search_remove_btn) || (empty($toselect) && $massaction === '0')) { $page = 0; }     // If $page is not defined, or '' or -1
 $offset = $limit * $page;
 if (! $sortorder && ! empty($conf->global->INVOICE_DEFAULT_UNPAYED_SORT_ORDER) && $search_status == '1') $sortorder=$conf->global->INVOICE_DEFAULT_UNPAYED_SORT_ORDER;
 if (! $sortorder) $sortorder='DESC';
@@ -442,7 +444,7 @@ if ($search_montant_localtax2 != '') $sql.= natural_search('f.localtax2', $searc
 if ($search_montant_ttc != '') $sql.= natural_search('f.total_ttc', $search_montant_ttc, 1);
 if ($search_categ_cus > 0) $sql.= " AND cc.fk_categorie = ".$db->escape($search_categ_cus);
 if ($search_categ_cus == -2)   $sql.= " AND cc.fk_categorie IS NULL";
-if ($search_status != '')
+if ($search_status != '-1' && $search_status != '')
 {
 	if (is_numeric($search_status) && $search_status >= 0)
 	{
@@ -462,7 +464,7 @@ if ($search_month > 0)
 	if ($search_year > 0 && empty($search_day))
 	$sql.= " AND f.datef BETWEEN '".$db->idate(dol_get_first_day($search_year,$search_month,false))."' AND '".$db->idate(dol_get_last_day($search_year,$search_month,false))."'";
 	else if ($search_year > 0 && ! empty($search_day))
-	$sql.= " AND f.datef BETWEEN '".$db->idate(dol_mktime(0, 0, 0, $search_month, $search_day, $search_year))."' AND '".$db->idate(dol_mktime(23, 59, 59, $search_month, $search_day, $serch_year))."'";
+	$sql.= " AND f.datef BETWEEN '".$db->idate(dol_mktime(0, 0, 0, $search_month, $search_day, $search_year))."' AND '".$db->idate(dol_mktime(23, 59, 59, $search_month, $search_day, $search_year))."'";
 	else
 	$sql.= " AND date_format(f.datef, '%m') = '".$search_month."'";
 }
@@ -507,8 +509,9 @@ if (! $sall)
 	$sql.= ' typent.code,';
 	$sql.= ' state.code_departement, state.nom,';
 	$sql.= ' country.code,';
-	$sql.= " p.rowid, p.ref";
-
+	$sql.= " p.rowid, p.ref, p.title";
+	if ($search_categ_cus) $sql .= ", cc.fk_categorie, cc.fk_soc";
+	// Add fields from extrafields
 	foreach ($extrafields->attribute_label as $key => $val) //prevent error with sql_mode=only_full_group_by
 	{
 		$sql.=($extrafields->attribute_type[$key] != 'separate' ? ",ef.".$key : '');
@@ -572,14 +575,14 @@ if ($resql)
 	if ($search_zip)         $param.='&search_zip='.urlencode($search_zip);
 	if ($search_sale > 0)    $param.='&search_sale=' .urlencode($search_sale);
 	if ($search_user > 0)    $param.='&search_user=' .urlencode($search_user);
-	if ($search_product_category > 0)   $param.='$search_product_category=' .urlencode($search_product_category);
+	if ($search_product_category > 0)   $param.='&search_product_category=' .urlencode($search_product_category);
 	if ($search_montant_ht != '')  $param.='&search_montant_ht='.urlencode($search_montant_ht);
 	if ($search_montant_vat != '')  $param.='&search_montant_vat='.urlencode($search_montant_vat);
 	if ($search_montant_localtax1 != '')  $param.='&search_montant_localtax1='.urlencode($search_montant_localtax1);
 	if ($search_montant_localtax2 != '')  $param.='&search_montant_localtax2='.urlencode($search_montant_localtax2);
 	if ($search_montant_ttc != '') $param.='&search_montant_ttc='.urlencode($search_montant_ttc);
 	if ($search_status != '') $param.='&search_status='.urlencode($search_status);
-	if ($search_paymentmode > 0) $param.='search_paymentmode='.urlencode($search_paymentmode);
+	if ($search_paymentmode > 0) $param.='&search_paymentmode='.urlencode($search_paymentmode);
 	if ($show_files)         $param.='&show_files='.urlencode($show_files);
 	if ($option)             $param.="&search_option=".urlencode($option);
 	if ($optioncss != '')    $param.='&optioncss='.urlencode($optioncss);
@@ -906,7 +909,8 @@ if ($resql)
 	print "</tr>\n";
 
 	$projectstatic=new Project($db);
-
+	$discount = new DiscountAbsolute($db);
+	
 	if ($num > 0)
 	{
 		$i=0;
@@ -920,6 +924,9 @@ if ($resql)
 			$facturestatic->ref=$obj->ref;
 			$facturestatic->type=$obj->type;
 			$facturestatic->statut=$obj->fk_statut;
+			$facturestatic->total_ttc=$obj->total_ttc;
+            $facturestatic->paye=$obj->paye;
+            $facturestatic->fk_soc=$obj->fk_soc;
 			$facturestatic->date_lim_reglement=$db->jdate($obj->datelimite);
 			$facturestatic->note_public=$obj->note_public;
 			$facturestatic->note_private=$obj->note_private;
@@ -939,7 +946,12 @@ if ($resql)
 			$totalcreditnotes = $facturestatic->getSumCreditNotesUsed();
 			$totaldeposits = $facturestatic->getSumDepositsUsed();
 			$totalpay = $paiement + $totalcreditnotes + $totaldeposits;
-			$remaintopay = $obj->total_ttc - $totalpay;
+			$remaintopay = $facturestatic->total_ttc - $totalpay;
+			if ($facturestatic->type == Facture::TYPE_CREDIT_NOTE && $obj->paye == 1) {
+				$remaincreditnote = $discount->getAvailableDiscounts($obj->fk_soc, '', 'rc.fk_facture_source='.$facturestatic->id);
+				$remaintopay = -$remaincreditnote;
+				$totalpay = $facturestatic->total_ttc - $remaintopay;
+			}
 
 			print '<tr class="oddeven">';
 			if (! empty($arrayfields['f.facnumber']['checked']))

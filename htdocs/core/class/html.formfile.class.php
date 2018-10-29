@@ -122,11 +122,12 @@ class FormFile
 			if (preg_match('/g$/i',$maxphp)) $maxphp=$maxphp*1024*1024;
 			if (preg_match('/t$/i',$maxphp)) $maxphp=$maxphp*1024*1024*1024;
 			// Now $max and $maxphp are in Kb
-			if ($maxphp > 0) $max=min($max,$maxphp);
+			$maxmin = $max;
+			if ($maxphp > 0) $maxmin=min($max,$maxphp);
 
-			if ($max > 0)
+			if ($maxmin > 0)
 			{
-				$out .= '<input type="hidden" name="max_file_size" value="'.($max*1024).'">';
+				$out .= '<input type="hidden" name="max_file_size" value="'.($maxmin*1024).'">';
 			}
 
 			$out .= '<input class="flat minwidth400" type="file"';
@@ -179,7 +180,7 @@ class FormFile
 
 			if ($linkfiles)
 			{
-				$out .= "\n<!-- Start form attach new link -->\n";
+				$out .= "\n<!-- Start form link new url -->\n";
 				$langs->load('link');
 				$title = $langs->trans("LinkANewFile");
 				$out .= load_fiche_titre($title, null, null);
@@ -207,19 +208,18 @@ class FormFile
 				$out .= '</div>';
 				$out .= '<div class="clearboth"></div>';
 				$out .= '</form><br>';
-				$parameters = array('socid'=>(isset($GLOBALS['socid'])?$GLOBALS['socid']:''),'id'=>(isset($GLOBALS['id'])?$GLOBALS['id']:''), 'url'=>$url, 'perm'=>$perm);
-				$res = $hookmanager->executeHooks('formattachOptions',$parameters,$object);
 
-				$out .= "\n<!-- End form attach new file -->\n";
+				$out .= "\n<!-- End form link new url -->\n";
 			}
 
+			$parameters = array('socid'=>(isset($GLOBALS['socid'])?$GLOBALS['socid']:''), 'id'=>(isset($GLOBALS['id'])?$GLOBALS['id']:''), 'url'=>$url, 'perm'=>$perm);
+			$res = $hookmanager->executeHooks('formattachOptions',$parameters,$object);
 			if (empty($res))
 			{
 				print '<div class="attacharea attacharea'.$htmlname.'">';
 				print $out;
 				print '</div>';
 			}
-
 			print $hookmanager->resPrint;
 
 			return 1;
@@ -778,7 +778,8 @@ class FormFile
 						$out.= '<td class="right nowraponall">';
 						if ($delallowed)
 						{
-							$out.= '<a href="'.$urlsource.(strpos($urlsource,'?')?'&amp;':'?').'action=remove_file&amp;file='.urlencode($relativepath);
+							$tmpurlsource = preg_replace('/#[a-zA-Z0-9_]*$/', '', $urlsource);
+							$out.= '<a href="'.$tmpurlsource.(strpos($tmpurlsource,'?')?'&amp;':'?').'action=remove_file&amp;file='.urlencode($relativepath);
 							$out.= ($param?'&amp;'.$param:'');
 							//$out.= '&modulepart='.$modulepart; // TODO obsolete ?
 							//$out.= '&urlsource='.urlencode($urlsource); // TODO obsolete ?
@@ -814,7 +815,7 @@ class FormFile
 
 				$this->numoffiles++;
 			}
-			// Loop on each file found
+			// Loop on each link found
 			if (is_array($link_list))
 			{
 				$colspan=2;
@@ -1304,8 +1305,7 @@ class FormFile
 							if (! empty($conf->dol_use_jmobile)) $useajax=0;
 							if (empty($conf->use_javascript_ajax)) $useajax=0;
 							if (! empty($conf->global->MAIN_ECM_DISABLE_JS)) $useajax=0;
-
-							print '<a href="'.(($useinecm && $useajax)?'#':$url.'?action=delete&urlfile='.urlencode($filepath).$param).'" class="deletefilelink" rel="'.$filepath.'">'.img_delete().'</a>';
+							print '<a href="'.(($useinecm && $useajax)?'#':($url.'?action=delete&urlfile='.urlencode($filepath).$param)).'" class="deletefilelink" rel="'.$filepath.'">'.img_delete().'</a>';
 						}
 						print "</td>";
 

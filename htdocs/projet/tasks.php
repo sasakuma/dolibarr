@@ -64,6 +64,7 @@ $extrafields_project = new ExtraFields($db);
 $extrafields_task = new ExtraFields($db);
 
 include DOL_DOCUMENT_ROOT.'/core/actions_fetchobject.inc.php';  // Must be include, not include_once
+if(! empty($conf->global->PROJECT_ALLOW_COMMENT_ON_PROJECT) && method_exists($object, 'fetchComments') && empty($object->comments)) $object->fetchComments();
 
 if ($id > 0 || ! empty($ref))
 {
@@ -489,7 +490,7 @@ if ($action == 'create' && $user->rights->projet->creer && (empty($object->third
 
 	// Planned workload
 	print '<tr><td>'.$langs->trans("PlannedWorkload").'</td><td>';
-	print $form->select_duration('planned_workload', $planned_workload?$planned_workload : $object->planned_workload,0,'text');
+	print $form->select_duration('planned_workload', $planned_workload?$planned_workload : 0, 0, 'text');
 	print '</td></tr>';
 
 	// Progress
@@ -505,11 +506,12 @@ if ($action == 'create' && $user->rights->projet->creer && (empty($object->third
 
 	// Other options
 	$parameters=array();
-	$reshook=$hookmanager->executeHooks('formObjectOptions',$parameters,$object,$action); // Note that $action and $object may have been modified by hook
+	$reshook=$hookmanager->executeHooks('formObjectOptions',$parameters,$taskstatic,$action); // Note that $action and $object may have been modified by hook
     print $hookmanager->resPrint;
+
     if (empty($reshook) && ! empty($extrafields_task->attribute_label))
 	{
-		print $object->showOptionals($extrafields_task,'edit');
+		print $taskstatic->showOptionals($extrafields_task,'edit');		// Do not use $object here that is object of project
 	}
 
 	print '</table>';

@@ -39,7 +39,7 @@ require_once DOL_DOCUMENT_ROOT.'/societe/class/societeaccount.class.php';
 require_once DOL_DOCUMENT_ROOT.'/compta/prelevement/class/bonprelevement.class.php';
 require_once DOL_DOCUMENT_ROOT.'/stripe/class/stripe.class.php';
 
-$langs->loadLangs(array("companies","commercial","banks","bills",'paypal','stripe'));
+$langs->loadLangs(array("companies","commercial","banks","bills",'paypal','stripe','withdrawals'));
 
 
 // Security check
@@ -550,13 +550,17 @@ if (empty($reshook))
 
 			$db->begin();
 
+                if (empty($newcu)) {
+                        $sql  = "DELETE FROM ".MAIN_DB_PREFIX."societe_account WHERE site = 'stripe' AND fk_soc = ".$object->id." AND status = ".$servicestatus." AND entity = ".$conf->entity;
+                } else {
 			$sql = 'UPDATE '.MAIN_DB_PREFIX."societe_account";
 			$sql.= " SET key_account = '".$db->escape(GETPOST('key_account', 'alpha'))."'";
 			$sql.= " WHERE site = 'stripe' AND fk_soc = ".$object->id." AND status = ".$servicestatus." AND entity = ".$conf->entity;	// Keep = here for entity. Only 1 record must be modified !
-
+                }
+     
 			$resql = $db->query($sql);
 			$num = $db->num_rows($resql);
-			if (empty($num))
+			if (empty($num) && !empty($newcu))
 			{
 				$societeaccount = new SocieteAccount($db);
 				$societeaccount->fk_soc = $object->id;

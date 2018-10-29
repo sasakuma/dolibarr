@@ -223,10 +223,10 @@ abstract class CommonDocGenerator
 	/**
 	 * Define array with couple subtitution key => subtitution value
 	 *
-	 * @param	Contact 		$object        	contact
+	 * @param	Contact 	$object        	contact
 	 * @param	Translate 	$outputlangs   	object for output
-	 * @param   array_key	$array_key	    Name of the key for return array
-	 * @return	array of substitution key->code
+	 * @param   array		$array_key	    Name of the key for return array
+	 * @return	array 						Array of substitution key->code
 	 */
 	function get_substitutionarray_contact($object, $outputlangs, $array_key = 'object') {
 		global $conf;
@@ -552,9 +552,9 @@ abstract class CommonDocGenerator
     /**
      * Define array with couple substitution key => substitution value
      *
-     * @param   Expedition			$object             Main object to use as data source
+     * @param   Expedition		$object             Main object to use as data source
      * @param   Translate		$outputlangs        Lang object to use for output
-     * @param   array_key		$array_key	        Name of the key for return array
+     * @param   array			$array_key	        Name of the key for return array
      * @return	array								Array of substitution
      */
     function get_substitutionarray_shipment($object,$outputlangs,$array_key='object')
@@ -596,15 +596,16 @@ abstract class CommonDocGenerator
     	}
 
     	// Retrieve extrafields
-    	/*if(is_array($object->array_options) && count($object->array_options))
+    	if (is_array($object->array_options) && count($object->array_options))
     	{
     		require_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
     		$extrafields = new ExtraFields($this->db);
-    		$extralabels = $extrafields->fetch_name_optionals_label('shipment',true);
+    		$extralabels = $extrafields->fetch_name_optionals_label('expedition',true);
     		$object->fetch_optionals();
 
     		$array_shipment = $this->fill_substitutionarray_with_extrafields($object,$array_shipment,$extrafields,$array_key,$outputlangs);
-    	}*/
+    	}
+
     	return $array_shipment;
     }
 
@@ -612,16 +613,16 @@ abstract class CommonDocGenerator
     /**
      *	Define array with couple substitution key => substitution value
      *
-     *	@param  array			$line				Array of lines
+     *	@param  ExpeditionLigne	$line				Object line
      *	@param  Translate		$outputlangs        Lang object to use for output
      *	@return	array								Substitution array
      */
-    function get_substitutionarray_shipment_lines($line,$outputlangs)
+    function get_substitutionarray_shipment_lines($line, $outputlangs)
     {
     	global $conf;
 		dol_include_once('/core/lib/product.lib.php');
 
-    	return array(
+        $resarray = array(
 	    	'line_fulldesc'=>doc_getlinedesc($line,$outputlangs),
 	    	'line_product_ref'=>$line->product_ref,
 	    	'line_product_label'=>$line->product_label,
@@ -640,6 +641,18 @@ abstract class CommonDocGenerator
 	    	'line_surface'=>empty($line->surface) ? '' : $line->surface*$line->qty_shipped.' '.measuring_units_string($line->surface_units, 'surface'),
 	    	'line_volume'=>empty($line->volume) ? '' : $line->volume*$line->qty_shipped.' '.measuring_units_string($line->volume_units, 'volume'),
     	);
+
+		// Retrieve extrafields
+        $extrafieldkey = $line->element;
+        $array_key = "line";
+        require_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
+        $extrafields = new ExtraFields($this->db);
+        $extralabels = $extrafields->fetch_name_optionals_label($extrafieldkey, true);
+        $line->fetch_optionals();
+
+        $resarray = $this->fill_substitutionarray_with_extrafields($line, $resarray, $extrafields, $array_key, $outputlangs);
+
+        return $resarray;
     }
 
 
@@ -733,7 +746,7 @@ abstract class CommonDocGenerator
 	/**
 	 * Rect pdf
 	 *
-	 * @param	PDF		$pdf			Object PDF
+	 * @param	TCPDF	$pdf			Object PDF
 	 * @param	float	$x				Abscissa of first point
 	 * @param	float	$y		        Ordinate of first point
 	 * @param	float	$l				??
