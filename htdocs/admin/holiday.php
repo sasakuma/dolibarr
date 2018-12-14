@@ -2,6 +2,7 @@
 /* Copyright (C) 2011-2013      Juanjo Menent	    <jmenent@2byte.es>
  * Copyright (C) 2011-2018      Philippe Grand	    <philippe.grand@atoo-net.com>
  * Copyright (C) 2018		    Charlene Benke		<charlie@patas-monkey.com>
+ * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,8 +75,8 @@ else if ($action == 'specimen') // For contract
 {
 	$modele= GETPOST('module','alpha');
 
-	$contract = new Contrat($db);
-	$contract->initAsSpecimen();
+	$holiday = new Holiday($db);
+	$holiday->initAsSpecimen();
 
 	// Search template files
 	$file=''; $classname=''; $filefound=0;
@@ -97,7 +98,7 @@ else if ($action == 'specimen') // For contract
 
 		$module = new $classname($db);
 
-		if ($module->write_file($contract,$langs) > 0)
+		if ($module->write_file($holiday,$langs) > 0)
 		{
 			header("Location: ".DOL_URL_ROOT."/document.php?modulepart=holiday&file=SPECIMEN.pdf");
 			return;
@@ -270,7 +271,7 @@ foreach ($dirmodels as $reldir)
 						// Info
 						$htmltooltip='';
 						$htmltooltip.=''.$langs->trans("Version").': <b>'.$module->getVersion().'</b><br>';
-						$nextval=$module->getNextValue($mysoc,$contract);
+						$nextval=$module->getNextValue($mysoc,$holiday);
                         if ("$nextval" != $langs->trans("NotAvailable")) {  // Keep " on nextval
                             $htmltooltip.=''.$langs->trans("NextValue").': ';
                             if ($nextval) {

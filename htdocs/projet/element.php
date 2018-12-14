@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2001-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@capnetworks.com>
+ * Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
  * Copyright (C) 2012-2016 Juanjo Menent        <jmenent@2byte.es>
  * Copyright (C) 2015-2018 Alexandre Spangaro   <aspangaro@zendsi.com>
  * Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
@@ -218,7 +218,7 @@ print nl2br($object->description);
 print '</td></tr>';
 
 // Bill time
-if (! empty($conf->global->PROJECT_BILL_TIME_SPENT))
+if (empty($conf->global->PROJECT_HIDE_TASKS) && ! empty($conf->global->PROJECT_BILL_TIME_SPENT))
 {
 	print '<tr><td>'.$langs->trans("BillTime").'</td><td>';
 	print yn($object->bill_time);
@@ -905,16 +905,16 @@ foreach ($listofreferent as $key => $value)
 
 					$element_doc = $element->element;
 					$filename=dol_sanitizeFileName($element->ref);
-					$filedir=$conf->{$element_doc}->dir_output . '/' . dol_sanitizeFileName($element->ref);
+					$filedir=$conf->{$element_doc}->multidir_output[$element->entity] . '/' . dol_sanitizeFileName($element->ref);
 
 					if ($element_doc === 'order_supplier') {
 						$element_doc='commande_fournisseur';
-						$filedir = $conf->fournisseur->commande->dir_output.'/'.dol_sanitizeFileName($element->ref);
+						$filedir = $conf->fournisseur->commande->multidir_output[$element->entity].'/'.dol_sanitizeFileName($element->ref);
 					}
 					else if ($element_doc === 'invoice_supplier') {
 						$element_doc='facture_fournisseur';
 						$filename = get_exdir($element->id,2,0,0,$element,'product').dol_sanitizeFileName($element->ref);
-						$filedir = $conf->fournisseur->facture->dir_output.'/'.get_exdir($element->id,2,0,0,$element,'invoice_supplier').dol_sanitizeFileName($element->ref);
+						$filedir = $conf->fournisseur->facture->multidir_output[$element->entity].'/'.get_exdir($element->id,2,0,0,$element,'invoice_supplier').dol_sanitizeFileName($element->ref);
 					}
 
 					print '<div class="inline-block valignmiddle">'.$formfile->getDocumentsLink($element_doc, $filename, $filedir).'</div>';
