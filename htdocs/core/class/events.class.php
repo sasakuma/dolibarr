@@ -155,10 +155,10 @@ class Events // extends CommonObject
 		$sql.= " '".$this->db->escape($this->type)."',";
 		$sql.= " ".$conf->entity.",";
 		$sql.= " '".$this->db->escape(getUserRemoteIP())."',";
-		$sql.= " ".($this->user_agent ? "'".$this->db->escape(dol_trunc($this->user_agent,250))."'" : 'NULL').",";
+		$sql.= " ".($this->user_agent ? "'".$this->db->escape(dol_trunc($this->user_agent, 250))."'" : 'NULL').",";
 		$sql.= " '".$this->db->idate($this->dateevent)."',";
 		$sql.= " ".($user->id?"'".$this->db->escape($user->id)."'":'NULL').",";
-		$sql.= " '".$this->db->escape(dol_trunc($this->description,250))."'";
+		$sql.= " '".$this->db->escape(dol_trunc($this->description, 250))."'";
 		$sql.= ")";
 
 		dol_syslog(get_class($this)."::create", LOG_DEBUG);
@@ -183,7 +183,7 @@ class Events // extends CommonObject
 	 * @param   int		$notrigger	    0=no, 1=yes (no update trigger)
 	 * @return  int         			<0 if KO, >0 if OK
 	 */
-	function update($user=null, $notrigger=0)
+	function update($user = null, $notrigger = 0)
 	{
 		global $conf, $langs;
 
@@ -220,7 +220,7 @@ class Events // extends CommonObject
 	 *  @param  User	$user       User that load
 	 *  @return int         		<0 if KO, >0 if OK
 	 */
-	function fetch($id, $user=null)
+	function fetch($id, $user = null)
 	{
 		global $langs;
 

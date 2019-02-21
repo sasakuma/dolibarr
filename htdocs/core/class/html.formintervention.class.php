@@ -60,7 +60,7 @@ class FormIntervention
 	 *	@param	int		$showempty	Show empty line
 	 *	@return int         		Nbre of project if OK, <0 if KO
 	 */
-	function select_interventions($socid=-1, $selected='', $htmlname='interventionid', $maxlength=16, $showempty=1)
+	function select_interventions($socid = -1, $selected = '', $htmlname = 'interventionid', $maxlength = 16, $showempty = 1)
 	{
         // phpcs:enable
 		global $db,$user,$conf,$langs;
@@ -99,7 +99,7 @@ class FormIntervention
 					}
 					else
 					{
-						$labeltoshow=dol_trunc($obj->ref,18);
+						$labeltoshow=dol_trunc($obj->ref, 18);
 						if (!empty($selected) && $selected == $obj->rowid && $obj->statut > 0)
 						{
 							$out.='<option value="'.$obj->rowid.'" selected>'.$labeltoshow.'</option>';

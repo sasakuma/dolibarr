@@ -59,7 +59,7 @@ class PrintingDriver
      *  @param  integer  $maxfilenamelength  Max length of value to show
      *  @return array                       List of drivers
     */
-    static function listDrivers($db,$maxfilenamelength=0)
+    static function listDrivers($db, $maxfilenamelength = 0)
     {
         global $conf;
 
@@ -67,9 +67,9 @@ class PrintingDriver
         $list = array();
 
         $moduledir=DOL_DOCUMENT_ROOT."/core/modules/printing/";
-        $tmpfiles=dol_dir_list($moduledir,'all',0,'\modules.php','','name',SORT_ASC,0);
+        $tmpfiles=dol_dir_list($moduledir, 'all', 0, '\modules.php', '', 'name', SORT_ASC, 0);
         foreach($tmpfiles as $record) {
-            $list[$record['fullname']]=str_replace('.modules.php', '',$record['name']);
+            $list[$record['fullname']]=str_replace('.modules.php', '', $record['name']);
         }
 
         return $list;

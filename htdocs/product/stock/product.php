@@ -56,27 +56,27 @@ if (! empty($conf->variants->enabled)) {
 $langs->loadlangs(array('products', 'orders', 'bills', 'stocks', 'sendings'));
 if (! empty($conf->productbatch->enabled)) $langs->load("productbatch");
 
-$backtopage=GETPOST('backtopage','alpha');
-$action=GETPOST('action','aZ09');
-$cancel=GETPOST('cancel','alpha');
+$backtopage=GETPOST('backtopage', 'alpha');
+$action=GETPOST('action', 'aZ09');
+$cancel=GETPOST('cancel', 'alpha');
 
 $id=GETPOST('id', 'int');
 $ref=GETPOST('ref', 'alpha');
 $stocklimit = GETPOST('seuil_stock_alerte');
 $desiredstock = GETPOST('desiredstock');
-$cancel = GETPOST('cancel','alpha');
+$cancel = GETPOST('cancel', 'alpha');
 $fieldid = isset($_GET["ref"])?'ref':'rowid';
 $d_eatby=dol_mktime(0, 0, 0, $_POST['eatbymonth'], $_POST['eatbyday'], $_POST['eatbyyear']);
 $d_sellby=dol_mktime(0, 0, 0, $_POST['sellbymonth'], $_POST['sellbyday'], $_POST['sellbyyear']);
-$pdluoid=GETPOST('pdluoid','int');
-$batchnumber=GETPOST('batch_number','san_alpha');
+$pdluoid=GETPOST('pdluoid', 'int');
+$batchnumber=GETPOST('batch_number', 'san_alpha');
 if (!empty($batchnumber)) {
 	$batchnumber=trim($batchnumber);
 }
 
 // Security check
 if ($user->societe_id) $socid=$user->societe_id;
-$result=restrictedArea($user,'produit&stock',$id,'product&product','','',$fieldid);
+$result=restrictedArea($user, 'produit&stock', $id, 'product&product', '', '', $fieldid);
 
 
 $object = new Product($db);
@@ -100,8 +100,8 @@ $objcanvas=null;
 if (! empty($canvas))
 {
     require_once DOL_DOCUMENT_ROOT.'/core/class/canvas.class.php';
-    $objcanvas = new Canvas($db,$action);
-    $objcanvas->getCanvas('stockproduct','card',$canvas);
+    $objcanvas = new Canvas($db, $action);
+    $objcanvas->getCanvas('stockproduct', 'card', $canvas);
 }
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
@@ -115,7 +115,7 @@ $hookmanager->initHooks(array('stockproductcard','globalcard'));
 if ($cancel) $action='';
 
 $parameters=array('id'=>$id, 'ref'=>$ref, 'objcanvas'=>$objcanvas);
-$reshook=$hookmanager->executeHooks('doActions',$parameters,$object,$action);    // Note that $action and $object may have been modified by some hooks
+$reshook=$hookmanager->executeHooks('doActions', $parameters, $object, $action);    // Note that $action and $object may have been modified by some hooks
 if ($reshook < 0) setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 
 if ($action == 'addlimitstockwarehouse' && !empty($user->rights->produit->creer))
@@ -137,14 +137,12 @@ if ($action == 'addlimitstockwarehouse' && !empty($user->rights->produit->creer)
 	if($maj_ok) {
 
 		$pse = new ProductStockEntrepot($db);
-		if($pse->fetch('', $id, GETPOST('fk_entrepot')) > 0) {
-
+		if ($pse->fetch(0, $id, GETPOST('fk_entrepot', 'int')) > 0) {
 			// Update
 			$pse->seuil_stock_alerte = $seuil_stock_alerte;
 			$pse->desiredstock  	 = $desiredstock;
 			if($pse->update($user) > 0) setEventMessages($langs->trans('ProductStockWarehouseUpdated'), null, 'mesgs');
 		} else {
-
 			// Create
 			$pse->fk_entrepot 		 = GETPOST('fk_entrepot');
 			$pse->fk_product  	 	 = $id;
@@ -162,8 +160,9 @@ if($action == 'delete_productstockwarehouse' && !empty($user->rights->produit->c
 {
 
 	$pse = new ProductStockEntrepot($db);
-	$pse->fetch(GETPOST('fk_productstockwarehouse'));
-	if($pse->delete($user) > 0) setEventMessages($langs->trans('ProductStockWarehouseDeleted'), null, 'mesgs');
+
+	$pse->fetch(GETPOST('fk_productstockwarehouse', 'int'));
+	if ($pse->delete($user) > 0) setEventMessages($langs->trans('ProductStockWarehouseDeleted'), null, 'mesgs');
 
 	$action = '';
 }
@@ -174,7 +173,7 @@ if ($action == 'setseuil_stock_alerte' && !empty($user->rights->produit->creer))
     $object = new Product($db);
     $result=$object->fetch($id);
     $object->seuil_stock_alerte=$stocklimit;
-    $result=$object->update($object->id,$user,0,'update');
+    $result=$object->update($object->id, $user, 0, 'update');
     if ($result < 0)
     	setEventMessages($object->error, $object->errors, 'errors');
     //else
@@ -188,7 +187,7 @@ if ($action == 'setdesiredstock' && !empty($user->rights->produit->creer))
     $object = new Product($db);
     $result=$object->fetch($id);
     $object->desiredstock=$desiredstock;
-    $result=$object->update($object->id,$user,0,'update');
+    $result=$object->update($object->id, $user, 0, 'update');
     if ($result < 0)
     	setEventMessages($object->error, $object->errors, 'errors');
     $action='';
@@ -299,19 +298,19 @@ if ($action == "correct_stock" && ! $cancel)
 // Transfer stock from a warehouse to another warehouse
 if ($action == "transfert_stock" && ! $cancel)
 {
-	if (! (GETPOST("id_entrepot",'int') > 0) || ! (GETPOST("id_entrepot_destination",'int') > 0))
+	if (! (GETPOST("id_entrepot", 'int') > 0) || ! (GETPOST("id_entrepot_destination", 'int') > 0))
 	{
 		setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("Warehouse")), null, 'errors');
 		$error++;
 		$action='transfert';
 	}
-	if (! GETPOST("nbpiece",'int'))
+	if (! GETPOST("nbpiece", 'int'))
 	{
 		setEventMessages($langs->trans("ErrorFieldRequired", $langs->transnoentitiesnoconv("NumberOfUnit")), null, 'errors');
 		$error++;
 		$action='transfert';
 	}
-	if (GETPOST("id_entrepot",'int') == GETPOST("id_entrepot_destination",'int'))
+	if (GETPOST("id_entrepot", 'int') == GETPOST("id_entrepot_destination", 'int'))
 	{
 		setEventMessages($langs->trans("ErrorSrcAndTargetWarehouseMustDiffers"), null, 'errors');
 		$error++;
@@ -368,7 +367,7 @@ if ($action == "transfert_stock" && ! $cancel)
 				}
 				else
 				{
-					$srcwarehouseid=GETPOST('id_entrepot','int');
+					$srcwarehouseid=GETPOST('id_entrepot', 'int');
 					$batch=$batchnumber;
 					$eatby=$d_eatby;
 					$sellby=$d_sellby;
@@ -377,14 +376,14 @@ if ($action == "transfert_stock" && ! $cancel)
 				if (! $error)
 				{
 					// Remove stock
-					$result1=$object->correct_stock_batch(
+    $result1=$object->correct_stock_batch(
 						$user,
 						$srcwarehouseid,
-						GETPOST("nbpiece",'int'),
+						GETPOST("nbpiece", 'int'),
 						1,
-						GETPOST("label",'san_alpha'),
+						GETPOST("label", 'san_alpha'),
 						$pricesrc,
-						$eatby,$sellby,$batch,
+						$eatby, $sellby, $batch,
 						GETPOST('inventorycode')
 					);
 					if ($result1 < 0) $error++;
@@ -392,14 +391,14 @@ if ($action == "transfert_stock" && ! $cancel)
 				if (! $error)
 				{
 					// Add stock
-					$result2=$object->correct_stock_batch(
+    $result2=$object->correct_stock_batch(
 						$user,
-						GETPOST("id_entrepot_destination",'int'),
-						GETPOST("nbpiece",'int'),
+						GETPOST("id_entrepot_destination", 'int'),
+						GETPOST("nbpiece", 'int'),
 						0,
-						GETPOST("label",'san_alpha'),
+						GETPOST("label", 'san_alpha'),
 						$pricedest,
-						$eatby,$sellby,$batch,
+						$eatby, $sellby, $batch,
 						GETPOST('inventorycode')
 					);
 					if ($result2 < 0) $error++;
@@ -468,7 +467,7 @@ if ($action == 'updateline' && GETPOST('save') == $langs->trans('Save'))
 {
 
     $pdluo = new Productbatch($db);
-    $result=$pdluo->fetch(GETPOST('pdluoid','int'));
+    $result=$pdluo->fetch(GETPOST('pdluoid', 'int'));
 
     if ($result>0)
     {
@@ -487,18 +486,18 @@ if ($action == 'updateline' && GETPOST('save') == $langs->trans('Save'))
                 $result=$pdluo->update($user);
                 if ($result<0)
                 {
-                    setEventMessages($pdluo->error,$pdluo->errors, 'errors');
+                    setEventMessages($pdluo->error, $pdluo->errors, 'errors');
                 }
             }
         }
         else
         {
-            setEventMessages($langs->trans('BatchInformationNotfound'),null, 'errors');
+            setEventMessages($langs->trans('BatchInformationNotfound'), null, 'errors');
         }
     }
     else
     {
-        setEventMessages($pdluo->error,null, 'errors');
+        setEventMessages($pdluo->error, null, 'errors');
     }
     header("Location: product.php?id=".$id);
     exit;
@@ -517,7 +516,7 @@ if (! empty($conf->projet->enabled)) $formproject=new FormProjets($db);
 if ($id > 0 || $ref)
 {
 	$object = new Product($db);
-	$result = $object->fetch($id,$ref);
+	$result = $object->fetch($id, $ref);
 
 	$variants = $object->hasVariants();
 
@@ -525,7 +524,7 @@ if ($id > 0 || $ref)
 
 	$title = $langs->trans('ProductServiceCard');
 	$helpurl = '';
-	$shortlabel = dol_trunc($object->label,16);
+	$shortlabel = dol_trunc($object->label, 16);
 	if (GETPOST("type") == '0' || ($object->type == Product::TYPE_PRODUCT))
 	{
 		$title = $langs->trans('Product')." ". $shortlabel ." - ".$langs->trans('Stock');
@@ -552,7 +551,7 @@ if ($id > 0 || $ref)
         $linkback = '<a href="'.DOL_URL_ROOT.'/product/list.php?restore_lastsearch_values=1">'.$langs->trans("BackToList").'</a>';
 
         $shownav = 1;
-        if ($user->societe_id && ! in_array('stock', explode(',',$conf->global->MAIN_MODULES_FOR_EXTERNAL))) $shownav=0;
+        if ($user->societe_id && ! in_array('stock', explode(',', $conf->global->MAIN_MODULES_FOR_EXTERNAL))) $shownav=0;
 
         dol_banner_tab($object, 'ref', $linkback, $shownav, 'ref');
 
@@ -641,6 +640,8 @@ if ($id > 0 || $ref)
 			$text_stock_options .= (!empty($conf->global->STOCK_CALCULATE_ON_SUPPLIER_BILL) ? $langs->trans("ReStockOnBill") . '<br>' : '');
 			$text_stock_options .= (!empty($conf->global->STOCK_CALCULATE_ON_SUPPLIER_VALIDATE_ORDER) ? $langs->trans("ReStockOnValidateOrder") . '<br>' : '');
 			$text_stock_options .= (!empty($conf->global->STOCK_CALCULATE_ON_SUPPLIER_DISPATCH_ORDER) ? $langs->trans("ReStockOnDispatchOrder") . '<br>' : '');
+       		$text_stock_options.= (! empty($conf->global->STOCK_CALCULATE_ON_RECEPTION) || ! empty($conf->global->STOCK_CALCULATE_ON_RECEPTION_CLOSE)?$langs->trans("StockOnReception").'<br>':'');
+
 			print '<tr><td>';
 			print $form->textwithpicto($langs->trans("PhysicalStock"), $text_stock_options, 1);
 			print '</td>';
@@ -752,7 +753,7 @@ else
 
 $parameters=array();
 
-$reshook=$hookmanager->executeHooks('addMoreActionsButtons',$parameters,$object,$action);    // Note that $action and $object may have been modified by hook
+$reshook=$hookmanager->executeHooks('addMoreActionsButtons', $parameters, $object, $action);    // Note that $action and $object may have been modified by hook
 if (empty($reshook))
 {
 
@@ -767,12 +768,12 @@ if (empty($reshook))
 			}
 			else
 			{
-				print '<a class="butActionRefused" href="#" title="'.$langs->trans("ActionAvailableOnVariantProductOnly").'">' . $langs->trans("CorrectStock") . '</a>';
+				print '<a class="butActionRefused classfortooltip" href="#" title="'.$langs->trans("ActionAvailableOnVariantProductOnly").'">' . $langs->trans("CorrectStock") . '</a>';
 			}
 		}
 		else
 		{
-			print '<a class="butActionRefused" href="#" title="'.$langs->trans("NotEnoughPermissions").'">' . $langs->trans("CorrectStock") . '</a>';
+			print '<a class="butActionRefused classfortooltip" href="#" title="'.$langs->trans("NotEnoughPermissions").'">' . $langs->trans("CorrectStock") . '</a>';
 		}
 
 		//if (($user->rights->stock->mouvement->creer) && ! $object->hasbatch())
@@ -783,12 +784,12 @@ if (empty($reshook))
 			}
 			else
 			{
-				print '<a class="butActionRefused" href="#" title="'.$langs->trans("ActionAvailableOnVariantProductOnly").'">' . $langs->trans("TransferStock") . '</a>';
+				print '<a class="butActionRefused classfortooltip" href="#" title="'.$langs->trans("ActionAvailableOnVariantProductOnly").'">' . $langs->trans("TransferStock") . '</a>';
 			}
 		}
 		else
 		{
-			print '<a class="butActionRefused" href="#" title="'.$langs->trans("NotEnoughPermissions").'">' . $langs->trans("CorrectStock") . '</a>';
+			print '<a class="butActionRefused classfortooltip" href="#" title="'.$langs->trans("NotEnoughPermissions").'">' . $langs->trans("CorrectStock") . '</a>';
 		}
 
 		print '</div>';
@@ -802,6 +803,7 @@ if (! $variants) {
 	 */
 
 	print '<div class="div-table-responsive">';
+
 	print '<table class="noborder" width="100%">';
 	print '<tr class="liste_titre">';
 	print '<td colspan="4">' . $langs->trans("Warehouse") . '</td>';
@@ -947,7 +949,7 @@ if (! $variants) {
 
 	if (!empty($conf->global->STOCK_ALLOW_ADD_LIMIT_STOCK_BY_WAREHOUSE)) {
 		print '<br><br>';
-		print_titre($langs->trans('AddNewProductStockWarehouse'));
+		print load_fiche_titre($langs->trans('AddNewProductStockWarehouse'));
 
 		if (!empty($user->rights->produit->creer)) {
 			print '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST">';

@@ -6,9 +6,9 @@
  * Copyright (C) 2013	   Juanjo Menent		<jmenent@2byte.es>
  * Copyright (C) 2015	   Jean-François Ferry	<jfefe@aternatik.fr>
  * Copyright (C) 2012	   Cedric Salvador		<csalvador@gpcsolutions.fr>
- * Copyright (C) 2015	   Alexandre Spangaro	<aspangaro.dolibarr@gmail.com>
+ * Copyright (C) 2015	   Alexandre Spangaro	<aspangaro@open-dsi.fr>
  * Copyright (C) 2016-2018 Charlie Benke		<charlie@patas-monkey.com>
- * Copyright (C) 2018       Frédéric France     <frederic.france@netlogic.fr>
+ * Copyright (C) 2018      Frédéric France      <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,9 +25,9 @@
  */
 
 /**
- *	\file	   fichinter/card-rec.php
- *	\ingroup	fichinter
- *	\brief	  Page to show predefined fichinter
+ *	\file	     fichinter/card-rec.php
+ *	\ingroup     intervention
+ *	\brief	     Page to show predefined fichinter
  */
 
 require '../main.inc.php';
@@ -209,7 +209,7 @@ if ($action == 'add') {
 } elseif ($action == 'setdate_when' && $user->rights->ficheinter->creer) {
 	// Set next date of execution
 	$object->fetch($id);
-	$date = dol_mktime(
+$date = dol_mktime(
 					GETPOST('date_whenhour'), GETPOST('date_whenmin'), 0,
 					GETPOST('date_whenmonth'), GETPOST('date_whenday'), GETPOST('date_whenyear')
 	);
@@ -294,7 +294,7 @@ if ($action == 'create') {
 		if (empty($conf->global->FICHINTER_DISABLE_DETAILS)) {
 			// Duration
 			print '<tr><td>'.$langs->trans("TotalDuration").'</td>';
-			print '<td colspan="3">'.convertSecondToTime(
+print '<td colspan="3">'.convertSecondToTime(
 							$object->duration, 'all',
 							$conf->global->MAIN_DURATION_OF_WORKDAY
 			).'</td>';
@@ -307,7 +307,7 @@ if ($action == 'create') {
 			print "<tr><td>".$langs->trans("Project")."</td><td>";
 			$projectid = GETPOST('projectid')?GETPOST('projectid'):$object->fk_project;
 
-			$numprojet = $formproject->select_projects(
+$numprojet = $formproject->select_projects(
 							$object->thirdparty->id, $projectid, 'projectid',
 							0, 0, 1, 0, 0, 0, 0, '', 0, 0, ''
 			);
@@ -342,7 +342,7 @@ if ($action == 'create') {
 		print $form->textwithpicto($langs->trans("Frequency"), $langs->transnoentitiesnoconv('toolTipFrequency'));
 		print "</td><td>";
 		print "<input type='text' name='frequency' value='".GETPOST('frequency', 'int')."' size='4' />&nbsp;";
-		print $form->selectarray(
+print $form->selectarray(
 						'unit_frequency',
 						array('d'=>$langs->trans('Day'), 'm'=>$langs->trans('Month'), 'y'=>$langs->trans('Year')),
 						(GETPOST('unit_frequency')?GETPOST('unit_frequency'):'m')
@@ -352,7 +352,7 @@ if ($action == 'create') {
 		// First date of execution for cron
 		print "<tr><td>".$langs->trans('NextDateToExecution')."</td><td>";
 		if ($date_next_execution != "")
-			$date_next_execution = (GETPOST('remonth') ? dol_mktime(
+$date_next_execution = (GETPOST('remonth') ? dol_mktime(
 							12, 0, 0, GETPOST('remonth'), GETPOST('reday'), GETPOST('reyear')
 			) : -1);
 		print $form->selectDate($date_next_execution, '', 1, 1, '', "add", 1, 1);
@@ -370,7 +370,7 @@ if ($action == 'create') {
 		$title = $langs->trans("ProductsAndServices");
 		if (empty($conf->service->enabled))
 			$title = $langs->trans("Products");
-		else if (empty($conf->product->enabled))
+		elseif (empty($conf->product->enabled))
 			$title = $langs->trans("Services");
 
 		print load_fiche_titre($title, '', '');
@@ -399,7 +399,6 @@ if ($action == 'create') {
 				print '<td align="center">'.$langs->trans("Duration").'</td>';
 				print "</tr>\n";
 			}
-			$var=true;
 			while ($i < $num) {
 				$objp = $db->fetch_object($result);
 				print '<tr class="oddeven">';
@@ -496,13 +495,13 @@ if ($action == 'create') {
 						$morehtmlref.='<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$object->id.'">';
 						$morehtmlref.='<input type="hidden" name="action" value="classin">';
 						$morehtmlref.='<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-						$morehtmlref.=$formproject->select_projects(
+    $morehtmlref.=$formproject->select_projects(
 										$object->socid, $object->fk_project, 'projectid', $maxlength, 0, 1, 0, 1, 0, 0, '', 1
 						);
 						$morehtmlref.='<input type="submit" class="button valignmiddle" value="'.$langs->trans("Modify").'">';
 						$morehtmlref.='</form>';
 					} else {
-						$morehtmlref.=$form->form_project(
+    $morehtmlref.=$form->form_project(
 										$_SERVER['PHP_SELF'].'?id='.$object->id,
 										$object->socid, $object->fk_project,
 										'none', 0, 0, 0, 1
@@ -543,9 +542,9 @@ if ($action == 'create') {
 
 			print '<tr><td>'.$langs->trans("Description").'</td><td colspan="3">'.nl2br($object->description)."</td></tr>";
 
-			// Contrat
+			// Contract
 			if (! empty($conf->contrat->enabled)) {
-				$langs->load('contrat');
+				$langs->load('contracts');
 				print '<tr>';
 				print '<td>';
 
@@ -561,7 +560,7 @@ if ($action == 'create') {
 				print '</td><td>';
 				if ($action == 'contrat') {
 					$formcontract= new Formcontract($db);
-					$formcontract->formSelectContract(
+    $formcontract->formSelectContract(
 									$_SERVER["PHP_SELF"].'?id='.$object->id, $object->socid,
 									$object->fk_contrat, 'contratid', 0, 1
 					);
@@ -614,7 +613,7 @@ if ($action == 'create') {
 								($object->unit_frequency?$object->unit_frequency:'m')
 				);
 				print '</td>';
-				print '<td align="left"><input type="submit" class="button" value="'.$langs->trans("Modify").'"></td>';
+				print '<td class="left"><input type="submit" class="button" value="'.$langs->trans("Modify").'"></td>';
 				print '</tr></table></form>';
 			} else {
 				if ($object->frequency > 0)
@@ -673,7 +672,7 @@ if ($action == 'create') {
 			if ($object->frequency > 0) {
 				print '<br>';
 				if (empty($conf->cron->enabled)) {
-					$txtinfoadmin=$langs->trans(
+    $txtinfoadmin=$langs->trans(
 									"EnableAndSetupModuleCron",
 									$langs->transnoentitiesnoconv("Module2300Name")
 					);
@@ -713,7 +712,7 @@ if ($action == 'create') {
 			$title = $langs->trans("ProductsAndServices");
 			if (empty($conf->service->enabled))
 				$title = $langs->trans("Products");
-			else if (empty($conf->product->enabled))
+			elseif (empty($conf->product->enabled))
 				$title = $langs->trans("Services");
 
 			print load_fiche_titre($title);
@@ -802,7 +801,7 @@ if ($action == 'create') {
 		$resql = $db->query($sql);
 		if ($resql) {
 			$num = $db->num_rows($resql);
-			print_barre_liste(
+print_barre_liste(
 							$langs->trans("RepeatableInterventional"), $page,
 							$_SERVER['PHP_SELF'], "&socid=$socid", $sortfield, $sortorder,
 							'', $num, '', 'title_commercial.png'
@@ -813,12 +812,12 @@ if ($action == 'create') {
 			$i = 0;
 			print '<table class="noborder" width="100%">';
 			print '<tr class="liste_titre">';
-			print_liste_field_titre(
+print_liste_field_titre(
 							$langs->trans("Ref"), $_SERVER['PHP_SELF'], "f.titre", "", "",
 							'width="200px" align="left"', $sortfiled, $sortorder
 			);
 
-			print_liste_field_titre(
+print_liste_field_titre(
 							$langs->trans("Company"), $_SERVER['PHP_SELF'], "s.nom", "", "",
 							'width="200px" align="left"', $sortfiled, $sortorder
 			);
@@ -835,29 +834,29 @@ if ($action == 'create') {
 								"f.fk_project", "", "",
 								'width="100px" align="left"', $sortfiled, $sortorder
 				);
-			print_liste_field_titre(
+print_liste_field_titre(
 							$langs->trans("Duration"), $_SERVER['PHP_SELF'],
 							'f.duree', '', '',
 							'width="50px" align="right"', $sortfiled, $sortorder
 			);
 			// Recurring or not
-			print_liste_field_titre(
+print_liste_field_titre(
 							$langs->trans("Frequency"), $_SERVER['PHP_SELF'],
 							"f.frequency", "", "",
 							'width="100px" align="center"', $sortfiled, $sortorder
 			);
-			print_liste_field_titre(
+print_liste_field_titre(
 							$langs->trans("NbOfGenerationDone"), $_SERVER['PHP_SELF'],
 							"f.nb_gen_done", "", "",
 							'width="100px" align="center"', $sortfiled, $sortorder
 			);
 
-			print_liste_field_titre(
+print_liste_field_titre(
 							$langs->trans("DateLastGeneration"), $_SERVER['PHP_SELF'],
 							"f.date_last_gen", "", "",
 							'width="100px" align="center"', $sortfiled, $sortorder
 			);
-			print_liste_field_titre(
+print_liste_field_titre(
 							$langs->trans("NextDateToIntervention"), $_SERVER['PHP_SELF'],
 							"f.date_when", "", "",
 							'width="100px" align="center"', $sortfiled, $sortorder

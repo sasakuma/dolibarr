@@ -93,13 +93,13 @@ class ActionsCardIndividual extends ActionsCardCommon
 	 *    @param	string	$ref		Ref of object
 	 *    @return	void
 	 */
-	function assign_values(&$action, $id=0, $ref='')
+	function assign_values(&$action, $id = 0, $ref = '')
 	{
         // phpcs:enable
 		global $conf, $langs;
 		global $form, $formcompany;
 
-		$ret = $this->getObject($id,$ref);
+		$ret = $this->getObject($id, $ref);
 
 		parent::assign_values($action);
 
@@ -114,7 +114,7 @@ class ActionsCardIndividual extends ActionsCardCommon
 			// Confirm delete third party
 			if ($action == 'delete' || $conf->use_javascript_ajax)
 			{
-				$this->tpl['action_delete'] = $form->formconfirm($_SERVER["PHP_SELF"]."?socid=".$this->object->id,$langs->trans("DeleteAnIndividual"),$langs->trans("ConfirmDeleteIndividual"),"confirm_delete",'',0,"1,action-delete");
+				$this->tpl['action_delete'] = $form->formconfirm($_SERVER["PHP_SELF"]."?socid=".$this->object->id, $langs->trans("DeleteAnIndividual"), $langs->trans("ConfirmDeleteIndividual"), "confirm_delete", '', 0, "1,action-delete");
 			}
 		}
 	}
@@ -132,8 +132,8 @@ class ActionsCardIndividual extends ActionsCardCommon
 	 *  @param      string	$dbt_select		Field name for select if not rowid. (optional)
 	 *  @return		int						1
 	 */
-	function restrictedArea($user, $features='societe', $objectid=0, $dbtablename='', $feature2='', $dbt_keyfield='fk_soc', $dbt_select='rowid')
+	function restrictedArea($user, $features = 'societe', $objectid = 0, $dbtablename = '', $feature2 = '', $dbt_keyfield = 'fk_soc', $dbt_select = 'rowid')
 	{
-		return restrictedArea($user,$features,$objectid,$dbtablename,$feature2,$dbt_keyfield,$dbt_select);
+		return restrictedArea($user, $features, $objectid, $dbtablename, $feature2, $dbt_keyfield, $dbt_select);
 	}
 }

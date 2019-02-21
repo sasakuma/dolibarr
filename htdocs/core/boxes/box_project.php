@@ -51,7 +51,7 @@ class box_project extends ModeleBoxes
      *  @param  DoliDB  $db         Database handler
      *  @param  string  $param      More parameters
      */
-    function __construct($db,$param='')
+    function __construct($db, $param = '')
     {
         global $user, $langs;
 
@@ -59,7 +59,7 @@ class box_project extends ModeleBoxes
         $langs->loadLangs(array('boxes', 'projects'));
 
         $this->db = $db;
-        $this->boxlabel="Projects";
+        $this->boxlabel="OpenedProjects";
 
         $this->hidden=! ($user->rights->projet->lire);
     }
@@ -70,7 +70,7 @@ class box_project extends ModeleBoxes
 	*  @param   int		$max        Maximum number of records to load
 	*  @return  void
 	*/
-	function loadBox($max=5)
+	function loadBox($max = 5)
 	{
 		global $conf, $user, $langs, $db;
 
@@ -93,7 +93,7 @@ class box_project extends ModeleBoxes
 
     		// Get list of project id allowed to user (in a string list separated by coma)
 		    $projectsListId='';
-    		if (! $user->rights->projet->all->lire) $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user,0,1,$socid);
+    		if (! $user->rights->projet->all->lire) $projectsListId = $projectstatic->getProjectsAuthorizedForUser($user, 0, 1, $socid);
 
 		    $sql = "SELECT p.rowid, p.ref, p.title, p.fk_statut, p.public";
 			$sql.= " FROM ".MAIN_DB_PREFIX."projet as p";
@@ -174,11 +174,11 @@ class box_project extends ModeleBoxes
              'text' => "&nbsp;",
         );
         $this->info_box_contents[$i][] = array(
-            'td' => 'align="right" ',
+            'td' => 'class="right" ',
             'text' => round($num, 0)."&nbsp;".$langs->trans("Projects"),
         );
         $this->info_box_contents[$i][] = array(
-            'td' => 'align="right" ',
+            'td' => 'class="right" ',
             'text' => (($max < $num) ? '' : (round($totalnbTask, 0)."&nbsp;".$langs->trans("Tasks"))),
         );
         $this->info_box_contents[$i][] = array(
@@ -195,9 +195,8 @@ class box_project extends ModeleBoxes
 	 *  @param	int		$nooutput	No print, only return string
 	 *	@return	string
 	 */
-    function showBox($head = null, $contents = null, $nooutput=0)
+    function showBox($head = null, $contents = null, $nooutput = 0)
     {
 		return parent::showBox($this->info_box_head, $this->info_box_contents, $nooutput);
 	}
 }
-

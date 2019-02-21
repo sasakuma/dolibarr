@@ -54,7 +54,7 @@ class Dolistore
 	 *
 	 * @param	boolean		$debug		Enable debug of request on screen
 	 */
-	function __construct($debug=false)
+	function __construct($debug = false)
 	{
 		global $conf, $langs;
 
@@ -65,7 +65,7 @@ class Dolistore
 
 		$langtmp    = explode('_', $langs->defaultlang);
 		$lang       = $langtmp[0];
-		$lang_array = array('en'=>1, 'fr'=>2, 'es'=>3, 'it'=>4, 'de'=>5);	// Into table ps_lang of Prestashop - 1
+		$lang_array = array('en'=>0, 'fr'=>1, 'es'=>2, 'it'=>3, 'de'=>4);	// Into table ps_lang of Prestashop - 1
 		if (! in_array($lang, array_keys($lang_array))) $lang = 'en';
 		$this->lang = $lang_array[$lang];
 	}
@@ -154,7 +154,7 @@ class Dolistore
 			// Here we are dealing with errors
 			$trace = $e->getTrace();
 			if ($trace[0]['args'][0] == 404) die('Bad ID');
-			else if ($trace[0]['args'][0] == 401) die('Bad auth key');
+			elseif ($trace[0]['args'][0] == 401) die('Bad auth key');
 			else
 			{
 				print 'Can not access to '.$conf->global->MAIN_MODULE_DOLISTORE_API_SRV.'<br>';
@@ -262,20 +262,20 @@ class Dolistore
 			if ($this->version_compare($product->dolibarr_min, DOL_VERSION) <= 0) {
 				if ($this->version_compare($product->dolibarr_max, DOL_VERSION) >= 0) {
 					//compatible
-					$version    = '<span class="compatible">'.$langs->trans('CompatibleUpTo', $product->dolibarr_max,
+                    $version = '<span class="compatible">'.$langs->trans('CompatibleUpTo', $product->dolibarr_max,
 						$product->dolibarr_min, $product->dolibarr_max).'</span>';
-						$compatible = '';
+					$compatible = '';
 				} else {
 					//never compatible, module expired
-					$version    = '<span class="notcompatible">'.$langs->trans('NotCompatible', DOL_VERSION,
+                    $version = '<span class="notcompatible">'.$langs->trans('NotCompatible', DOL_VERSION,
 						$product->dolibarr_min, $product->dolibarr_max).'</span>';
-						$compatible = 'NotCompatible';
+					$compatible = 'NotCompatible';
 				}
 			} else {
 				//need update
 				$version    = '<span class="compatibleafterupdate">'.$langs->trans('CompatibleAfterUpdate', DOL_VERSION,
 					$product->dolibarr_min, $product->dolibarr_max).'</span>';
-					$compatible = 'NotCompatible';
+				$compatible = 'NotCompatible';
 			}
 
 			//.'<br><a class="inline-block valignmiddle" target="_blank" href="'.$this->shop_url.$product->id.'"><span class="details button">'.$langs->trans("SeeInMarkerPlace").'</span></a>

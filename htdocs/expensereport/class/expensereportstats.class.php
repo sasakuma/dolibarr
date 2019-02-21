@@ -50,7 +50,7 @@ class ExpenseReportStats extends Stats
      * @param   int			$userid    Id user for filter
 	 * @return 	void
 	 */
-	function __construct($db, $socid=0, $userid=0)
+	function __construct($db, $socid = 0, $userid = 0)
 	{
 		global $conf, $user;
 
@@ -77,7 +77,7 @@ class ExpenseReportStats extends Stats
 		{
 			$childids = $user->getAllChildIds();
 			$childids[]=$user->id;
-			$this->where.=" AND e.fk_user_author IN (".(join(',',$childids)).")";
+			$this->where.=" AND e.fk_user_author IN (".(join(',', $childids)).")";
 		}
 
 		if ($this->userid > 0) $this->where.=' AND e.fk_user_author = '.$this->userid;
@@ -91,7 +91,7 @@ class ExpenseReportStats extends Stats
 	 */
 	function getNbByYear()
 	{
-		$sql = "SELECT YEAR(".$this->db->ifsql('e.date_valid IS NULL','e.date_create','e.date_valid').") as dm, count(*)";
+		$sql = "SELECT YEAR(".$this->db->ifsql('e.date_valid IS NULL', 'e.date_create', 'e.date_valid').") as dm, count(*)";
 		$sql.= " FROM ".$this->from;
 		$sql.= " GROUP BY dm DESC";
 		$sql.= " WHERE ".$this->where;
@@ -107,14 +107,14 @@ class ExpenseReportStats extends Stats
      *	@param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 *	@return	array				Array of values
 	 */
-	function getNbByMonth($year, $format=0)
+	function getNbByMonth($year, $format = 0)
 	{
-		$sql = "SELECT MONTH(".$this->db->ifsql('e.date_valid IS NULL','e.date_create','e.date_valid').") as dm, count(*)";
+		$sql = "SELECT MONTH(".$this->db->ifsql('e.date_valid IS NULL', 'e.date_create', 'e.date_valid').") as dm, count(*)";
 		$sql.= " FROM ".$this->from;
 		$sql.= " WHERE YEAR(e.date_valid) = ".$year;
 		$sql.= " AND ".$this->where;
 		$sql.= " GROUP BY dm";
-        $sql.= $this->db->order('dm','DESC');
+        $sql.= $this->db->order('dm', 'DESC');
 
 		$res=$this->_getNbByMonth($year, $sql, $format);
 		//var_dump($res);print '<br>';
@@ -129,14 +129,14 @@ class ExpenseReportStats extends Stats
      *	@param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 *	@return	array				Array of values
 	 */
-	function getAmountByMonth($year, $format=0)
+	function getAmountByMonth($year, $format = 0)
 	{
-		$sql = "SELECT date_format(".$this->db->ifsql('e.date_valid IS NULL','e.date_create','e.date_valid').",'%m') as dm, sum(".$this->field.")";
+		$sql = "SELECT date_format(".$this->db->ifsql('e.date_valid IS NULL', 'e.date_create', 'e.date_valid').",'%m') as dm, sum(".$this->field.")";
 		$sql.= " FROM ".$this->from;
-		$sql.= " WHERE date_format(".$this->db->ifsql('e.date_valid IS NULL','e.date_create','e.date_valid').",'%Y') = '".$year."'";
+		$sql.= " WHERE date_format(".$this->db->ifsql('e.date_valid IS NULL', 'e.date_create', 'e.date_valid').",'%Y') = '".$year."'";
 		$sql.= " AND ".$this->where;
 		$sql.= " GROUP BY dm";
-		$sql.= $this->db->order('dm','DESC');
+		$sql.= $this->db->order('dm', 'DESC');
 
 		$res=$this->_getAmountByMonth($year, $sql, $format);
 		//var_dump($res);print '<br>';
@@ -151,12 +151,12 @@ class ExpenseReportStats extends Stats
 	 */
 	function getAverageByMonth($year)
 	{
-		$sql = "SELECT date_format(".$this->db->ifsql('e.date_valid IS NULL','e.date_create','e.date_valid').",'%m') as dm, avg(".$this->field.")";
+		$sql = "SELECT date_format(".$this->db->ifsql('e.date_valid IS NULL', 'e.date_create', 'e.date_valid').",'%m') as dm, avg(".$this->field.")";
 		$sql.= " FROM ".$this->from;
-		$sql.= " WHERE date_format(".$this->db->ifsql('e.date_valid IS NULL','e.date_create','e.date_valid').",'%Y') = '".$year."'";
+		$sql.= " WHERE date_format(".$this->db->ifsql('e.date_valid IS NULL', 'e.date_create', 'e.date_valid').",'%Y') = '".$year."'";
 		$sql.= " AND ".$this->where;
 		$sql.= " GROUP BY dm";
-        $sql.= $this->db->order('dm','DESC');
+        $sql.= $this->db->order('dm', 'DESC');
 
 		return $this->_getAverageByMonth($year, $sql);
 	}
@@ -168,13 +168,12 @@ class ExpenseReportStats extends Stats
 	 */
 	function getAllByYear()
 	{
-		$sql = "SELECT date_format(".$this->db->ifsql('e.date_valid IS NULL','e.date_create','e.date_valid').",'%Y') as year, count(*) as nb, sum(".$this->field.") as total, avg(".$this->field.") as avg";
+		$sql = "SELECT date_format(".$this->db->ifsql('e.date_valid IS NULL', 'e.date_create', 'e.date_valid').",'%Y') as year, count(*) as nb, sum(".$this->field.") as total, avg(".$this->field.") as avg";
 		$sql.= " FROM ".$this->from;
 		$sql.= " WHERE ".$this->where;
 		$sql.= " GROUP BY year";
-        $sql.= $this->db->order('year','DESC');
+        $sql.= $this->db->order('year', 'DESC');
 
 		return $this->_getAllByYear($sql);
 	}
 }
-

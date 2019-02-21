@@ -53,7 +53,7 @@ class mod_chequereceipt_mint extends ModeleNumRefChequeReceipts
     function info()
     {
     	global $langs;
-      	return $langs->trans("SimpleNumRefModelDesc",$this->prefix);
+      	return $langs->trans("SimpleNumRefModelDesc", $this->prefix);
     }
 
 
@@ -90,9 +90,9 @@ class mod_chequereceipt_mint extends ModeleNumRefChequeReceipts
 		if ($resql)
 		{
 			$row = $db->fetch_row($resql);
-			if ($row) { $payyymm = substr($row[0],0,6); $max=$row[0]; }
+			if ($row) { $payyymm = substr($row[0], 0, 6); $max=$row[0]; }
 		}
-		if ($payyymm && ! preg_match('/'.$this->prefix.'[0-9][0-9][0-9][0-9]/i',$payyymm))
+		if ($payyymm && ! preg_match('/'.$this->prefix.'[0-9][0-9][0-9][0-9]/i', $payyymm))
 		{
 			$langs->load("errors");
 			$this->error=$langs->trans('ErrorNumRefModel', $max);
@@ -109,7 +109,7 @@ class mod_chequereceipt_mint extends ModeleNumRefChequeReceipts
 	 *  @param  Object		$object		Object we need next value for
 	 *  @return string      			Value if KO, <0 if KO
 	 */
-	function getNextValue($objsoc,$object)
+	function getNextValue($objsoc, $object)
 	{
 		global $db,$conf;
 
@@ -135,10 +135,10 @@ class mod_chequereceipt_mint extends ModeleNumRefChequeReceipts
 
 		//$date=time();
 		$date=$object->date_bordereau;
-		$yymm = strftime("%y%m",$date);
+		$yymm = strftime("%y%m", $date);
 
     	if ($max >= (pow(10, 4) - 1)) $num=$max+1;	// If counter > 9999, we do not format on 4 chars, we take number as it is
-    	else $num = sprintf("%04s",$max+1);
+    	else $num = sprintf("%04s", $max+1);
 
 		dol_syslog(__METHOD__." return ".$this->prefix.$yymm."-".$num);
 		return $this->prefix.$yymm."-".$num;
@@ -153,9 +153,9 @@ class mod_chequereceipt_mint extends ModeleNumRefChequeReceipts
 	 * 	@param	string		$objforref	Object for number to search
 	 *  @return string      			Next free value
 	 */
-	function chequereceipt_get_num($objsoc,$objforref)
+	function chequereceipt_get_num($objsoc, $objforref)
 	{
         // phpcs:enable
-		return $this->getNextValue($objsoc,$objforref);
+		return $this->getNextValue($objsoc, $objforref);
 	}
 }

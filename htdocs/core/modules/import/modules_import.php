@@ -163,7 +163,7 @@ class ModeleImports
      *  @param  integer	$maxfilenamelength  Max length of value to show
      *  @return	array						List of templates
 	 */
-	function liste_modeles($db,$maxfilenamelength=0)
+	function liste_modeles($db, $maxfilenamelength = 0)
 	{
         // phpcs:enable
 		dol_syslog(get_class($this)."::liste_modeles");
@@ -177,7 +177,7 @@ class ModeleImports
         {
     		while (($file = readdir($handle))!==false)
     		{
-    			if (preg_match("/^import_(.*)\.modules\.php/i",$file,$reg))
+    			if (preg_match("/^import_(.*)\.modules\.php/i", $file, $reg))
     			{
     				$moduleid=$reg[1];
 
@@ -186,7 +186,7 @@ class ModeleImports
     				$classname = "Import".ucfirst($moduleid);
 
     				require_once $file;
-    				$module = new $classname($db,'');
+    				$module = new $classname($db, '');
 
     				// Picto
     				$this->picto[$module->id]=$module->picto;

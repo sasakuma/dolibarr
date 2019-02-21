@@ -41,14 +41,14 @@ class DolGeoIP
 	 * @param 	string	$type		'country' or 'city'
 	 * @param	string	$datfile	Data file
 	 */
-	function __construct($type,$datfile)
+	function __construct($type, $datfile)
 	{
 		if ($type == 'country')
 		{
 		    // geoip may have been already included with PEAR
 		    if (! function_exists('geoip_country_code_by_name')) $res=include_once GEOIP_PATH.'geoip.inc';
 		}
-		else if ($type == 'city')
+		elseif ($type == 'city')
 		{
 		    // geoip may have been already included with PEAR
 		    if (! function_exists('geoip_country_code_by_name')) $res=include_once GEOIP_PATH.'geoipcity.inc';
@@ -72,7 +72,7 @@ class DolGeoIP
 
 		if (function_exists('geoip_open'))
 		{
-			$this->gi = geoip_open($datfile,GEOIP_STANDARD);
+			$this->gi = geoip_open($datfile, GEOIP_STANDARD);
 		}
 		else
 		{

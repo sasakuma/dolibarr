@@ -26,7 +26,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/lib/member.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/dolgraph.class.php';
 
-$graphwidth=DolGraph::getDefaultGraphSizeForStats('width',700);
+$graphwidth=DolGraph::getDefaultGraphSizeForStats('width', 700);
 $mapratio = 0.5;
 $graphheight = round($graphwidth * $mapratio);
 
@@ -39,7 +39,7 @@ if ($user->societe_id > 0)
     $action = '';
     $socid = $user->societe_id;
 }
-$result=restrictedArea($user,'adherent','','','cotisation');
+$result=restrictedArea($user, 'adherent', '', '', 'cotisation');
 
 $year = strftime("%Y", time());
 $startyear=$year-2;
@@ -62,7 +62,7 @@ if ($mode == 'memberbystate') $title=$langs->trans("MembersStatisticsByState");
 if ($mode == 'memberbytown') $title=$langs->trans("MembersStatisticsByTown");
 if ($mode == 'memberbyregion') $title=$langs->trans("MembersStatisticsByRegion");
 
-llxHeader('', $title,'','',0,0,$arrayjs);
+llxHeader('', $title, '', '', 0, 0, $arrayjs);
 
 print load_fiche_titre($title, $mesg);
 
@@ -133,7 +133,7 @@ if ($mode)
         //print $sql;
     }
 
-    $langsen=new Translate('',$conf);
+    $langsen=new Translate('', $conf);
     $langsen->setDefaultLang('en_US');
     $langsen->load("dict");
     //print $langsen->trans("Country"."FI");exit;
@@ -157,15 +157,16 @@ if ($mode)
 							'lastdate'=>$db->jdate($obj->lastdate)
                 );
             }
-	    if ($mode == 'memberbyregion') //+
+            if ($mode == 'memberbyregion') //+
             {
-                $data[]=array('label'=>(($obj->code && $langs->trans("Country".$obj->code)!="Country".$obj->code)?$langs->trans("Country".$obj->code):($obj->label?$obj->label:$langs->trans("Unknown"))),
-                            'label_en'=>(($obj->code && $langsen->transnoentitiesnoconv("Country".$obj->code)!="Country".$obj->code)?$langsen->transnoentitiesnoconv("Country".$obj->code):($obj->label?$obj->label:$langs->trans("Unknown"))),
-				            'label2'=>($obj->label2?$obj->label2:$langs->trans("Unknown")),
-							'nb'=>$obj->nb,
-							'lastdate'=>$db->jdate($obj->lastdate)
+                $data[]=array(
+                    'label'=>(($obj->code && $langs->trans("Country".$obj->code)!="Country".$obj->code)?$langs->trans("Country".$obj->code):($obj->label?$obj->label:$langs->trans("Unknown"))),
+                    'label_en'=>(($obj->code && $langsen->transnoentitiesnoconv("Country".$obj->code)!="Country".$obj->code)?$langsen->transnoentitiesnoconv("Country".$obj->code):($obj->label?$obj->label:$langs->trans("Unknown"))),
+				    'label2'=>($obj->label2?$obj->label2:$langs->trans("Unknown")),
+					'nb'=>$obj->nb,
+					'lastdate'=>$db->jdate($obj->lastdate)
                 );
-	}
+	        }
             if ($mode == 'memberbystate')
             {
                 $data[]=array('label'=>(($obj->code && $langs->trans("Country".$obj->code)!="Country".$obj->code)?$langs->trans("Country".$obj->code):($obj->label?$obj->label:$langs->trans("Unknown"))),
@@ -210,9 +211,9 @@ if ($mode && ! count($data))
 else
 {
     if ($mode == 'memberbycountry') print $langs->trans("MembersByCountryDesc").'<br>';
-    else if ($mode == 'memberbystate') print $langs->trans("MembersByStateDesc").'<br>';
-    else if ($mode == 'memberbytown') print $langs->trans("MembersByTownDesc").'<br>';
-    else if ($mode == 'memberbyregion') print $langs->trans("MembersByRegion").'<br>';//+
+    elseif ($mode == 'memberbystate') print $langs->trans("MembersByStateDesc").'<br>';
+    elseif ($mode == 'memberbytown') print $langs->trans("MembersByTownDesc").'<br>';
+    elseif ($mode == 'memberbyregion') print $langs->trans("MembersByRegion").'<br>';//+
     else
     {
         print $langs->trans("MembersStatisticsDesc").'<br>';
@@ -267,7 +268,7 @@ if (count($arrayjs) && $mode == 'memberbycountry')
     //print "\toptions['zoomOutLabel'] = '".dol_escape_js($langs->transnoentitiesnoconv("Numbers"))."';\n";
     print "\toptions['width'] = ".$graphwidth.";\n";
     print "\toptions['height'] = ".$graphheight.";\n";
-    print "\toptions['colors'] = [0x".colorArrayToHex($theme_datacolor[1],'BBBBBB').", 0x".colorArrayToHex($theme_datacolor[0],'444444')."];\n";
+    print "\toptions['colors'] = [0x".colorArrayToHex($theme_datacolor[1], 'BBBBBB').", 0x".colorArrayToHex($theme_datacolor[0], '444444')."];\n";
     print "\tvar container = document.getElementById('".$mode."');\n";
     print "\tvar geomap = new google.visualization.GeoMap(container);\n";
     print "\tgeomap.draw(data, options);\n";
@@ -286,7 +287,7 @@ if ($mode)
     print '<tr class="liste_titre">';
     print '<td>'.$label.'</td>';
     if ($label2) print '<td align="center">'.$label2.'</td>';
-    print '<td align="right">'.$langs->trans("NbOfMembers").'</td>';
+    print '<td class="right">'.$langs->trans("NbOfMembers").'</td>';
     print '<td align="center">'.$langs->trans("LastMemberDate").'</td>';
     print '</tr>';
 
@@ -297,8 +298,8 @@ if ($mode)
         print '<tr class="oddeven">';
         print '<td>'.$val['label'].'</td>';
         if ($label2) print '<td align="center">'.$val['label2'].'</td>';
-        print '<td align="right">'.$val['nb'].'</td>';
-        print '<td align="center">'.dol_print_date($val['lastdate'],'dayhour').'</td>';
+        print '<td class="right">'.$val['nb'].'</td>';
+        print '<td align="center">'.dol_print_date($val['lastdate'], 'dayhour').'</td>';
         print '</tr>';
         $oldyear=$year;
     }

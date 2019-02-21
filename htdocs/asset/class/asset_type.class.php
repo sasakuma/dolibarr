@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2018      Alexandre Spangaro   <aspangaro@zendsi.com>
+/* Copyright (C) 2018      Alexandre Spangaro   <aspangaro@open-dsi.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ class AssetType extends CommonObject
 	 *  @param	int			$notrigger		1=do not execute triggers, 0 otherwise
 	 *  @return	int							>0 if OK, < 0 if KO
 	 */
-	function create($user,$notrigger=0)
+	function create($user, $notrigger = 0)
 	{
 		global $conf;
 
@@ -124,7 +124,7 @@ class AssetType extends CommonObject
 		{
 			$this->id = $this->db->last_insert_id(MAIN_DB_PREFIX."asset_type");
 
-			$result = $this->update($user,1);
+			$result = $this->update($user, 1);
 			if ($result < 0)
 			{
 				$this->db->rollback();
@@ -134,7 +134,7 @@ class AssetType extends CommonObject
 			if (! $notrigger)
 			{
 				// Call trigger
-				$result=$this->call_trigger('ASSET_TYPE_CREATE',$user);
+				$result=$this->call_trigger('ASSET_TYPE_CREATE', $user);
 				if ($result < 0) { $error++; }
 				// End call triggers
 			}
@@ -166,7 +166,7 @@ class AssetType extends CommonObject
 	 *  @param	int			$notrigger		1=do not execute triggers, 0 otherwise
 	 *  @return	int							>0 if OK, < 0 if KO
 	 */
-	function update($user,$notrigger=0)
+	function update($user, $notrigger = 0)
 	{
 		global $conf, $hookmanager;
 
@@ -203,7 +203,7 @@ class AssetType extends CommonObject
 			if (! $error && ! $notrigger)
 			{
 				// Call trigger
-				$result=$this->call_trigger('ASSET_TYPE_MODIFY',$user);
+				$result=$this->call_trigger('ASSET_TYPE_MODIFY', $user);
 				if ($result < 0) { $error++; }
 				// End call triggers
 			}
@@ -246,7 +246,7 @@ class AssetType extends CommonObject
 		if ($resql)
 		{
 			// Call trigger
-			$result=$this->call_trigger('ASSET_TYPE_DELETE',$user);
+			$result=$this->call_trigger('ASSET_TYPE_DELETE', $user);
 			if ($result < 0) { $error++; $this->db->rollback(); return -2; }
 			// End call triggers
 
@@ -350,7 +350,7 @@ class AssetType extends CommonObject
 	 *  									2=Return array of asset id only
 	 * 	@return	mixed						Array of asset or -1 on error
 	 */
-	function listAssetForAssetType($excludefilter='', $mode=0)
+	function listAssetForAssetType($excludefilter = '', $mode = 0)
 	{
 		global $conf, $user;
 
@@ -374,7 +374,7 @@ class AssetType extends CommonObject
 					{
 						$assetstatic=new Asset($this->db);
 						if ($mode == 1) {
-							$assetstatic->fetch($obj->rowid,'','','',false, false);
+							$assetstatic->fetch($obj->rowid, '', '', '', false, false);
 						} else {
 							$assetstatic->fetch($obj->rowid);
 						}
@@ -405,19 +405,19 @@ class AssetType extends CommonObject
 	 *  	@param		int  	$notooltip		1=Disable tooltip
 	 *		@return		string					String with URL
 	 */
-	function getNomUrl($withpicto=0, $maxlen=0, $notooltip=0)
+	function getNomUrl($withpicto = 0, $maxlen = 0, $notooltip = 0)
 	{
 		global $langs;
 
 		$result='';
-		$label=$langs->trans("ShowTypeCard",$this->label);
+		$label=$langs->trans("ShowTypeCard", $this->label);
 
 		$linkstart = '<a href="'.DOL_URL_ROOT.'/asset/type.php?rowid='.$this->id.'" title="'.dol_escape_htmltag($label, 1).'" class="classfortooltip">';
 		$linkend='</a>';
 
 		$result .= $linkstart;
 		if ($withpicto) $result.=img_object(($notooltip?'':$label), ($this->picto?$this->picto:'generic'), ($notooltip?(($withpicto != 2) ? 'class="paddingright"' : ''):'class="'.(($withpicto != 2) ? 'paddingright ' : '').'classfortooltip"'), 0, 0, $notooltip?0:1);
-		if ($withpicto != 2) $result.= ($maxlen?dol_trunc($this->label,$maxlen):$this->label);
+		if ($withpicto != 2) $result.= ($maxlen?dol_trunc($this->label, $maxlen):$this->label);
 		$result .= $linkend;
 
 		return $result;

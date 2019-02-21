@@ -133,7 +133,7 @@ class Localtax extends CommonObject
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX."localtax");
 
             // Call trigger
-            $result=$this->call_trigger('LOCALTAX_CREATE',$user);
+            $result=$this->call_trigger('LOCALTAX_CREATE', $user);
             if ($result < 0) $error++;
             // End call triggers
 
@@ -163,7 +163,7 @@ class Localtax extends CommonObject
      *	@param		int		$notrigger		0=no, 1=yes (no update trigger)
      *	@return		int						<0 if KO, >0 if OK
      */
-    function update(User $user, $notrigger=0)
+    function update(User $user, $notrigger = 0)
     {
     	global $conf, $langs;
 
@@ -204,7 +204,7 @@ class Localtax extends CommonObject
 		if (! $error && ! $notrigger)
 		{
             // Call trigger
-            $result=$this->call_trigger('LOCALTAX_MODIFY',$user);
+            $result=$this->call_trigger('LOCALTAX_MODIFY', $user);
             if ($result < 0) $error++;
             // End call triggers
     	}
@@ -295,7 +295,7 @@ class Localtax extends CommonObject
 	function delete($user)
 	{
 		// Call trigger
-		$result=$this->call_trigger('LOCALTAX_DELETE',$user);
+		$result=$this->call_trigger('LOCALTAX_DELETE', $user);
 		if ($result < 0) return -1;
 		// End call triggers
 
@@ -499,22 +499,22 @@ class Localtax extends CommonObject
         $this->amount=price2num($this->amount);
 		if (! $this->label)
 		{
-			$this->error=$langs->trans("ErrorFieldRequired",$langs->transnoentities("Label"));
+			$this->error=$langs->trans("ErrorFieldRequired", $langs->transnoentities("Label"));
 			return -3;
 		}
         if ($this->amount <= 0)
         {
-            $this->error=$langs->trans("ErrorFieldRequired",$langs->transnoentities("Amount"));
+            $this->error=$langs->trans("ErrorFieldRequired", $langs->transnoentities("Amount"));
             return -4;
         }
         if (! empty($conf->banque->enabled) && (empty($this->accountid) || $this->accountid <= 0))
         {
-            $this->error=$langs->trans("ErrorFieldRequired",$langs->transnoentities("Account"));
+            $this->error=$langs->trans("ErrorFieldRequired", $langs->transnoentities("Account"));
             return -5;
         }
         if (! empty($conf->banque->enabled) && (empty($this->paymenttype) || $this->paymenttype <= 0))
         {
-            $this->error=$langs->trans("ErrorFieldRequired",$langs->transnoentities("PaymentMode"));
+            $this->error=$langs->trans("ErrorFieldRequired", $langs->transnoentities("PaymentMode"));
             return -5;
         }
 
@@ -628,7 +628,7 @@ class Localtax extends CommonObject
 	 *	@param		string	$option			Sur quoi pointe le lien
 	 *	@return		string					Chaine avec URL
 	 */
-	function getNomUrl($withpicto=0, $option='')
+	function getNomUrl($withpicto = 0, $option = '')
 	{
 		global $langs;
 
@@ -652,9 +652,9 @@ class Localtax extends CommonObject
 	 * @param	int		$mode       0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 * @return  string				Libelle
 	 */
-	function getLibStatut($mode=0)
+	function getLibStatut($mode = 0)
 	{
-		return $this->LibStatut($this->statut,$mode);
+		return $this->LibStatut($this->statut, $mode);
 	}
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
@@ -665,7 +665,7 @@ class Localtax extends CommonObject
 	 * @param   int		$mode       0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 * @return	string              Libelle du statut
 	 */
-    function LibStatut($status, $mode=0)
+    function LibStatut($status, $mode = 0)
     {
         // phpcs:enable
         global $langs;  // TODO Renvoyer le libelle anglais et faire traduction a affichage

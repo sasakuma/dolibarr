@@ -91,7 +91,7 @@ class Menubase
 	 *  @param		DoliDB		$db 		    Database handler
      *  @param     	string		$menu_handler	Menu handler
      */
-    function __construct($db,$menu_handler='')
+    function __construct($db, $menu_handler = '')
     {
         $this->db = $db;
         $this->menu_handler = $menu_handler;
@@ -105,7 +105,7 @@ class Menubase
      *      @param      User	$user       User that create
      *      @return     int      			<0 if KO, Id of record if OK
      */
-    function create($user=null)
+    function create($user = null)
     {
         global $conf, $langs;
 
@@ -135,7 +135,7 @@ class Menubase
         // For PGSQL, we must first found the max rowid and use it as rowid in insert because postgresql
         // may use an already used value because its internal cursor does not increase when we do
         // an insert with a forced id.
-        if (in_array($this->db->type,array('pgsql')))
+        if (in_array($this->db->type, array('pgsql')))
         {
           $sql = "SELECT MAX(rowid) as maxrowid FROM ".MAIN_DB_PREFIX."menu";
           $resqlrowid=$this->db->query($sql);
@@ -245,7 +245,7 @@ class Menubase
      *  @param  int		$notrigger	    0=no, 1=yes (no update trigger)
      *  @return int 		        	<0 if KO, >0 if OK
      */
-    function update($user=null, $notrigger=0)
+    function update($user = null, $notrigger = 0)
     {
         global $conf, $langs;
 
@@ -310,7 +310,7 @@ class Menubase
      *   @param		User    $user       User that load
      *   @return	int         		<0 if KO, >0 if OK
      */
-    function fetch($id, $user=null)
+    function fetch($id, $user = null)
     {
         global $langs;
 
@@ -362,7 +362,7 @@ class Menubase
                 $this->titre = $obj->titre;
                 $this->langs = $obj->langs;
                 $this->perms = $obj->perms;
-                $this->enabled = str_replace("\"","'",$obj->enabled);
+                $this->enabled = str_replace("\"", "'", $obj->enabled);
                 $this->user = $obj->user;
                 $this->tms = $this->db->jdate($obj->tms);
             }
@@ -599,7 +599,7 @@ class Menubase
                 if ($menu['perms'])
                 {
                 	$tmpcond=$menu['perms'];
-                	if ($leftmenu == 'all') $tmpcond=preg_replace('/\$leftmenu\s*==\s*["\'a-zA-Z_]+/','1==1',$tmpcond);	// Force part of condition to true
+                	if ($leftmenu == 'all') $tmpcond=preg_replace('/\$leftmenu\s*==\s*["\'a-zA-Z_]+/', '1==1', $tmpcond);	// Force part of condition to true
                 	$perms = verifCond($tmpcond);
                     //print "verifCond rowid=".$menu['rowid']." ".$tmpcond.":".$perms."<br>\n";
                 }
@@ -609,7 +609,7 @@ class Menubase
                 if ($menu['enabled'])
                 {
                 	$tmpcond=$menu['enabled'];
-                	if ($leftmenu == 'all') $tmpcond=preg_replace('/\$leftmenu\s*==\s*["\'a-zA-Z_]+/','1==1',$tmpcond);	// Force part of condition to true
+                	if ($leftmenu == 'all') $tmpcond=preg_replace('/\$leftmenu\s*==\s*["\'a-zA-Z_]+/', '1==1', $tmpcond);	// Force part of condition to true
                     $enabled = verifCond($tmpcond);
                 }
 
@@ -629,15 +629,16 @@ class Menubase
                         $substitarray = array('__LOGIN__' => $user->login, '__USER_ID__' => $user->id, '__USER_SUPERVISOR_ID__' => $user->fk_user);
                         $menu['titre'] = make_substitutions($menu['titre'], $substitarray);
 
-                        if (preg_match("/\//",$menu['titre'])) // To manage translation when title is string1/string2
+                        if (preg_match("/\//", $menu['titre'])) // To manage translation when title is string1/string2
                         {
-                            $tab_titre = explode("/",$menu['titre']);
+                            $tab_titre = explode("/", $menu['titre']);
                             $title = $langs->trans($tab_titre[0])."/".$langs->trans($tab_titre[1]);
                         }
-                        else if (preg_match('/\|\|/',$menu['titre'])) // To manage different translation (Title||AltTitle@ConditionForAltTitle)
+                        elseif (preg_match('/\|\|/', $menu['titre']))
                         {
-                        	$tab_title = explode("||",$menu['titre']);
-                        	$alt_title = explode("@",$tab_title[1]);
+                            // To manage different translation (Title||AltTitle@ConditionForAltTitle)
+                        	$tab_title = explode("||", $menu['titre']);
+                        	$alt_title = explode("@", $tab_title[1]);
                         	$title_enabled = verifCond($alt_title[1]);
                         	$title = ($title_enabled ? $langs->trans($alt_title[0]) : $langs->trans($tab_title[0]));
                         }
@@ -654,9 +655,9 @@ class Menubase
                     $tabMenu[$b]['module']      = $menu['module'];
                     $tabMenu[$b]['fk_menu']     = $menu['fk_menu'];
                     $tabMenu[$b]['url']         = $menu['url'];
-                    if (! preg_match("/^(http:\/\/|https:\/\/)/i",$tabMenu[$b]['url']))
+                    if (! preg_match("/^(http:\/\/|https:\/\/)/i", $tabMenu[$b]['url']))
                     {
-                        if (preg_match('/\?/',$tabMenu[$b]['url'])) $tabMenu[$b]['url'].='&amp;idmenu='.$menu['rowid'];
+                        if (preg_match('/\?/', $tabMenu[$b]['url'])) $tabMenu[$b]['url'].='&amp;idmenu='.$menu['rowid'];
                         else $tabMenu[$b]['url'].='?idmenu='.$menu['rowid'];
                     }
                     $tabMenu[$b]['titre']       = $title;
@@ -712,5 +713,5 @@ class Menubase
                 $this->recur($tab, $tab[$x]['rowid'], ($level+1));
             }
         }
-   }
+    }
 }

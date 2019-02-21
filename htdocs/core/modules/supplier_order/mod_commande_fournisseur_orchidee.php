@@ -63,12 +63,12 @@ class mod_commande_fournisseur_orchidee extends ModeleNumRefSuppliersOrders
      */
 	function info()
     {
-    	global $conf, $langs;
+    	global $db, $conf, $langs;
 
 		// Load translation files required by the page
         $langs->loadLangs(array("bills","admin"));
 
-		$form = new Form($this->db);
+		$form = new Form($db);
 
 		$texte = $langs->trans('GenericNumRefModelDesc')."<br>\n";
 		$texte.= '<form action="'.$_SERVER["PHP_SELF"].'" method="POST">';
@@ -77,15 +77,15 @@ class mod_commande_fournisseur_orchidee extends ModeleNumRefSuppliersOrders
 		$texte.= '<input type="hidden" name="maskconstorder" value="COMMANDE_FOURNISSEUR_ORCHIDEE_MASK">';
 		$texte.= '<table class="nobordernopadding" width="100%">';
 
-		$tooltip=$langs->trans("GenericMaskCodes",$langs->transnoentities("Order"),$langs->transnoentities("Order"));
+		$tooltip=$langs->trans("GenericMaskCodes", $langs->transnoentities("Order"), $langs->transnoentities("Order"));
 		$tooltip.=$langs->trans("GenericMaskCodes2");
 		$tooltip.=$langs->trans("GenericMaskCodes3");
-		$tooltip.=$langs->trans("GenericMaskCodes4a",$langs->transnoentities("Order"),$langs->transnoentities("Order"));
+		$tooltip.=$langs->trans("GenericMaskCodes4a", $langs->transnoentities("Order"), $langs->transnoentities("Order"));
 		$tooltip.=$langs->trans("GenericMaskCodes5");
 
 		// Parametrage du prefix
 		$texte.= '<tr><td>'.$langs->trans("Mask").':</td>';
-		$texte.= '<td align="right">'.$form->textwithpicto('<input type="text" class="flat" size="24" name="maskorder" value="'.$conf->global->COMMANDE_FOURNISSEUR_ORCHIDEE_MASK.'">',$tooltip,1,1).'</td>';
+		$texte.= '<td align="right">'.$form->textwithpicto('<input type="text" class="flat" size="24" name="maskorder" value="'.$conf->global->COMMANDE_FOURNISSEUR_ORCHIDEE_MASK.'">', $tooltip, 1, 1).'</td>';
 
 		$texte.= '<td align="left" rowspan="2">&nbsp; <input type="submit" class="button" value="'.$langs->trans("Modify").'" name="Button"></td>';
 
@@ -108,7 +108,7 @@ class mod_commande_fournisseur_orchidee extends ModeleNumRefSuppliersOrders
 
     	$old_code_client=$mysoc->code_client;
     	$mysoc->code_client='CCCCCCCCCC';
-    	$numExample = $this->getNextValue($mysoc,'');
+    	$numExample = $this->getNextValue($mysoc, '');
 		$mysoc->code_client=$old_code_client;
 
 		if (! $numExample)
@@ -125,7 +125,7 @@ class mod_commande_fournisseur_orchidee extends ModeleNumRefSuppliersOrders
 	 *  @param  Object	    $object		Object
      *  @return string      			Value if OK, 0 if KO
 	*/
-    function getNextValue($objsoc=0,$object='')
+    function getNextValue($objsoc = 0, $object = '')
     {
 		global $db,$conf;
 
@@ -140,7 +140,7 @@ class mod_commande_fournisseur_orchidee extends ModeleNumRefSuppliersOrders
 			return 0;
 		}
 
-		$numFinal=get_next_value($db,$mask,'commande_fournisseur','ref','',$objsoc,$object->date_commande);
+		$numFinal=get_next_value($db, $mask, 'commande_fournisseur', 'ref', '', $objsoc, $object->date_commande);
 
 		return  $numFinal;
 	}
@@ -154,9 +154,9 @@ class mod_commande_fournisseur_orchidee extends ModeleNumRefSuppliersOrders
 	 *  @param  Object	    $object		Object
      *  @return string      			Texte descripif
      */
-    function commande_get_num($objsoc=0,$object='')
+    function commande_get_num($objsoc = 0, $object = '')
     {
         // phpcs:enable
-        return $this->getNextValue($objsoc,$object);
+        return $this->getNextValue($objsoc, $object);
     }
 }

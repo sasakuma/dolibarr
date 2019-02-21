@@ -6,7 +6,7 @@
  * Copyright (C) 2005-2010	Regis Houssin			<regis.houssin@inodbox.com>
  * Copyright (C) 2013		Florian Henry			<florian.henry@open-concept.pro>
  * Copyright (C) 2015-2016	Marcos García			<marcosgdf@gmail.com>
- * Copyright (C) 2015-2017	Alexandre Spangaro		<aspangaro@zendsi.com>
+ * Copyright (C) 2015-2017	Alexandre Spangaro		<aspangaro@open-dsi.fr>
  * Copyright (C) 2016		Ferran Marcet   		<fmarcet@2byte.es>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -256,7 +256,7 @@ class Account extends CommonObject
 	}
 
 	/**
-	 * Shows the account number in the appropiate format
+	 * Shows the account number in the appropriate format
 	 *
 	 * @return string
 	 */
@@ -352,7 +352,7 @@ class Account extends CommonObject
 	 *      @param  string      $type       To search using type
 	 *      @return array|int               Array of links array('url'=>, 'url_id'=>, 'label'=>, 'type'=> 'fk_bank'=> ) or -1 on error
 	 */
-	function get_url($fk_bank='', $url_id='', $type='')
+	function get_url($fk_bank = '', $url_id = '', $type = '')
 	{
         // phpcs:enable
 		$lines = array();
@@ -417,9 +417,9 @@ class Account extends CommonObject
 	 *  @param	int			$datev			Date value
 	 *  @return	int							Rowid of added entry, <0 if KO
 	 */
-	function addline($date, $oper, $label, $amount, $num_chq, $categorie, User $user, $emetteur='',$banque='', $accountancycode='', $datev=null)
+	function addline($date, $oper, $label, $amount, $num_chq, $categorie, User $user, $emetteur = '', $banque = '', $accountancycode = '', $datev = null)
 	{
-		// Deprecatîon warning
+		// Deprecation warning
 		if (is_numeric($oper)) {
 			dol_syslog(__METHOD__ . ": using numeric operations is deprecated", LOG_WARNING);
 		}
@@ -430,7 +430,7 @@ class Account extends CommonObject
 
 		$now=dol_now();
 
-		if (is_numeric($oper))    // Clean oper to have a code instead of a rowid
+		if (is_numeric($oper))    // Clean operation to have a code instead of a rowid
 		{
 			$sql = "SELECT code FROM ".MAIN_DB_PREFIX."c_paiement";
 			$sql.= " WHERE id=".$oper;
@@ -443,7 +443,7 @@ class Account extends CommonObject
 			}
 			else
 			{
-				dol_print_error($this->db,'Failed to get payment type code');
+				dol_print_error($this->db, 'Failed to get payment type code');
 				return -1;
 			}
 		}
@@ -525,7 +525,7 @@ class Account extends CommonObject
 	 *  @param  int     $notrigger  1=Disable triggers
 	 *  @return int        			< 0 if KO, > 0 if OK
 	 */
-	function create(User $user, $notrigger=0)
+	function create(User $user, $notrigger = 0)
 	{
 		global $langs,$conf, $hookmanager;
 
@@ -540,19 +540,19 @@ class Account extends CommonObject
 		// Check parameters
 		if (empty($this->country_id))
 		{
-			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired",$langs->transnoentitiesnoconv("Country"));
+			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->transnoentitiesnoconv("Country"));
 			dol_syslog(get_class($this)."::create ".$this->error, LOG_ERR);
 			return -1;
 		}
 		if (empty($this->ref))
 		{
-			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired",$langs->transnoentitiesnoconv("Ref"));
+			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->transnoentitiesnoconv("Ref"));
 			dol_syslog(get_class($this)."::create ".$this->error, LOG_ERR);
 			return -1;
 		}
 		if (empty($this->date_solde))
 		{
-			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired",$langs->transnoentitiesnoconv("DateInitialBalance"));
+			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->transnoentitiesnoconv("DateInitialBalance"));
 			dol_syslog(get_class($this)."::create ".$this->error, LOG_ERR);
 			return -1;
 		}
@@ -648,7 +648,7 @@ class Account extends CommonObject
 				if (! $error && ! $notrigger)
 				{
 					// Call trigger
-					$result=$this->call_trigger('BANKACCOUNT_CREATE',$user);
+					$result=$this->call_trigger('BANKACCOUNT_CREATE', $user);
 					if ($result < 0) $error++;
 					// End call triggers
 				}
@@ -705,13 +705,13 @@ class Account extends CommonObject
 		// Check parameters
 		if (empty($this->country_id))
 		{
-			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired",$langs->transnoentitiesnoconv("Country"));
+			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->transnoentitiesnoconv("Country"));
 			dol_syslog(get_class($this)."::update ".$this->error, LOG_ERR);
 			return -1;
 		}
 		if (empty($this->ref))
 		{
-			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired",$langs->transnoentitiesnoconv("Ref"));
+			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->transnoentitiesnoconv("Ref"));
 			dol_syslog(get_class($this)."::update ".$this->error, LOG_ERR);
 			return -1;
 		}
@@ -768,7 +768,7 @@ class Account extends CommonObject
 			if (! $error && ! $notrigger)
 			{
 				// Call trigger
-				$result=$this->call_trigger('BANKACCOUNT_UPDATE',$user);
+				$result=$this->call_trigger('BANKACCOUNT_UPDATE', $user);
 				if ($result < 0) $error++;
 				// End call triggers
 			}
@@ -817,7 +817,7 @@ class Account extends CommonObject
 		// Check parameters
 		if (! $this->ref)
 		{
-			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired",$langs->trans("Ref"));
+			$this->error=$langs->transnoentitiesnoconv("ErrorFieldRequired", $langs->trans("Ref"));
 			return -2;
 		}
 
@@ -860,7 +860,7 @@ class Account extends CommonObject
 	 *      @param  string	$ref     	Ref of bank account to get
 	 *      @return	int					<0 if KO, >0 if OK
 	 */
-	function fetch($id, $ref='')
+	function fetch($id, $ref = '')
 	{
 		global $conf;
 
@@ -1076,9 +1076,9 @@ class Account extends CommonObject
 	 *  @param      int		$mode			0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=short label + picto, 6=Long label + picto
 	 *  @return     string        		    Label
 	 */
-	function getLibStatut($mode=0)
+	function getLibStatut($mode = 0)
 	{
-		return $this->LibStatut($this->clos,$mode);
+		return $this->LibStatut($this->clos, $mode);
 	}
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
@@ -1163,7 +1163,7 @@ class Account extends CommonObject
 	 * 	@param	int		$option		1=Exclude future operation date (this is to exclude input made in advance and have real account sold)
 	 *	@return	int					Current sold (value date <= today)
 	 */
-	function solde($option=0)
+	function solde($option = 0)
 	{
 		$solde=0;
 
@@ -1226,7 +1226,7 @@ class Account extends CommonObject
 			$response->warning_delay=$conf->bank->rappro->warning_delay/60/60/24;
 			$response->label=$langs->trans("TransactionsToConciliate");
 			$response->url=DOL_URL_ROOT.'/compta/bank/list.php?leftmenu=bank&amp;mainmenu=bank';
-			$response->img=img_object('',"payment");
+			$response->img=img_object('', "payment");
 
 			while ($obj=$this->db->fetch_object($resql))
 			{
@@ -1329,7 +1329,7 @@ class Account extends CommonObject
      *  @param	int  	$notooltip		 			1=Disable tooltip
 	 *	@return	string								Chaine avec URL
 	 */
-	function getNomUrl($withpicto=0, $mode='', $option='', $save_lastsearch_value=-1, $notooltip=0)
+	function getNomUrl($withpicto = 0, $mode = '', $option = '', $save_lastsearch_value = -1, $notooltip = 0)
 	{
 		global $conf, $langs, $user;
 
@@ -1358,7 +1358,7 @@ class Account extends CommonObject
 		{
 			$url = DOL_URL_ROOT.'/compta/bank/bankentries_list.php?id='.$this->id;
 		}
-		else if ($mode == 'receipts')
+		elseif ($mode == 'receipts')
 		{
 			$url = DOL_URL_ROOT.'/compta/bank/releve.php?account='.$this->id;
 		}
@@ -1367,7 +1367,7 @@ class Account extends CommonObject
 		{
 			// Add param to save lastsearch_values or not
 			$add_save_lastsearch_values=($save_lastsearch_value == 1 ? 1 : 0);
-			if ($save_lastsearch_value == -1 && preg_match('/list\.php/',$_SERVER["PHP_SELF"])) $add_save_lastsearch_values=1;
+			if ($save_lastsearch_value == -1 && preg_match('/list\.php/', $_SERVER["PHP_SELF"])) $add_save_lastsearch_values=1;
 			if ($add_save_lastsearch_values) $url.='&save_lastsearch_values=1';
 		}
 
@@ -1441,7 +1441,7 @@ class Account extends CommonObject
 		if (! empty($this->iban))
 		{
 			// If IBAN defined, we can know country of account from it
-			if (preg_match("/^([a-zA-Z][a-zA-Z])/i",$this->iban,$reg)) return $reg[1];
+			if (preg_match("/^([a-zA-Z][a-zA-Z])/i", $this->iban, $reg)) return $reg[1];
 		}
 
 		// If this class is linked to a third party
@@ -1471,8 +1471,8 @@ class Account extends CommonObject
 	{
 		$country_code=$this->getCountryCode();
 
-		if (in_array($country_code,array('FR','ES','GA','IT','NC'))) return 1; // France, Spain, Gabon, ... - Not valid for CH
-		if (in_array($country_code,array('AU','BE','CA','DE','DK','GR','GB','ID','IE','IR','KR','NL','NZ','UK','US'))) return 2;      // Australia, England...
+		if (in_array($country_code, array('FR','ES','GA','IT','NC'))) return 1; // France, Spain, Gabon, ... - Not valid for CH
+		if (in_array($country_code, array('AU','BE','CA','DE','DK','GR','GB','ID','IE','IR','KR','NL','NZ','UK','US'))) return 2;      // Australia, England...
 		return 0;
 	}
 
@@ -1521,7 +1521,7 @@ class Account extends CommonObject
 				//'CH',	// Switzerland - No. Swizerland in not in EEC
 		);
 
-		if (in_array($country_code,$country_code_in_EEC)) return 1; // France, Spain, ...
+		if (in_array($country_code, $country_code_in_EEC)) return 1; // France, Spain, ...
 		return 0;
 	}
 
@@ -1549,7 +1549,7 @@ class Account extends CommonObject
 	 * @return array
 	 * @see useDetailedBBAN
 	 */
-	public function getFieldsToShow($includeibanbic=0)
+	public function getFieldsToShow($includeibanbic = 0)
 	{
 		//Get the required properties depending on the country
 		$detailedBBAN = $this->useDetailedBBAN();
@@ -1614,7 +1614,7 @@ class Account extends CommonObject
 				//Replace the old AccountNumber key with the new BankAccountNumber key
 				$fieldlists = explode(
 					' ',
-					preg_replace('/ ?[^Bank]AccountNumber ?/', 'BankAccountNumber',
+    preg_replace('/ ?[^Bank]AccountNumber ?/', 'BankAccountNumber',
 						$conf->global->BANK_SHOW_ORDER_OPTION)
 				);
 			}
@@ -1765,7 +1765,7 @@ class AccountLine extends CommonObject
 	 *  @param      string	$num     	External num to load (ex: num of transaction for paypal fee)
 	 *	@return		int					<0 if KO, 0 if OK but not found, >0 if OK and found
 	 */
-	function fetch($rowid,$ref='',$num='')
+	function fetch($rowid, $ref = '', $num = '')
 	{
 		global $conf;
 
@@ -1783,7 +1783,7 @@ class AccountLine extends CommonObject
 		$sql.= " WHERE b.fk_account = ba.rowid";
 		$sql.= " AND ba.entity IN (".getEntity('bank_account').")";
 		if ($num) $sql.= " AND b.num_chq='".$this->db->escape($num)."'";
-		else if ($ref) $sql.= " AND b.rowid='".$this->db->escape($ref)."'";
+		elseif ($ref) $sql.= " AND b.rowid='".$this->db->escape($ref)."'";
 		else $sql.= " AND b.rowid=".$rowid;
 
 		dol_syslog(get_class($this)."::fetch", LOG_DEBUG);
@@ -2011,7 +2011,7 @@ class AccountLine extends CommonObject
 	 *	@param	int		$conciliated	1=Set transaction to conciliated, 0=Keep transaction non conciliated
 	 *	@return	int						<0 if KO, >0 if OK
 	 */
-	function update_conciliation(User $user, $cat, $conciliated=1)
+	function update_conciliation(User $user, $cat, $conciliated = 1)
 	{
         // phpcs:enable
 		global $conf,$langs;
@@ -2075,7 +2075,7 @@ class AccountLine extends CommonObject
 	 *	@param	int		$sign		1 or -1
 	 *	@return	int					>0 if OK, 0 if KO
 	 */
-	function datev_change($rowid,$sign=1)
+	function datev_change($rowid, $sign = 1)
 	{
         // phpcs:enable
 		$sql = "SELECT datev FROM ".MAIN_DB_PREFIX."bank WHERE rowid = ".$rowid;
@@ -2117,7 +2117,7 @@ class AccountLine extends CommonObject
 	function datev_next($id)
 	{
         // phpcs:enable
-		return $this->datev_change($id,1);
+		return $this->datev_change($id, 1);
 	}
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
@@ -2130,7 +2130,7 @@ class AccountLine extends CommonObject
 	function datev_previous($id)
 	{
         // phpcs:enable
-		return $this->datev_change($id,-1);
+		return $this->datev_change($id, -1);
 	}
 
 
@@ -2142,7 +2142,7 @@ class AccountLine extends CommonObject
 	 *	@param	int		$sign		1 or -1
 	 *	@return	int					>0 if OK, 0 if KO
 	 */
-	function dateo_change($rowid,$sign=1)
+	function dateo_change($rowid, $sign = 1)
 	{
         // phpcs:enable
 		$sql = "SELECT dateo FROM ".MAIN_DB_PREFIX."bank WHERE rowid = ".$rowid;
@@ -2184,7 +2184,7 @@ class AccountLine extends CommonObject
 	function dateo_next($id)
 	{
         // phpcs:enable
-		return $this->dateo_change($id,1);
+		return $this->dateo_change($id, 1);
 	}
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
@@ -2197,7 +2197,7 @@ class AccountLine extends CommonObject
 	function dateo_previous($id)
 	{
         // phpcs:enable
-		return $this->dateo_change($id,-1);
+		return $this->dateo_change($id, -1);
 	}
 
 
@@ -2257,7 +2257,7 @@ class AccountLine extends CommonObject
 	 * 		@param	int     $notooltip		1=Disable tooltip
 	 *		@return	string					Chaine avec URL
 	 */
-	function getNomUrl($withpicto=0,$maxlen=0,$option='',$notooltip=0)
+	function getNomUrl($withpicto = 0, $maxlen = 0, $option = '', $notooltip = 0)
 	{
 		global $langs;
 
@@ -2298,9 +2298,9 @@ class AccountLine extends CommonObject
 	 *    @param	int		$mode       0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long
 	 *    @return   string        		Libelle
 	 */
-	function getLibStatut($mode=0)
+	function getLibStatut($mode = 0)
 	{
-		return $this->LibStatut($this->status,$mode);
+		return $this->LibStatut($this->status, $mode);
 	}
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
@@ -2311,7 +2311,7 @@ class AccountLine extends CommonObject
 	 *  @param	int		$mode           0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 *  @return	string          		Libelle du statut
 	 */
-	function LibStatut($statut,$mode=0)
+	function LibStatut($statut, $mode = 0)
 	{
         // phpcs:enable
 		global $langs;

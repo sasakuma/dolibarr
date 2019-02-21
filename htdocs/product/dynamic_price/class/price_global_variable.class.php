@@ -81,7 +81,7 @@ class PriceGlobalVariable
      *  @param  int		$notrigger   0=launch triggers after, 1=disable triggers
      *  @return int      		   	 <0 if KO, Id of created object if OK
      */
-    function create($user, $notrigger=0)
+    function create($user, $notrigger = 0)
     {
         $error=0;
 
@@ -182,7 +182,7 @@ class PriceGlobalVariable
      *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
      *  @return int     		   	 <0 if KO, >0 if OK
      */
-    function update($user=0, $notrigger=0)
+    function update($user = 0, $notrigger = 0)
     {
         $error=0;
 
@@ -201,19 +201,19 @@ class PriceGlobalVariable
         $resql = $this->db->query($sql);
         if (! $resql) { $error++; $this->errors[]="Error ".$this->db->lasterror(); }
 
-        if (! $error)
-        {
-            if (! $notrigger)
-            {
-                // Uncomment this and change MYOBJECT to your own tag if you
-                // want this action calls a trigger.
+        // if (! $error)
+        // {
+        //     if (! $notrigger)
+        //     {
+        //         // Uncomment this and change MYOBJECT to your own tag if you
+        //         // want this action calls a trigger.
 
-                //// Call triggers
-                //$result=$this->call_trigger('MYOBJECT_MODIFY',$user);
-                //if ($result < 0) { $error++; //Do also what you must do to rollback action if trigger fail}
-                //// End call triggers
-             }
-        }
+        //         //// Call triggers
+        //         //$result=$this->call_trigger('MYOBJECT_MODIFY',$user);
+        //         //if ($result < 0) { $error++; //Do also what you must do to rollback action if trigger fail}
+        //         //// End call triggers
+        //     }
+        // }
 
         // Commit or rollback
         if ($error)
@@ -242,7 +242,7 @@ class PriceGlobalVariable
      *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
      *  @return	int					 <0 if KO, >0 if OK
      */
-    function delete($rowid, $user, $notrigger=0)
+    function delete($rowid, $user, $notrigger = 0)
     {
         $error=0;
 

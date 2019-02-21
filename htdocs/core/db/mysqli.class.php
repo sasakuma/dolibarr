@@ -54,7 +54,7 @@ class DoliDBMysqli extends DoliDB
 	 *	@param	    string	$name		Nom de la database
 	 *	@param	    int		$port		Port of database server
      */
-    function __construct($type, $host, $user, $pass, $name='', $port=0)
+    function __construct($type, $host, $user, $pass, $name = '', $port = 0)
     {
         global $conf,$langs;
 
@@ -75,7 +75,7 @@ class DoliDBMysqli extends DoliDB
             $this->connected = false;
             $this->ok = false;
             $this->error="Mysqli PHP functions for using Mysqli driver are not available in this version of PHP. Try to use another driver.";
-            dol_syslog(get_class($this)."::DoliDBMysqli : Mysqli PHP functions for using Mysqli driver are not available in this version of PHP. Try to use another driver.",LOG_ERR);
+            dol_syslog(get_class($this)."::DoliDBMysqli : Mysqli PHP functions for using Mysqli driver are not available in this version of PHP. Try to use another driver.", LOG_ERR);
         }
 
         if (! $host)
@@ -83,7 +83,7 @@ class DoliDBMysqli extends DoliDB
             $this->connected = false;
             $this->ok = false;
             $this->error=$langs->trans("ErrorWrongHostParameter");
-            dol_syslog(get_class($this)."::DoliDBMysqli : Connect error, wrong host parameters",LOG_ERR);
+            dol_syslog(get_class($this)."::DoliDBMysqli : Connect error, wrong host parameters", LOG_ERR);
         }
 
 		// Try server connection
@@ -128,7 +128,7 @@ class DoliDBMysqli extends DoliDB
                 $this->database_name = '';
                 $this->ok = false;
                 $this->error=$this->error();
-                dol_syslog(get_class($this)."::DoliDBMysqli : Select_db error ".$this->error,LOG_ERR);
+                dol_syslog(get_class($this)."::DoliDBMysqli : Select_db error ".$this->error, LOG_ERR);
             }
         }
         else
@@ -162,7 +162,7 @@ class DoliDBMysqli extends DoliDB
      *  @param     string	$type	Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
      *  @return    string   		SQL request line converted
      */
-    static function convertSQLFromMysql($line,$type='ddl')
+    static function convertSQLFromMysql($line, $type = 'ddl')
     {
         return $line;
     }
@@ -234,7 +234,7 @@ class DoliDBMysqli extends DoliDB
     {
         if ($this->db)
         {
-	        if ($this->transaction_opened > 0) dol_syslog(get_class($this)."::close Closing a connection with an opened transaction depth=".$this->transaction_opened,LOG_ERR);
+	        if ($this->transaction_opened > 0) dol_syslog(get_class($this)."::close Closing a connection with an opened transaction depth=".$this->transaction_opened, LOG_ERR);
             $this->connected=false;
             return $this->db->close();
         }
@@ -250,13 +250,13 @@ class DoliDBMysqli extends DoliDB
      *  @param  string	$type           Type of SQL order ('ddl' for insert, update, select, delete or 'dml' for create, alter...)
      *	@return	bool|mysqli_result		Resultset of answer
      */
-    function query($query,$usesavepoint=0,$type='auto')
+    function query($query, $usesavepoint = 0, $type = 'auto')
     {
     	global $conf;
 
         $query = trim($query);
 
-	    if (! in_array($query,array('BEGIN','COMMIT','ROLLBACK'))) dol_syslog('sql='.$query, LOG_DEBUG);
+	    if (! in_array($query, array('BEGIN','COMMIT','ROLLBACK'))) dol_syslog('sql='.$query, LOG_DEBUG);
 
         if (! $this->database_name)
         {
@@ -268,7 +268,7 @@ class DoliDBMysqli extends DoliDB
             $ret = $this->db->query($query);
         }
 
-        if (! preg_match("/^COMMIT/i",$query) && ! preg_match("/^ROLLBACK/i",$query))
+        if (! preg_match("/^COMMIT/i", $query) && ! preg_match("/^ROLLBACK/i", $query))
         {
             // Si requete utilisateur, on la sauvegarde ainsi que son resultset
             if (! $ret)
@@ -382,7 +382,7 @@ class DoliDBMysqli extends DoliDB
      *	@param  mysqli_result	$resultset	Curseur de la requete voulue
      *	@return	void
      */
-    function free($resultset=null)
+    function free($resultset = null)
     {
         // If resultset not provided, we take the last used by connexion
         if (! is_object($resultset)) { $resultset=$this->_results; }
@@ -476,7 +476,7 @@ class DoliDBMysqli extends DoliDB
 	 * @param	string	$fieldid	Field name
 	 * @return  int|string			Id of row
      */
-    function last_insert_id($tab,$fieldid='rowid')
+    function last_insert_id($tab, $fieldid = 'rowid')
     {
         // phpcs:enable
         return $this->db->insert_id;
@@ -491,7 +491,7 @@ class DoliDBMysqli extends DoliDB
      * 	@return	string					XXX(field) or XXX('value') or field or 'value'
      *
      */
-    function encrypt($fieldorvalue, $withQuotes=0)
+    function encrypt($fieldorvalue, $withQuotes = 0)
     {
         global $conf;
 
@@ -509,7 +509,7 @@ class DoliDBMysqli extends DoliDB
             {
                 $return = 'AES_ENCRYPT('.$return.',\''.$cryptKey.'\')';
             }
-            else if ($cryptType == 1)
+            elseif ($cryptType == 1)
             {
                 $return = 'DES_ENCRYPT('.$return.',\''.$cryptKey.'\')';
             }
@@ -542,7 +542,7 @@ class DoliDBMysqli extends DoliDB
             {
                 $return = 'AES_DECRYPT('.$value.',\''.$cryptKey.'\')';
             }
-            else if ($cryptType == 1)
+            elseif ($cryptType == 1)
             {
                 $return = 'DES_DECRYPT('.$value.',\''.$cryptKey.'\')';
             }
@@ -582,7 +582,7 @@ class DoliDBMysqli extends DoliDB
 	 * 	@param	string	$owner			Username of database owner
 	 * 	@return	bool|mysqli_result		resource defined if OK, null if KO
      */
-    function DDLCreateDb($database,$charset='',$collation='',$owner='')
+    function DDLCreateDb($database, $charset = '', $collation = '', $owner = '')
     {
         // phpcs:enable
         if (empty($charset))   $charset=$this->forcecharset;
@@ -592,13 +592,13 @@ class DoliDBMysqli extends DoliDB
 		$sql = "CREATE DATABASE `".$this->escape($database)."`";
 		$sql.= " DEFAULT CHARACTER SET `".$this->escape($charset)."` DEFAULT COLLATE `".$this->escape($collation)."`";
 
-        dol_syslog($sql,LOG_DEBUG);
+        dol_syslog($sql, LOG_DEBUG);
         $ret=$this->query($sql);
         if (! $ret)
         {
             // We try again for compatibility with Mysql < 4.1.1
             $sql = "CREATE DATABASE `".$this->escape($database)."`";
-            dol_syslog($sql,LOG_DEBUG);
+            dol_syslog($sql, LOG_DEBUG);
             $ret=$this->query($sql);
         }
         return $ret;
@@ -612,7 +612,7 @@ class DoliDBMysqli extends DoliDB
 	 *  @param	string		$table		Nmae of table filter ('xxx%')
 	 *  @return	array					List of tables in an array
      */
-    function DDLListTables($database, $table='')
+    function DDLListTables($database, $table = '')
     {
         // phpcs:enable
         $listtables=array();
@@ -646,7 +646,7 @@ class DoliDBMysqli extends DoliDB
 
         $sql="SHOW FULL COLUMNS FROM ".$table.";";
 
-        dol_syslog($sql,LOG_DEBUG);
+        dol_syslog($sql, LOG_DEBUG);
         $result = $this->query($sql);
         if ($result)
         {
@@ -671,7 +671,7 @@ class DoliDBMysqli extends DoliDB
 	 *	@param	    array	$keys 			Tableau des champs cles noms => valeur
 	 *	@return	    int						<0 if KO, >=0 if OK
      */
-    function DDLCreateTable($table,$fields,$primary_key,$type,$unique_keys=null,$fulltext_keys=null,$keys=null)
+    function DDLCreateTable($table, $fields, $primary_key, $type, $unique_keys = null, $fulltext_keys = null, $keys = null)
     {
         // phpcs:enable
 	    // FIXME: $fulltext_keys parameter is unused
@@ -684,25 +684,25 @@ class DoliDBMysqli extends DoliDB
         {
         	$sqlfields[$i] = $field_name." ";
 			$sqlfields[$i]  .= $field_desc['type'];
-			if( preg_match("/^[^\s]/i",$field_desc['value'])) {
+			if( preg_match("/^[^\s]/i", $field_desc['value'])) {
 				$sqlfields[$i]  .= "(".$field_desc['value'].")";
 			}
-			if( preg_match("/^[^\s]/i",$field_desc['attribute'])) {
+			if( preg_match("/^[^\s]/i", $field_desc['attribute'])) {
 				$sqlfields[$i]  .= " ".$field_desc['attribute'];
 			}
-			if( preg_match("/^[^\s]/i",$field_desc['default']))
+			if( preg_match("/^[^\s]/i", $field_desc['default']))
 			{
-				if ((preg_match("/null/i",$field_desc['default'])) || (preg_match("/CURRENT_TIMESTAMP/i",$field_desc['default']))) {
+				if ((preg_match("/null/i", $field_desc['default'])) || (preg_match("/CURRENT_TIMESTAMP/i", $field_desc['default']))) {
 					$sqlfields[$i]  .= " default ".$field_desc['default'];
 				}
 				else {
 					$sqlfields[$i]  .= " default '".$field_desc['default']."'";
 				}
 			}
-			if( preg_match("/^[^\s]/i",$field_desc['null'])) {
+			if( preg_match("/^[^\s]/i", $field_desc['null'])) {
 				$sqlfields[$i]  .= " ".$field_desc['null'];
 			}
-			if( preg_match("/^[^\s]/i",$field_desc['extra'])) {
+			if( preg_match("/^[^\s]/i", $field_desc['extra'])) {
 				$sqlfields[$i]  .= " ".$field_desc['extra'];
 			}
             $i++;
@@ -727,13 +727,13 @@ class DoliDBMysqli extends DoliDB
                 $i++;
             }
         }
-        $sql .= implode(',',$sqlfields);
+        $sql .= implode(',', $sqlfields);
         if($primary_key != "")
         $sql .= ",".$pk;
         if($unique_keys != "")
-        $sql .= ",".implode(',',$sqluq);
+        $sql .= ",".implode(',', $sqluq);
         if(is_array($keys))
-        $sql .= ",".implode(',',$sqlk);
+        $sql .= ",".implode(',', $sqlk);
         $sql .=") engine=".$type;
 
         if(! $this->query($sql))
@@ -768,12 +768,12 @@ class DoliDBMysqli extends DoliDB
 	 *	@param	string		$field	Optionnel : Name of field if we want description of field
 	 *	@return	bool|mysqli_result	Resultset x (x->Field, x->Type, ...)
      */
-    function DDLDescTable($table,$field="")
+    function DDLDescTable($table, $field = "")
     {
         // phpcs:enable
         $sql="DESC ".$table." ".$field;
 
-        dol_syslog(get_class($this)."::DDLDescTable ".$sql,LOG_DEBUG);
+        dol_syslog(get_class($this)."::DDLDescTable ".$sql, LOG_DEBUG);
         $this->_results = $this->query($sql);
         return $this->_results;
     }
@@ -788,42 +788,42 @@ class DoliDBMysqli extends DoliDB
 	 *	@param	string	$field_position 	Optionnel ex.: "after champtruc"
 	 *	@return	int							<0 if KO, >0 if OK
      */
-    function DDLAddField($table,$field_name,$field_desc,$field_position="")
+    function DDLAddField($table, $field_name, $field_desc, $field_position = "")
     {
         // phpcs:enable
         // cles recherchees dans le tableau des descriptions (field_desc) : type,value,attribute,null,default,extra
         // ex. : $field_desc = array('type'=>'int','value'=>'11','null'=>'not null','extra'=> 'auto_increment');
         $sql= "ALTER TABLE ".$table." ADD ".$field_name." ";
         $sql.= $field_desc['type'];
-        if (preg_match("/^[^\s]/i",$field_desc['value']))
+        if (preg_match("/^[^\s]/i", $field_desc['value']))
         {
-            if (! in_array($field_desc['type'],array('date','datetime')))
+            if (! in_array($field_desc['type'], array('date','datetime')))
             {
                 $sql.= "(".$field_desc['value'].")";
             }
         }
-        if (isset($field_desc['attribute']) && preg_match("/^[^\s]/i",$field_desc['attribute']))
+        if (isset($field_desc['attribute']) && preg_match("/^[^\s]/i", $field_desc['attribute']))
         {
         	$sql.= " ".$field_desc['attribute'];
         }
-        if (isset($field_desc['null']) && preg_match("/^[^\s]/i",$field_desc['null']))
+        if (isset($field_desc['null']) && preg_match("/^[^\s]/i", $field_desc['null']))
         {
         	$sql.= " ".$field_desc['null'];
         }
-        if (isset($field_desc['default']) && preg_match("/^[^\s]/i",$field_desc['default']))
+        if (isset($field_desc['default']) && preg_match("/^[^\s]/i", $field_desc['default']))
         {
-            if(preg_match("/null/i",$field_desc['default']))
+            if(preg_match("/null/i", $field_desc['default']))
             $sql.= " default ".$field_desc['default'];
             else
             $sql.= " default '".$field_desc['default']."'";
         }
-        if (isset($field_desc['extra']) && preg_match("/^[^\s]/i",$field_desc['extra']))
+        if (isset($field_desc['extra']) && preg_match("/^[^\s]/i", $field_desc['extra']))
         {
         	$sql.= " ".$field_desc['extra'];
         }
         $sql.= " ".$field_position;
 
-        dol_syslog(get_class($this)."::DDLAddField ".$sql,LOG_DEBUG);
+        dol_syslog(get_class($this)."::DDLAddField ".$sql, LOG_DEBUG);
         if ($this->query($sql)) {
             return 1;
         }
@@ -839,7 +839,7 @@ class DoliDBMysqli extends DoliDB
 	 *	@param	string	$field_desc 		Array with description of field format
 	 *	@return	int							<0 if KO, >0 if OK
      */
-    function DDLUpdateField($table,$field_name,$field_desc)
+    function DDLUpdateField($table, $field_name, $field_desc)
     {
         // phpcs:enable
         $sql = "ALTER TABLE ".$table;
@@ -870,7 +870,7 @@ class DoliDBMysqli extends DoliDB
         	elseif ($field_desc['type'] == 'text') $sql.=" DEFAULT '".$this->escape($field_desc['default'])."'";							// Default not supported on text fields
         }
 
-        dol_syslog(get_class($this)."::DDLUpdateField ".$sql,LOG_DEBUG);
+        dol_syslog(get_class($this)."::DDLUpdateField ".$sql, LOG_DEBUG);
         if (! $this->query($sql))
         return -1;
         else
@@ -885,11 +885,11 @@ class DoliDBMysqli extends DoliDB
 	 *	@param	string	$field_name 	Name of field to drop
 	 *	@return	int						<0 if KO, >0 if OK
      */
-    function DDLDropField($table,$field_name)
+    function DDLDropField($table, $field_name)
     {
         // phpcs:enable
         $sql= "ALTER TABLE ".$table." DROP COLUMN `".$field_name."`";
-        dol_syslog(get_class($this)."::DDLDropField ".$sql,LOG_DEBUG);
+        dol_syslog(get_class($this)."::DDLDropField ".$sql, LOG_DEBUG);
         if ($this->query($sql)) {
             return 1;
         }
@@ -908,7 +908,7 @@ class DoliDBMysqli extends DoliDB
 	 *	@param	string	$dolibarr_main_db_name		Database name where user must be granted
 	 *	@return	int									<0 if KO, >=0 if OK
      */
-    function DDLCreateUser($dolibarr_main_db_host,$dolibarr_main_db_user,$dolibarr_main_db_pass,$dolibarr_main_db_name)
+    function DDLCreateUser($dolibarr_main_db_host, $dolibarr_main_db_user, $dolibarr_main_db_pass, $dolibarr_main_db_name)
     {
         // phpcs:enable
         $sql = "CREATE USER '".$this->escape($dolibarr_main_db_user)."'";
@@ -1052,7 +1052,7 @@ class DoliDBMysqli extends DoliDB
         {
             $liste=$this->fetch_array($resql);
             $basedir=$liste['Value'];
-            $fullpathofdump=$basedir.(preg_match('/\/$/',$basedir)?'':'/').'bin/mysqldump';
+            $fullpathofdump=$basedir.(preg_match('/\/$/', $basedir)?'':'/').'bin/mysqldump';
         }
         return $fullpathofdump;
     }
@@ -1071,7 +1071,7 @@ class DoliDBMysqli extends DoliDB
         {
             $liste=$this->fetch_array($resql);
             $basedir=$liste['Value'];
-            $fullpathofimport=$basedir.(preg_match('/\/$/',$basedir)?'':'/').'bin/mysql';
+            $fullpathofimport=$basedir.(preg_match('/\/$/', $basedir)?'':'/').'bin/mysql';
         }
         return $fullpathofimport;
     }
@@ -1082,7 +1082,7 @@ class DoliDBMysqli extends DoliDB
      * @param	string	$filter		Filter list on a particular value
 	 * @return	array				Array of key-values (key=>value)
      */
-    function getServerParametersValues($filter='')
+    function getServerParametersValues($filter = '')
     {
         $result=array();
 
@@ -1103,7 +1103,7 @@ class DoliDBMysqli extends DoliDB
      * @param	string	$filter		Filter list on a particular value
 	 * @return  array				Array of key-values (key=>value)
      */
-    function getServerStatusValues($filter='')
+    function getServerStatusValues($filter = '')
     {
         $result=array();
 

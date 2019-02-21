@@ -75,7 +75,7 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
     function info()
     {
     	global $langs;
-      	return $langs->trans("SimpleNumRefModelDesc",$this->prefix);
+      	return $langs->trans("SimpleNumRefModelDesc", $this->prefix);
     }
 
 
@@ -111,16 +111,16 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
         if ($resql)
         {
             $row = $db->fetch_row($resql);
-            if ($row) { $coyymm = substr($row[0],0,6); $max=$row[0]; }
+            if ($row) { $coyymm = substr($row[0], 0, 6); $max=$row[0]; }
         }
-        if (! $coyymm || preg_match('/'.$this->prefix.'[0-9][0-9][0-9][0-9]/i',$coyymm))
+        if (! $coyymm || preg_match('/'.$this->prefix.'[0-9][0-9][0-9][0-9]/i', $coyymm))
         {
             return true;
         }
         else
         {
 			$langs->load("errors");
-			$this->error=$langs->trans('ErrorNumRefModel',$max);
+			$this->error=$langs->trans('ErrorNumRefModel', $max);
             return false;
         }
     }
@@ -132,7 +132,7 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
 	 *  @param  Object		$object		Object
 	 *  @return string      			Value if OK, 0 if KO
      */
-    function getNextValue($objsoc=0,$object='')
+    function getNextValue($objsoc = 0, $object = '')
     {
         global $db,$conf;
 
@@ -154,10 +154,10 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
 		//$date=time();
         $date=$object->date_commande;   // Not always defined
         if (empty($date)) $date=$object->date;  // Creation date is order date for suppliers orders
-        $yymm = strftime("%y%m",$date);
+        $yymm = strftime("%y%m", $date);
 
         if ($max >= (pow(10, 4) - 1)) $num=$max+1;	// If counter > 9999, we do not format on 4 chars, we take number as it is
-        else $num = sprintf("%04s",$max+1);
+        else $num = sprintf("%04s", $max+1);
 
         return $this->prefix.$yymm."-".$num;
     }
@@ -171,9 +171,9 @@ class mod_commande_fournisseur_muguet extends ModeleNumRefSuppliersOrders
 	 *  @param  Object	    $object		Object
      *  @return string      			Texte descripif
      */
-    function commande_get_num($objsoc=0,$object='')
+    function commande_get_num($objsoc = 0, $object = '')
     {
         // phpcs:enable
-        return $this->getNextValue($objsoc,$object);
+        return $this->getNextValue($objsoc, $object);
     }
 }

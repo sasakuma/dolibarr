@@ -70,7 +70,7 @@ class Productbatch extends CommonObject
      *  @param  int		$notrigger   0=launch triggers after, 1=disable triggers
      *  @return int      		   	 <0 if KO, Id of created object if OK
      */
-    function create($user, $notrigger=0)
+    function create($user, $notrigger = 0)
     {
 		global $conf, $langs;
 		$error=0;
@@ -201,7 +201,7 @@ class Productbatch extends CommonObject
      *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
      *  @return int     		   	 <0 if KO, >0 if OK
      */
-    function update($user=null, $notrigger=0)
+    function update($user = null, $notrigger = 0)
     {
     	global $conf, $langs;
 		$error=0;
@@ -271,7 +271,7 @@ class Productbatch extends CommonObject
      *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
 	 *  @return	int					 <0 if KO, >0 if OK
 	 */
-	function delete($user, $notrigger=0)
+	function delete($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -338,8 +338,6 @@ class Productbatch extends CommonObject
 
 		$object=new Productbatch($this->db);
 
-		$object->context['createfromclone']='createfromclone';
-
  		$this->db->begin();
 
 		// Load source object
@@ -351,18 +349,19 @@ class Productbatch extends CommonObject
 		// ...
 
 		// Create clone
+		$object->context['createfromclone']='createfromclone';
 		$result=$object->create($user);
 
 		// Other options
 		if ($result < 0)
 		{
 			$this->error=$object->error;
+			$this->errors=array_merge($this->errors, $object->errors);
 			$error++;
 		}
 
 		if (! $error)
 		{
-
 
 		}
 
@@ -422,7 +421,7 @@ class Productbatch extends CommonObject
      *  @param	string		$batch_number   	batch number for object
      *  @return int          					<0 if KO, >0 if OK
      */
-    function find($fk_product_stock=0, $eatby='',$sellby='',$batch_number='')
+    function find($fk_product_stock = 0, $eatby = '', $sellby = '', $batch_number = '')
     {
     	global $langs;
 		$where = array();
@@ -438,12 +437,12 @@ class Productbatch extends CommonObject
 		$sql.= " FROM ".MAIN_DB_PREFIX.self::$_table_element." as t";
 		$sql.= " WHERE fk_product_stock=".$fk_product_stock;
 
-		if (! empty($eatby)) array_push($where," eatby = '".$this->db->idate($eatby)."'");            // deprecated
-		if (! empty($sellby)) array_push($where," sellby = '".$this->db->idate($sellby)."'");         // deprecated
+		if (! empty($eatby)) array_push($where, " eatby = '".$this->db->idate($eatby)."'");            // deprecated
+		if (! empty($sellby)) array_push($where, " sellby = '".$this->db->idate($sellby)."'");         // deprecated
 
 		if (! empty($batch_number)) $sql.= " AND batch = '".$this->db->escape($batch_number)."'";
 
-		if (! empty($where)) $sql.= " AND (".implode(" OR ",$where).")";
+		if (! empty($where)) $sql.= " AND (".implode(" OR ", $where).")";
 
     	dol_syslog(get_class($this)."::fetch", LOG_DEBUG);
         $resql=$this->db->query($sql);
@@ -482,7 +481,7 @@ class Productbatch extends CommonObject
      *  @param  int         $fk_product         If set to a product id, get eatby and sellby from table llx_product_lot
      *  @return array         					<0 if KO, array of batch
      */
-    public static function findAll($db, $fk_product_stock, $with_qty=0, $fk_product=0)
+    public static function findAll($db, $fk_product_stock, $with_qty = 0, $fk_product = 0)
     {
     	global $langs;
 		$ret = array();

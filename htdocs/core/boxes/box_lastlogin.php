@@ -53,7 +53,7 @@ class box_lastlogin extends ModeleBoxes
      *  @param  DoliDB  $db         Database handler
      *  @param  string  $param      More parameters
      */
-    function __construct($db,$param)
+    function __construct($db, $param)
     {
         global $conf;
 
@@ -66,7 +66,7 @@ class box_lastlogin extends ModeleBoxes
      *  @param  int     $max        Maximum number of records to load
      *  @return void
      */
-    function loadBox($max=5)
+    function loadBox($max = 5)
     {
         global $conf, $user, $langs, $db;
 
@@ -92,7 +92,7 @@ class box_lastlogin extends ModeleBoxes
             'td' => '',
             'text' => $langs->trans("PreviousConnexion"),
         );
-        if ($user->datepreviouslogin) $tmp= dol_print_date($user->datepreviouslogin,"dayhour",'tzuser');
+        if ($user->datepreviouslogin) $tmp= dol_print_date($user->datepreviouslogin, "dayhour", 'tzuser');
         else $tmp= $langs->trans("Unknown");
         $this->info_box_contents[$line][1] = array(
             'td' => '',
@@ -109,7 +109,7 @@ class box_lastlogin extends ModeleBoxes
 	 *  @param	int		$nooutput	No print, only return string
 	 *	@return	void
 	 */
-    function showBox($head = null, $contents = null, $nooutput=0)
+    function showBox($head = null, $contents = null, $nooutput = 0)
     {
 		parent::showBox($this->info_box_head, $this->info_box_contents, $nooutput);
 	}

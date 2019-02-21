@@ -50,8 +50,8 @@ class RssParser
     private $_rssarray=array();
 
     // For parsing with xmlparser
-    var $stack               = array(); // parser stack
-    var $_CONTENT_CONSTRUCTS = array('content', 'summary', 'info', 'title', 'tagline', 'copyright');
+    public $stack               = array(); // parser stack
+    private $_CONTENT_CONSTRUCTS = array('content', 'summary', 'info', 'title', 'tagline', 'copyright');
 
 
     /**
@@ -184,7 +184,7 @@ class RssParser
      * 	@param	string	$cachedir	Directory where to save cache file
      *	@return	int					<0 if KO, >0 if OK
      */
-    public function parser($urlRSS, $maxNb=0, $cachedelay=60, $cachedir='')
+    public function parser($urlRSS, $maxNb = 0, $cachedelay = 60, $cachedir = '')
     {
         global $conf;
 
@@ -201,7 +201,7 @@ class RssParser
         }
 
         $this->_urlRSS = $urlRSS;
-        $newpathofdestfile=$cachedir.'/'.dol_hash($this->_urlRSS,3);	// Force md5 hash (does not contains special chars)
+        $newpathofdestfile=$cachedir.'/'.dol_hash($this->_urlRSS, 3);	// Force md5 hash (does not contains special chars)
         $newmask='0644';
 
         //dol_syslog("RssPArser::parser parse url=".$urlRSS." => cache file=".$newpathofdestfile);
@@ -233,7 +233,7 @@ class RssParser
         else
         {
             try {
-                ini_set("user_agent","Dolibarr ERP-CRM RSS reader");
+                ini_set("user_agent", "Dolibarr ERP-CRM RSS reader");
                 ini_set("max_execution_time", $conf->global->MAIN_USE_RESPONSE_TIMEOUT);
                 ini_set("default_socket_timeout", $conf->global->MAIN_USE_RESPONSE_TIMEOUT);
 
@@ -246,7 +246,7 @@ class RssParser
                 $str = file_get_contents($this->_urlRSS, false, $context);
             }
             catch (Exception $e) {
-                print 'Error retrieving URL '.$this->urlRSS.' - '.$e->getMessage();
+                print 'Error retrieving URL '.$this->_urlRSS.' - '.$e->getMessage();
             }
         }
 
@@ -342,7 +342,7 @@ class RssParser
                 else $items=$rss->items;                                                              // With xmlparse
                 //var_dump($items);exit;
             }
-            else if ($rss->_format == 'atom')
+            elseif ($rss->_format == 'atom')
             {
                 //var_dump($rss);
                 if (! empty($conf->global->EXTERNALRSS_USE_SIMPLEXML))
@@ -410,7 +410,7 @@ class RssParser
                             }
                         }
                     }
-                    else if ($rss->_format == 'atom')
+                    elseif ($rss->_format == 'atom')
                     {
                         if (! empty($conf->global->EXTERNALRSS_USE_SIMPLEXML))
                         {
@@ -666,7 +666,7 @@ class RssParser
      *  @param	string	$str2		Str2
      *  @return	string				String cancatenated
      */
-    function concat(&$str1, $str2="")
+    function concat(&$str1, $str2 = "")
     {
         if (!isset($str1) ) {
             $str1="";
@@ -759,7 +759,7 @@ function xml2php($xml)
         }
 
         //Let see if the new child is not in the array
-        if ($tab === false && in_array($key,array_keys($array)))
+        if ($tab === false && in_array($key, array_keys($array)))
         {
             //If this element is already in the array we will create an indexed array
             $tmp = $array[$key];

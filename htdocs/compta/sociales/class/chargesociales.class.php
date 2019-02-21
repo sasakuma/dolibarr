@@ -1,8 +1,8 @@
 <?php
 /* Copyright (C) 2002      Rodolphe Quiedeville <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2007 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2016      Frédéric France      <frederic.france@free.fr>
- * Copyright (C) 2017      Alexandre Spangaro	<aspangaro@zendsi.com>
+ * Copyright (C) 2016-2019 Frédéric France      <frederic.france@netlogic.fr>
+ * Copyright (C) 2017      Alexandre Spangaro	<aspangaro@open-dsi.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ class ChargeSociales extends CommonObject
      *  @param	string  $ref	Ref
      *  @return	int <0 KO >0 OK
      */
-    function fetch($id, $ref='')
+    function fetch($id, $ref = '')
     {
         $sql = "SELECT cs.rowid, cs.date_ech";
         $sql.= ", cs.libelle as lib, cs.fk_type, cs.amount, cs.fk_projet as fk_project, cs.paye, cs.periode, cs.import_key";
@@ -154,7 +154,7 @@ class ChargeSociales extends CommonObject
 	 */
 	function check()
 	{
-		$newamount=price2num($this->amount,'MT');
+		$newamount=price2num($this->amount, 'MT');
 
         // Validation parametres
         if (! $newamount > 0 || empty($this->date_ech) || empty($this->periode))
@@ -180,7 +180,7 @@ class ChargeSociales extends CommonObject
         $now=dol_now();
 
         // Nettoyage parametres
-        $newamount=price2num($this->amount,'MT');
+        $newamount=price2num($this->amount, 'MT');
 
 		if (!$this->check())
 		{
@@ -211,7 +211,7 @@ class ChargeSociales extends CommonObject
             $this->id=$this->db->last_insert_id(MAIN_DB_PREFIX."chargesociales");
 
             //dol_syslog("ChargesSociales::create this->id=".$this->id);
-			$result=$this->call_trigger('SOCIALCONTRIBUTION_CREATE',$user);
+			$result=$this->call_trigger('SOCIALCONTRIBUTION_CREATE', $user);
 			if ($result < 0) $error++;
 
 			if(empty($error)) {
@@ -247,7 +247,7 @@ class ChargeSociales extends CommonObject
         // Get bank transaction lines for this social contributions
         include_once DOL_DOCUMENT_ROOT.'/compta/bank/class/account.class.php';
         $account=new Account($this->db);
-        $lines_url=$account->get_url('',$this->id,'sc');
+        $lines_url=$account->get_url('', $this->id, 'sc');
 
         // Delete bank urls
         foreach ($lines_url as $line_url)
@@ -303,44 +303,67 @@ class ChargeSociales extends CommonObject
 
 
     /**
-     *      Met a jour une charge sociale
+     *      Update social or fiscal contribution
      *
-     *      @param	User	$user   Utilisateur qui modifie
-     *      @return int     		<0 si erreur, >0 si ok
+     *      @param	User	$user           User that modify
+     *      @param  int		$notrigger	    0=launch triggers after, 1=disable triggers
+     *      @return int     		        <0 if KO, >0 if OK
      */
-    function update($user)
+    function update($user, $notrigger = 0)
     {
+        $error=0;
         $this->db->begin();
 
         $sql = "UPDATE ".MAIN_DB_PREFIX."chargesociales";
         $sql.= " SET libelle='".$this->db->escape($this->lib)."'";
         $sql.= ", date_ech='".$this->db->idate($this->date_ech)."'";
         $sql.= ", periode='".$this->db->idate($this->periode)."'";
-        $sql.= ", amount='".price2num($this->amount,'MT')."'";
+        $sql.= ", amount='".price2num($this->amount, 'MT')."'";
 		$sql.= ", fk_projet='".$this->db->escape($this->fk_project)."'";
         $sql.= ", fk_user_modif=".$user->id;
         $sql.= " WHERE rowid=".$this->id;
 
         dol_syslog(get_class($this)."::update", LOG_DEBUG);
         $resql=$this->db->query($sql);
-        if ($resql)
+
+        if (! $resql) {
+            $error++; $this->errors[]="Error ".$this->db->lasterror();
+        }
+
+        if (! $error)
         {
-            $this->db->commit();
-            return 1;
+            if (! $notrigger)
+            {
+                // Call trigger
+                $result=$this->call_trigger('SOCIALCHARGES_MODIFY', $user);
+                if ($result < 0) $error++;
+                // End call triggers
+            }
+        }
+
+        // Commit or rollback
+        if ($error)
+        {
+            foreach($this->errors as $errmsg)
+            {
+                dol_syslog(get_class($this)."::update ".$errmsg, LOG_ERR);
+                $this->error.=($this->error?', '.$errmsg:$errmsg);
+            }
+            $this->db->rollback();
+            return -1*$error;
         }
         else
         {
-            $this->error=$this->db->error();
-            $this->db->rollback();
-            return -1;
+            $this->db->commit();
+            return 1;
         }
     }
 
     /**
      * Calculate amount remaining to pay by year
      *
-     * @param	int		$year		Year
-     * @return	number
+     * @param   int     $year       Year
+     * @return  number
      */
     function solde($year = 0)
     {
@@ -380,8 +403,8 @@ class ChargeSociales extends CommonObject
     /**
      *    Tag social contribution as payed completely
      *
-     *    @param	User	$user       Object user making change
-     *    @return	int					<0 if KO, >0 if OK
+     *    @param    User    $user       Object user making change
+     *    @return   int					<0 if KO, >0 if OK
      */
     function set_paid($user)
     {
@@ -419,9 +442,9 @@ class ChargeSociales extends CommonObject
 	 *  @param  double	$alreadypaid	0=No payment already done, >0=Some payments were already done (we recommand to put here amount payed if you have it, 1 otherwise)
      *  @return	string        			Label
      */
-    function getLibStatut($mode=0,$alreadypaid=-1)
+    function getLibStatut($mode = 0, $alreadypaid = -1)
     {
-        return $this->LibStatut($this->paye,$mode,$alreadypaid);
+        return $this->LibStatut($this->paye, $mode, $alreadypaid);
     }
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
@@ -433,7 +456,7 @@ class ChargeSociales extends CommonObject
 	 *  @param  double	$alreadypaid	0=No payment already done, >0=Some payments were already done (we recommand to put here amount payed if you have it, 1 otherwise)
      *  @return string        			Label
      */
-    function LibStatut($statut,$mode=0,$alreadypaid=-1)
+    function LibStatut($statut, $mode = 0, $alreadypaid = -1)
     {
         // phpcs:enable
         global $langs;
@@ -491,7 +514,7 @@ class ChargeSociales extends CommonObject
      *  @param  int     $save_lastsearch_value		-1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
      *	@return	string								String with link
      */
-    function getNomUrl($withpicto=0, $maxlen=0, $notooltip=0, $short=0, $save_lastsearch_value=-1)
+    function getNomUrl($withpicto = 0, $maxlen = 0, $notooltip = 0, $short = 0, $save_lastsearch_value = -1)
     {
     	global $langs, $conf, $user, $form;
 
@@ -507,7 +530,7 @@ class ChargeSociales extends CommonObject
         {
         	// Add param to save lastsearch_values or not
         	$add_save_lastsearch_values=($save_lastsearch_value == 1 ? 1 : 0);
-        	if ($save_lastsearch_value == -1 && preg_match('/list\.php/',$_SERVER["PHP_SELF"])) $add_save_lastsearch_values=1;
+        	if ($save_lastsearch_value == -1 && preg_match('/list\.php/', $_SERVER["PHP_SELF"])) $add_save_lastsearch_values=1;
         	if ($add_save_lastsearch_values) $url.='&save_lastsearch_values=1';
         }
 
@@ -540,7 +563,7 @@ class ChargeSociales extends CommonObject
 
         $result .= $linkstart;
         if ($withpicto) $result.=img_object(($notooltip?'':$label), ($this->picto?$this->picto:'generic'), ($notooltip?(($withpicto != 2) ? 'class="paddingright"' : ''):'class="'.(($withpicto != 2) ? 'paddingright ' : '').'classfortooltip"'), 0, 0, $notooltip?0:1);
-        if ($withpicto != 2) $result.= ($maxlen?dol_trunc($this->ref,$maxlen):$this->ref);
+        if ($withpicto != 2) $result.= ($maxlen?dol_trunc($this->ref, $maxlen):$this->ref);
         $result .= $linkend;
 
         return $result;

@@ -270,7 +270,7 @@ class LoanSchedule extends CommonObject
 	 *  @param  int		$notrigger	    0=launch triggers after, 1=disable triggers
 	 *  @return int         			<0 if KO, >0 if OK
 	 */
-	public function update($user=0, $notrigger=0)
+	public function update($user = 0, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -354,7 +354,7 @@ class LoanSchedule extends CommonObject
 	 *  @param  int		$notrigger		0=launch triggers after, 1=disable triggers
 	 *  @return int						<0 if KO, >0 if OK
 	 */
-	public function delete($user, $notrigger=0)
+	public function delete($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -418,7 +418,7 @@ class LoanSchedule extends CommonObject
 		$result='';
 
 		if (!empty($capital) && !empty($rate) && !empty($nbterm)) {
-			$result = ($capital*($rate/12))/(1-pow((1+($rate/12)),($nbterm*-1)));
+			$result = ($capital*($rate/12))/(1-pow((1+($rate/12)), ($nbterm*-1)));
 		}
 
 		return $result;

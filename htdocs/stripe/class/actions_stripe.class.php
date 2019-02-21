@@ -71,10 +71,10 @@ class ActionsStripeconnect
 	{
 		global $db,$conf,$user,$langs,$form;
 
-		if (! empty($conf->stripe->enabled) && (empty($conf->global->STRIPE_LIVE) || GETPOST('forcesandbox','alpha')))
+		if (! empty($conf->stripe->enabled) && (empty($conf->global->STRIPE_LIVE) || GETPOST('forcesandbox', 'alpha')))
 		{
 			$service = 'StripeTest';
-			dol_htmloutput_mesg($langs->trans('YouAreCurrentlyInSandboxMode','Stripe'),'','warning');
+			dol_htmloutput_mesg($langs->trans('YouAreCurrentlyInSandboxMode', 'Stripe'), '', 'warning');
 		}
 		else
 		{
@@ -102,7 +102,7 @@ class ActionsStripeconnect
 			$this->resprints.= '<td colspan="3">';
 			$stripe=new Stripe($db);
 			if ($stripe->getStripeAccount($service)&&$object->client!=0) {
-				$customer=$stripe->customerStripe($object,$stripe->getStripeAccount($service));
+				$customer=$stripe->customerStripe($object, $stripe->getStripeAccount($service));
 				$this->resprints.= $customer->id;
 			}
 			else {
@@ -139,7 +139,7 @@ class ActionsStripeconnect
 			$stripe=new Stripe($db);
 			if (7==4) {
 				$object->fetch_thirdparty();
-				$customer=$stripe->customerStripe($object,$stripe->getStripeAccount($service));
+				$customer=$stripe->customerStripe($object, $stripe->getStripeAccount($service));
 				$this->resprints.= $customer->id;
 			}
 			else {
@@ -159,7 +159,7 @@ class ActionsStripeconnect
 			$stripe=new Stripe($db);
 			if (7==4) {
 				$object->fetch_thirdparty();
-				$customer=$stripe->customerStripe($object,$stripe->getStripeAccount($service));
+				$customer=$stripe->customerStripe($object, $stripe->getStripeAccount($service));
 				$this->resprints.= $customer->id;
 			}
 			else {
@@ -215,23 +215,23 @@ class ActionsStripeconnect
 					}
 					else
 					{
-						print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans("StripeConnectPay").'</a>';
+						print '<a class="butActionRefused classfortooltip" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans("StripeConnectPay").'</a>';
 					}
 				}
 				elseif ($resteapayer == 0)
 				{
-					print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans("StripeConnectPay").'</a>';
+					print '<a class="butActionRefused classfortooltip" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans("StripeConnectPay").'</a>';
 				}
 			}
 			else {
-				print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans("StripeConnectPay").'</a>';
+				print '<a class="butActionRefused classfortooltip" href="#" title="'.dol_escape_htmltag($langs->trans("NotEnoughPermissions")).'">'.$langs->trans("StripeConnectPay").'</a>';
 			}
 		}
 		elseif (is_object($object) && $object->element == 'invoice_supplier'){
-			print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("StripeConnectPay")).'">'.$langs->trans("StripeConnectPay").'</a>';
+			print '<a class="butActionRefused classfortooltip" href="#" title="'.dol_escape_htmltag($langs->trans("StripeConnectPay")).'">'.$langs->trans("StripeConnectPay").'</a>';
 		}
 		elseif (is_object($object) && $object->element == 'member'){
-			print '<a class="butActionRefused" href="#" title="'.dol_escape_htmltag($langs->trans("StripeAutoSubscription")).'">'.$langs->trans("StripeAutoSubscription").'</a>';
+			print '<a class="butActionRefused classfortooltip" href="#" title="'.dol_escape_htmltag($langs->trans("StripeAutoSubscription")).'">'.$langs->trans("StripeAutoSubscription").'</a>';
 		}
 		return 0;
 	}

@@ -121,7 +121,7 @@ class Cronjob extends CommonObject
      *  @param  int		$notrigger   0=launch triggers after, 1=disable triggers
      *  @return int      		   	 <0 if KO, Id of created object if OK
      */
-    function create($user, $notrigger=0)
+    function create($user, $notrigger = 0)
     {
     	global $conf, $langs;
 		$error=0;
@@ -153,11 +153,11 @@ class Cronjob extends CommonObject
 		// Check parameters
 		// Put here code to add a control on parameters values
 		if (dol_strlen($this->datestart)==0) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->trans('CronDtStart'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->trans('CronDtStart'));
 			$error++;
 		}
 		if (empty($this->label)) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->trans('CronLabel'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->trans('CronLabel'));
 			$error++;
 		}
 		if ((dol_strlen($this->datestart)!=0) && (dol_strlen($this->dateend)!=0) && ($this->dateend<$this->datestart)) {
@@ -165,28 +165,28 @@ class Cronjob extends CommonObject
 			$error++;
 		}
 		if (empty($this->unitfrequency)) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->trans('CronFrequency'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->trans('CronFrequency'));
 			$error++;
 		}
 		if (($this->jobtype=='command') && (empty($this->command))) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->trans('CronCommand'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->trans('CronCommand'));
 			$error++;
 		}
 		if (($this->jobtype=='method') && (empty($this->classesname))) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->trans('CronClass'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->trans('CronClass'));
 			$error++;
 		}
 		if (($this->jobtype=='method' || $this->jobtype == 'function') && (empty($this->methodename))) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->trans('CronMethod'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->trans('CronMethod'));
 			$error++;
 		}
 		if (($this->jobtype=='method') && (empty($this->objectname))) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->trans('CronObject'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->trans('CronObject'));
 			$error++;
 		}
 
 		if (($this->jobtype=='function') && (empty($this->libname))) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->trans('CronLib'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->trans('CronLib'));
 			$error++;
 		}
 
@@ -406,7 +406,7 @@ class Cronjob extends CommonObject
 	 *  @param  int         $processing     Processing or not
      *  @return int          			    <0 if KO, >0 if OK
      */
-    function fetch_all($sortorder='DESC', $sortfield='t.rowid', $limit=0, $offset=0, $status=1, $filter='', $processing=-1)
+    function fetch_all($sortorder = 'DESC', $sortfield = 't.rowid', $limit = 0, $offset = 0, $status = 1, $filter = '', $processing = -1)
     {
         // phpcs:enable
         global $langs;
@@ -459,15 +459,15 @@ class Cronjob extends CommonObject
     		}
     	}
 
-    	$sql.= $this->db->order($sortfield,$sortorder);
+    	$sql.= $this->db->order($sortfield, $sortorder);
     	if (!empty($limit) && !empty($offset)) {
-    		$sql.= $this->db->plimit($limit + 1,$offset);
+    		$sql.= $this->db->plimit($limit + 1, $offset);
     	}
 
     	$sqlwhere = array();
 
     	if (count($sqlwhere)>0) {
-    		$sql.= " WHERE ".implode(' AND ',$sqlwhere);
+    		$sql.= " WHERE ".implode(' AND ', $sqlwhere);
     	}
 
     	dol_syslog(get_class($this)."::fetch_all", LOG_DEBUG);
@@ -541,7 +541,7 @@ class Cronjob extends CommonObject
      *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
      *  @return int     		   	 <0 if KO, >0 if OK
      */
-    function update($user=null, $notrigger=0)
+    function update($user = null, $notrigger = 0)
     {
     	global $conf, $langs;
 
@@ -576,7 +576,7 @@ class Cronjob extends CommonObject
 		// Check parameters
 		// Put here code to add a control on parameters values
 		if (dol_strlen($this->datestart)==0) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->transnoentitiesnoconv('CronDtStart'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->transnoentitiesnoconv('CronDtStart'));
 			$error++;
 		}
 		if ((dol_strlen($this->datestart)!=0) && (dol_strlen($this->dateend)!=0) && ($this->dateend<$this->datestart)) {
@@ -584,32 +584,32 @@ class Cronjob extends CommonObject
 			$error++;
 		}
 		if (empty($this->label)) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->transnoentitiesnoconv('CronLabel'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->transnoentitiesnoconv('CronLabel'));
 			$error++;
 		}
 		if (empty($this->unitfrequency)) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->transnoentitiesnoconv('CronFrequency'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->transnoentitiesnoconv('CronFrequency'));
 			$error++;
 		}
 		if (($this->jobtype=='command') && (empty($this->command))) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->transnoentitiesnoconv('CronCommand'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->transnoentitiesnoconv('CronCommand'));
 			$error++;
 		}
 		if (($this->jobtype=='method') && (empty($this->classesname))) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->transnoentitiesnoconv('CronClass'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->transnoentitiesnoconv('CronClass'));
 			$error++;
 		}
 		if (($this->jobtype=='method' || $this->jobtype == 'function') && (empty($this->methodename))) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->transnoentitiesnoconv('CronMethod'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->transnoentitiesnoconv('CronMethod'));
 			$error++;
 		}
 		if (($this->jobtype=='method') && (empty($this->objectname))) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->transnoentitiesnoconv('CronObject'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->transnoentitiesnoconv('CronObject'));
 			$error++;
 		}
 
 		if (($this->jobtype=='function') && (empty($this->libname))) {
-			$this->errors[]=$langs->trans('CronFieldMandatory',$langs->transnoentitiesnoconv('CronLib'));
+			$this->errors[]=$langs->trans('CronFieldMandatory', $langs->transnoentitiesnoconv('CronLib'));
 			$error++;
 		}
 
@@ -691,7 +691,7 @@ class Cronjob extends CommonObject
      *  @param  int		$notrigger	 0=launch triggers after, 1=disable triggers
 	 *  @return	int					 <0 if KO, >0 if OK
 	 */
-	function delete($user, $notrigger=0)
+	function delete($user, $notrigger = 0)
 	{
 		$error=0;
 
@@ -757,8 +757,6 @@ class Cronjob extends CommonObject
 
 		$object=new Cronjob($this->db);
 
-		$object->context['createfromclone'] = 'createfromclone';
-
 		$this->db->begin();
 
 		// Load source object
@@ -770,6 +768,7 @@ class Cronjob extends CommonObject
 		// ...
 
 		// Create clone
+		$object->context['createfromclone'] = 'createfromclone';
 		$result=$object->create($user);
 
 		// Other options
@@ -782,10 +781,9 @@ class Cronjob extends CommonObject
 		//if (! $error)
 		//{
 
-
 		//}
 
-		unset($this->context['createfromclone']);
+		unset($object->context['createfromclone']);
 
 		// End
 		if (! $error)
@@ -854,7 +852,7 @@ class Cronjob extends CommonObject
 	 *  @param  int     $save_lastsearch_value    	-1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
 	 *	@return	string								String with URL
 	 */
-	function getNomUrl($withpicto=0, $option='', $notooltip=0, $morecss='', $save_lastsearch_value=-1)
+	function getNomUrl($withpicto = 0, $option = '', $notooltip = 0, $morecss = '', $save_lastsearch_value = -1)
 	{
 		global $db, $conf, $langs;
 		global $dolibarr_main_authentication, $dolibarr_main_demo;
@@ -875,7 +873,7 @@ class Cronjob extends CommonObject
 		{
 			// Add param to save lastsearch_values or not
 			$add_save_lastsearch_values=($save_lastsearch_value == 1 ? 1 : 0);
-			if ($save_lastsearch_value == -1 && preg_match('/list\.php/',$_SERVER["PHP_SELF"])) $add_save_lastsearch_values=1;
+			if ($save_lastsearch_value == -1 && preg_match('/list\.php/', $_SERVER["PHP_SELF"])) $add_save_lastsearch_values=1;
 			if ($add_save_lastsearch_values) $url.='&save_lastsearch_values=1';
 		}
 
@@ -982,7 +980,7 @@ class Cronjob extends CommonObject
 
 		require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
 		$user=new User($this->db);
-		$result=$user->fetch('',$userlogin);
+		$result=$user->fetch('', $userlogin);
 		if ($result<0)
 		{
 			$this->error="User Error:".$user->error;
@@ -1041,8 +1039,8 @@ class Cronjob extends CommonObject
 				$ret=dol_include_once($this->classesname);
 				if ($ret===false || (! class_exists($this->objectname)))
 				{
-					if ($ret===false) $this->error=$langs->trans('CronCannotLoadClass',$this->classesname,$this->objectname);
-					else $this->error=$langs->trans('CronCannotLoadObject',$this->classesname,$this->objectname);
+					if ($ret===false) $this->error=$langs->trans('CronCannotLoadClass', $this->classesname, $this->objectname);
+					else $this->error=$langs->trans('CronCannotLoadObject', $this->classesname, $this->objectname);
 					dol_syslog(get_class($this)."::run_jobs ".$this->error, LOG_ERR);
 					$this->lastoutput = $this->error;
 					$this->lastresult = -1;
@@ -1056,7 +1054,7 @@ class Cronjob extends CommonObject
 			{
 			    if (! method_exists($this->objectname, $this->methodename))
 			    {
-			        $this->error=$langs->trans('CronMethodDoesNotExists',$this->objectname,$this->methodename);
+			        $this->error=$langs->trans('CronMethodDoesNotExists', $this->objectname, $this->methodename);
     				dol_syslog(get_class($this)."::run_jobs ".$this->error, LOG_ERR);
     				$this->lastoutput = $this->error;
     				$this->lastresult = -1;
@@ -1089,7 +1087,7 @@ class Cronjob extends CommonObject
 				$object = new $this->objectname($this->db);
 				if ($this->entity > 0) $object->entity = $this->entity;		// We work on a dedicated entity
 
-				$params_arr = array_map('trim', explode(",",$this->params));
+				$params_arr = array_map('trim', explode(",", $this->params));
 
 				if (!is_array($params_arr))
 				{
@@ -1106,7 +1104,7 @@ class Cronjob extends CommonObject
 
 				    $errmsg='';
 				    if (! is_array($object->errors) || ! in_array($object->error, $object->errors)) $errmsg.=$object->error;
-				    if (is_array($object->errors) && count($object->errors)) $errmsg.=($errmsg?', '.$errmsg:'').join(', ',$object->errors);
+				    if (is_array($object->errors) && count($object->errors)) $errmsg.=($errmsg?', '.$errmsg:'').join(', ', $object->errors);
 				    if (empty($errmsg)) $errmsg=$langs->trans('ErrorUnknown');
 
 				    dol_syslog(get_class($this)."::run_jobs END result=".$result." error=".$errmsg, LOG_ERR);
@@ -1121,7 +1119,7 @@ class Cronjob extends CommonObject
 				{
 					dol_syslog(get_class($this)."::run_jobs END");
 				    $this->lastoutput=$object->output;
-					$this->lastresult=var_export($result,true);
+					$this->lastresult=var_export($result, true);
 					$retval = $this->lastresult;
 				}
 			}
@@ -1173,8 +1171,8 @@ class Cronjob extends CommonObject
 			}
 			else
 			{
-                $this->lastoutput=var_export($result,true);
-                $this->lastresult=var_export($result,true);	// Return code
+                $this->lastoutput=var_export($result, true);
+                $this->lastresult=var_export($result, true);	// Return code
                 $retval = $this->lastresult;
 			}
 		}
@@ -1234,7 +1232,7 @@ class Cronjob extends CommonObject
 
 		require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
 		$user=new User($this->db);
-		$result=$user->fetch('',$userlogin);
+		$result=$user->fetch('', $userlogin);
 		if ($result<0)
 		{
 			$this->error="User Error:".$user->error;
@@ -1303,7 +1301,7 @@ class Cronjob extends CommonObject
 	 *  @param	int		$mode          0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 *  @return	string 			       Label of status
 	 */
-	function getLibStatut($mode=0)
+	function getLibStatut($mode = 0)
 	{
 	    return $this->LibStatut($this->status, $mode, $this->processing);
 	}
@@ -1317,7 +1315,7 @@ class Cronjob extends CommonObject
 	 *	@param	int		$processing		0=Not running, 1=Running
 	 *  @return string 			       	Label of status
 	 */
-	function LibStatut($status, $mode=0, $processing=0)
+	function LibStatut($status, $mode = 0, $processing = 0)
 	{
         // phpcs:enable
         global $langs;
@@ -1338,23 +1336,23 @@ class Cronjob extends CommonObject
 	    }
 	    elseif ($mode == 2)
 	    {
-	    	if ($status == 1) return img_picto($langs->trans('Enabled'),'statut'.($processing?'1':'4'),'class="pictostatus"').' '.$langs->trans('Enabled').$moretext;
-	    	elseif ($status == 0) return img_picto($langs->trans('Disabled'),'statut5','class="pictostatus"').' '.$langs->trans('Disabled').$moretext;
+	    	if ($status == 1) return img_picto($langs->trans('Enabled'), 'statut'.($processing?'1':'4'), 'class="pictostatus"').' '.$langs->trans('Enabled').$moretext;
+	    	elseif ($status == 0) return img_picto($langs->trans('Disabled'), 'statut5', 'class="pictostatus"').' '.$langs->trans('Disabled').$moretext;
 	    }
 	    elseif ($mode == 3)
 	    {
-	    	if ($status == 1) return img_picto($langs->trans('Enabled').$moretext,'statut'.($processing?'1':'4'),'class="pictostatus"');
-	    	elseif ($status == 0) return img_picto($langs->trans('Disabled').$moretext,'statut5','class="pictostatus"');
+	    	if ($status == 1) return img_picto($langs->trans('Enabled').$moretext, 'statut'.($processing?'1':'4'), 'class="pictostatus"');
+	    	elseif ($status == 0) return img_picto($langs->trans('Disabled').$moretext, 'statut5', 'class="pictostatus"');
 	    }
 	    elseif ($mode == 4)
 	    {
-	    	if ($status == 1) return img_picto($langs->trans('Enabled').$moretext,'statut'.($processing?'1':'4'),'class="pictostatus"').' '.$langs->trans('Enabled').$moretext;
-	    	elseif ($status == 0) return img_picto($langs->trans('Disabled').$moretext,'statut5','class="pictostatus"').' '.$langs->trans('Disabled').$moretext;
+	    	if ($status == 1) return img_picto($langs->trans('Enabled').$moretext, 'statut'.($processing?'1':'4'), 'class="pictostatus"').' '.$langs->trans('Enabled').$moretext;
+	    	elseif ($status == 0) return img_picto($langs->trans('Disabled').$moretext, 'statut5', 'class="pictostatus"').' '.$langs->trans('Disabled').$moretext;
 	    }
 	    elseif ($mode == 5)
 	    {
-	    	if ($status == 1) return $langs->trans('Enabled').$moretext.' '.img_picto($langs->trans('Enabled').$moretext,'statut'.($processing?'1':'4'),'class="pictostatus"');
-	    	elseif ($status == 0) return $langs->trans('Disabled').$moretext.' '.img_picto($langs->trans('Disabled').$moretext,'statut5','class="pictostatus"');
+	    	if ($status == 1) return $langs->trans('Enabled').$moretext.' '.img_picto($langs->trans('Enabled').$moretext, 'statut'.($processing?'1':'4'), 'class="pictostatus"');
+	    	elseif ($status == 0) return $langs->trans('Disabled').$moretext.' '.img_picto($langs->trans('Disabled').$moretext, 'statut5', 'class="pictostatus"');
 	    }
 	}
 }

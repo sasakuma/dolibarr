@@ -88,7 +88,7 @@ class mailing_pomme extends MailingTargets
      *	@param	string	$sql		SQL request to use to count
      *	@return	int					Number of recipients
      */
-	function getNbOfRecipients($sql='')
+	function getNbOfRecipients($sql = '')
 	{
 		global $conf;
 
@@ -142,7 +142,7 @@ class mailing_pomme extends MailingTargets
 	 */
 	function url($id)
 	{
-		return '<a href="'.DOL_URL_ROOT.'/user/card.php?id='.$id.'">'.img_object('',"user").'</a>';
+		return '<a href="'.DOL_URL_ROOT.'/user/card.php?id='.$id.'">'.img_object('', "user").'</a>';
 	}
 
 

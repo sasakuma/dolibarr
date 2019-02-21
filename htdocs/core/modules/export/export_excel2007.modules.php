@@ -17,7 +17,7 @@
  */
 
 /**
- *	\file       htdocs/core/modules/export/export_excel.modules.php
+ *	\file       htdocs/core/modules/export/export_excel2007.modules.php
  *	\ingroup    export
  *	\brief      File of class to generate export file with Excel format
  *	\author	    Laurent Destailleur
@@ -82,7 +82,7 @@ class ExportExcel2007 extends ExportExcel
         $this->picto='mime/xls';			// Picto
 		$this->version='1.30';             // Driver version
 
-		$this->disabled = (in_array(constant('PHPEXCEL_PATH'),array('disabled','disabled/'))?1:0);	// A condition to disable module (used for native debian packages)
+		$this->disabled = (in_array(constant('PHPEXCEL_PATH'), array('disabled','disabled/'))?1:0);	// A condition to disable module (used for native debian packages)
 
 		if (empty($this->disabled))
 		{

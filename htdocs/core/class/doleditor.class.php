@@ -64,7 +64,7 @@ class DolEditor
 	 *      @param  string	$cols                   		Size of cols for textarea tool (textarea number of cols '70' or percent 'x%')
 	 *      @param	int		$readonly						0=Read/Edit, 1=Read only
 	 */
-    function __construct($htmlname, $content, $width='', $height=200, $toolbarname='Basic', $toolbarlocation='In', $toolbarstartexpanded=false, $uselocalbrowser=true, $okforextendededitor=true, $rows=0, $cols=0, $readonly=0)
+    function __construct($htmlname, $content, $width = '', $height = 200, $toolbarname = 'Basic', $toolbarlocation = 'In', $toolbarstartexpanded = false, $uselocalbrowser = true, $okforextendededitor = true, $rows = 0, $cols = 0, $readonly = 0)
     {
     	global $conf,$langs;
 
@@ -72,7 +72,7 @@ class DolEditor
 
     	if (! $rows) $rows=round($height/20);
     	if (! $cols) $cols=($width?round($width/6):80);
-		$shorttoolbarname=preg_replace('/_encoded$/','',$toolbarname);
+		$shorttoolbarname=preg_replace('/_encoded$/', '', $toolbarname);
 
         // Name of extended editor to use (FCKEDITOR_EDITORNAME can be 'ckeditor' or 'fckeditor')
         $defaulteditor='ckeditor';
@@ -124,14 +124,14 @@ class DolEditor
     	}
 
     	// Define some properties
-        if (in_array($this->tool,array('textarea','ckeditor','ace')))
+        if (in_array($this->tool, array('textarea','ckeditor','ace')))
         {
     	    $this->content				= $content;
     	    $this->htmlname 			= $htmlname;
     	    $this->toolbarname			= $shorttoolbarname;
     	    $this->toolbarstartexpanded = $toolbarstartexpanded;
-            $this->rows					= max(ROWS_3,$rows);
-            $this->cols					= (preg_match('/%/',$cols)?$cols:max(40,$cols));	// If $cols is a percent, we keep it, otherwise, we take max
+            $this->rows					= max(ROWS_3, $rows);
+            $this->cols					= (preg_match('/%/', $cols)?$cols:max(40, $cols));	// If $cols is a percent, we keep it, otherwise, we take max
             $this->height				= $height;
             $this->width				= $width;
     	}
@@ -149,7 +149,7 @@ class DolEditor
      *  @param	string	$option				 For ACE editor, set the source language ('html', 'php', 'javascript', ...)
      *  @return	void|string
      */
-    function Create($noprint=0, $morejs='', $disallowAnyContent=true, $titlecontent='', $option='')
+    function Create($noprint = 0, $morejs = '', $disallowAnyContent = true, $titlecontent = '', $option = '')
     {
         // phpcs:enable
     	global $conf,$langs;
@@ -168,18 +168,18 @@ class DolEditor
 			$found=1;
             $this->editor->Create();
         }
-        if (in_array($this->tool,array('textarea','ckeditor')))
+        if (in_array($this->tool, array('textarea','ckeditor')))
         {
             $found=1;
             //$out.= '<textarea id="'.$this->htmlname.'" name="'.$this->htmlname.'" '.($this->readonly?' disabled':'').' rows="'.$this->rows.'"'.(preg_match('/%/',$this->cols)?' style="margin-top: 5px; width: '.$this->cols.'"':' cols="'.$this->cols.'"').' class="flat">';
             // TODO We do not put the disabled tag because on a read form, it change style with grey.
-            $out.= '<textarea id="'.$this->htmlname.'" name="'.$this->htmlname.'" rows="'.$this->rows.'"'.(preg_match('/%/',$this->cols)?' style="margin-top: 5px; width: '.$this->cols.'"':' cols="'.$this->cols.'"').' class="flat">';
+            $out.= '<textarea id="'.$this->htmlname.'" name="'.$this->htmlname.'" rows="'.$this->rows.'"'.(preg_match('/%/', $this->cols)?' style="margin-top: 5px; width: '.$this->cols.'"':' cols="'.$this->cols.'"').' class="flat">';
             $out.= $this->content;
             $out.= '</textarea>';
 
             if ($this->tool == 'ckeditor' && ! empty($conf->use_javascript_ajax))
             {
-            	if (! defined('REQUIRE_CKEDITOR')) define('REQUIRE_CKEDITOR','1');
+            	if (! defined('REQUIRE_CKEDITOR')) define('REQUIRE_CKEDITOR', '1');
 
             	if (! empty($conf->global->FCKEDITOR_SKIN)) {
 					$skin = $conf->global->FCKEDITOR_SKIN;
@@ -187,7 +187,7 @@ class DolEditor
 					$skin = 'moono-lisa'; // default with ckeditor 4.6 : moono-lisa
 				}
 
-            	$htmlencode_force=preg_match('/_encoded$/',$this->toolbarname)?'true':'false';
+            	$htmlencode_force=preg_match('/_encoded$/', $this->toolbarname)?'true':'false';
 
             	$out.= '<!-- Output ckeditor $disallowAnyContent='.$disallowAnyContent.' toolbarname='.$this->toolbarname.' -->'."\n";
             	$out.= '<script type="text/javascript">

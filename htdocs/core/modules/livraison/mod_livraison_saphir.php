@@ -75,15 +75,15 @@ class mod_livraison_saphir extends ModeleNumRefDeliveryOrder
 		$texte.= '<input type="hidden" name="maskconstdelivery" value="LIVRAISON_SAPHIR_MASK">';
 		$texte.= '<table class="nobordernopadding" width="100%">';
 
-		$tooltip=$langs->trans("GenericMaskCodes",$langs->transnoentities("Delivery"),$langs->transnoentities("Delivery"));
+		$tooltip=$langs->trans("GenericMaskCodes", $langs->transnoentities("Delivery"), $langs->transnoentities("Delivery"));
 		$tooltip.=$langs->trans("GenericMaskCodes2");
 		$tooltip.=$langs->trans("GenericMaskCodes3");
-		$tooltip.=$langs->trans("GenericMaskCodes4a",$langs->transnoentities("Delivery"),$langs->transnoentities("Delivery"));
+		$tooltip.=$langs->trans("GenericMaskCodes4a", $langs->transnoentities("Delivery"), $langs->transnoentities("Delivery"));
 		$tooltip.=$langs->trans("GenericMaskCodes5");
 
 		// Parametrage du prefix
 		$texte.= '<tr><td>'.$langs->trans("Mask").':</td>';
-		$texte.= '<td align="right">'.$form->textwithpicto('<input type="text" class="flat" size="24" name="maskdelivery" value="'.$conf->global->LIVRAISON_SAPHIR_MASK.'">',$tooltip,1,1).'</td>';
+		$texte.= '<td align="right">'.$form->textwithpicto('<input type="text" class="flat" size="24" name="maskdelivery" value="'.$conf->global->LIVRAISON_SAPHIR_MASK.'">', $tooltip, 1, 1).'</td>';
 
 		$texte.= '<td align="left" rowspan="2">&nbsp; <input type="submit" class="button" value="'.$langs->trans("Modify").'" name="Button"></td>';
 
@@ -106,7 +106,7 @@ class mod_livraison_saphir extends ModeleNumRefDeliveryOrder
 
     	$old_code_client=$mysoc->code_client;
     	$mysoc->code_client='CCCCCCCCCC';
-		$numExample = $this->getNextValue($mysoc,'');
+		$numExample = $this->getNextValue($mysoc, '');
     	$mysoc->code_client=$old_code_client;
 
 		if (! $numExample)
@@ -124,7 +124,7 @@ class mod_livraison_saphir extends ModeleNumRefDeliveryOrder
 	 *  @param  Object		$object			Object delivery
 	 *  @return string      				Value if OK, 0 if KO
 	 */
-    function getNextValue($objsoc,$object)
+    function getNextValue($objsoc, $object)
     {
 		global $db,$conf;
 
@@ -139,7 +139,7 @@ class mod_livraison_saphir extends ModeleNumRefDeliveryOrder
 			return 0;
 		}
 
-		$numFinal=get_next_value($db,$mask,'livraison','ref','',$objsoc,$object->date_livraison);
+		$numFinal=get_next_value($db, $mask, 'livraison', 'ref', '', $objsoc, $object->date_livraison);
 
 		return  $numFinal;
     }
@@ -152,9 +152,9 @@ class mod_livraison_saphir extends ModeleNumRefDeliveryOrder
 	 * 	@param	string		$objforref	Object for number to search
      *  @return string      			Next free value
      */
-    function getNumRef($objsoc,$objforref)
+    function getNumRef($objsoc, $objforref)
     {
-        return $this->getNextValue($objsoc,$objforref);
+        return $this->getNextValue($objsoc, $objforref);
     }
 
 
@@ -166,9 +166,9 @@ class mod_livraison_saphir extends ModeleNumRefDeliveryOrder
      *  @param  Object		$object			Objet livraison
      *  @return string      				Texte descripif
      */
-    function livraison_get_num($objsoc=0,$object='')
+    function livraison_get_num($objsoc = 0, $object = '')
     {
         // phpcs:enable
-        return $this->getNextValue($objsoc,$object);
+        return $this->getNextValue($objsoc, $object);
     }
 }

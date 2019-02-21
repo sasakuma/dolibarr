@@ -92,7 +92,7 @@ abstract class ModeleNumRefChequeReceipts
 	 *	@param	Object		$object		Object we need next value for
 	 *	@return	string      Valeur
 	 */
-	function getNextValue($objsoc,$object)
+	function getNextValue($objsoc, $object)
 	{
 		global $langs;
 		return $langs->trans("NotAvailable");
@@ -135,7 +135,7 @@ abstract class ModeleChequeReceipts extends CommonDocGenerator
      *  @param  integer	$maxfilenamelength  Max length of value to show
      *  @return	array						List of templates
 	 */
-	static function liste_modeles($db,$maxfilenamelength=0)
+	static function liste_modeles($db, $maxfilenamelength = 0)
 	{
         // phpcs:enable
 		global $conf;
@@ -144,7 +144,7 @@ abstract class ModeleChequeReceipts extends CommonDocGenerator
 		$liste=array();
 
 		include_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
-		$liste=getListOfModels($db,$type,$maxfilenamelength);
+		$liste=getListOfModels($db, $type, $maxfilenamelength);
 		// TODO Remove this to use getListOfModels only
 		$liste = array('blochet'=>'blochet');
 
@@ -206,13 +206,13 @@ function chequereceipt_pdf_create($db, $id, $message, $modele, $outputlangs)
 		else
 		{
 			$outputlangs->charset_output=$sav_charset_output;
-			dol_print_error($db,"chequereceipt_pdf_create Error: ".$obj->error);
+			dol_print_error($db, "chequereceipt_pdf_create Error: ".$obj->error);
 			return -1;
 		}
 	}
 	else
 	{
-		dol_print_error('',$langs->trans("Error")." ".$langs->trans("ErrorFileDoesNotExists",$dir.$file));
+		dol_print_error('', $langs->trans("Error")." ".$langs->trans("ErrorFileDoesNotExists", $dir.$file));
 		return -1;
 	}
 }

@@ -18,8 +18,7 @@
  */
 
 /**
- *     \defgroup    ticket    Ticket module
- *     \brief       Ticket module descriptor.
+ *     \defgroup    ticket    Module Ticket
  *     \file        core/modules/modTicket.class.php
  *     \ingroup     ticket
  *     \brief       Description and activation file for module Ticket
@@ -32,7 +31,6 @@ require_once DOL_DOCUMENT_ROOT . "/core/modules/DolibarrModules.class.php";
  */
 class modTicket extends DolibarrModules
 {
-
     /**
      *     Constructor. Define names, constants, directories, boxes, permissions
      *
@@ -65,7 +63,7 @@ class modTicket extends DolibarrModules
         // (where XXX is value of numeric property 'numero' of module)
         $this->description = "Incident/support ticket management";
         // Possible values for version are: 'development', 'experimental' or version
-        $this->version = 'experimental';
+        $this->version = 'dolibarr';
         // Key used in llx_const table to save module status enabled/disabled
         // (where MYMODULE is value of property name of module in uppercase)
         $this->const_name = 'MAIN_MODULE_' . strtoupper($this->name);
@@ -194,7 +192,7 @@ class modTicket extends DolibarrModules
             'leftmenu' => '1', // Use 1 if you also want to add left menu entries using this descriptor.
             'url' => '/ticket/index.php',
             'langs' => 'ticket', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-            'position' => 100,
+            'position' => 88,
             'enabled' => '$conf->ticket->enabled', // Define condition to show or hide menu entry. Use '$conf->ticket->enabled' if entry must be visible if module is enabled.
             'perms' => '$user->rights->ticket->read', // Use 'perms'=>'$user->rights->ticket->level1->level2' if you want your menu with a permission rules
             'target' => '',
@@ -277,6 +275,19 @@ class modTicket extends DolibarrModules
             'url' => '/ticket/list.php?mode=my_assign&search_fk_status=non_closed',
             'langs' => 'ticket',
             'position' => 106,
+            'enabled' => '$conf->ticket->enabled',
+            'perms' => '$user->rights->ticket->read',
+            'target' => '',
+            'user' => 0);
+        $r++;
+
+        $this->menu[$r] = array('fk_menu' => 'fk_mainmenu=ticket,fk_leftmenu=ticket',
+            'type' => 'left',
+            'titre' => 'Statistics',
+            'mainmenu' => 'ticket',
+            'url' => '/ticket/stats/index.php',
+            'langs' => 'ticket',
+            'position' => 107,
             'enabled' => '$conf->ticket->enabled',
             'perms' => '$user->rights->ticket->read',
             'target' => '',

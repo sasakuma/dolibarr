@@ -75,7 +75,7 @@ class FormResource
      *  @param	int		$limit			Limit number of answers
      * 	@return	string					HTML string with
      */
-    function select_resource_list($selected='',$htmlname='fk_resource',$filter='',$showempty=0, $showtype=0, $forcecombo=0, $event=array(), $filterkey='', $outputmode=0, $limit=20)
+    function select_resource_list($selected = '', $htmlname = 'fk_resource', $filter = '', $showempty = 0, $showtype = 0, $forcecombo = 0, $event = array(), $filterkey = '', $outputmode = 0, $limit = 20)
     {
         // phpcs:enable
     	global $conf,$user,$langs;
@@ -85,7 +85,7 @@ class FormResource
 
     	$resourcestat = new Dolresource($this->db);
 
-    	$resources_used = $resourcestat->fetch_all('ASC', 't.rowid', $limit, $offset, $filter='');
+    	$resources_used = $resourcestat->fetch_all('ASC', 't.rowid', $limit, $offset, $filter);
 
     	if ($outputmode != 2)
     	{
@@ -107,13 +107,14 @@ class FormResource
     		$out.= '<select id="'.$htmlname.'" class="flat minwidth200" name="'.$htmlname.'">'."\n";
     		if ($showempty) $out.= '<option value="-1">&nbsp;</option>'."\n";
 
-    		$num = count($resourcestat->lines);
+    		$num = 0;
+    		if (is_array($resourcestat->lines)) $num = count($resourcestat->lines);
 
     		//var_dump($resourcestat->lines);
     		$i = 0;
     		if ($num)
     		{
-    			while ( $i < $num)
+    			while ($i < $num)
     			{
     			    $resourceclass=ucfirst($resourcestat->lines[$i]->element);
 
@@ -168,18 +169,18 @@ class FormResource
      *  @param  int		$maxlength      Max length of label
      * 	@return	void
      */
-    function select_types_resource($selected='',$htmlname='type_resource',$filtertype='',$format=0, $empty=0, $noadmininfo=0,$maxlength=0)
+    function select_types_resource($selected = '', $htmlname = 'type_resource', $filtertype = '', $format = 0, $empty = 0, $noadmininfo = 0, $maxlength = 0)
     {
         // phpcs:enable
     	global $langs,$user;
 
     	$resourcestat = new Dolresource($this->db);
 
-    	dol_syslog(get_class($this)."::select_types_resource ".$selected.", ".$htmlname.", ".$filtertype.", ".$format,LOG_DEBUG);
+    	dol_syslog(get_class($this)."::select_types_resource ".$selected.", ".$htmlname.", ".$filtertype.", ".$format, LOG_DEBUG);
 
     	$filterarray=array();
 
-    	if ($filtertype != '' && $filtertype != '-1') $filterarray=explode(',',$filtertype);
+    	if ($filtertype != '' && $filtertype != '-1') $filterarray=explode(',', $filtertype);
 
     	$resourcestat->load_cache_code_type_resource();
     	print '<select id="select'.$htmlname.'" class="flat maxwidthonsmartphone select_'.$htmlname.'" name="'.$htmlname.'">';
@@ -200,15 +201,15 @@ class FormResource
     			if (preg_match('/[a-z]/i', $selected) && $selected == $arraytypes['code']) print ' selected';
     			elseif ($selected == $id) print ' selected';
     			print '>';
-    			if ($format == 0) $value=($maxlength?dol_trunc($arraytypes['label'],$maxlength):$arraytypes['label']);
+    			if ($format == 0) $value=($maxlength?dol_trunc($arraytypes['label'], $maxlength):$arraytypes['label']);
     			if ($format == 1) $value=$arraytypes['code'];
-    			if ($format == 2) $value=($maxlength?dol_trunc($arraytypes['label'],$maxlength):$arraytypes['label']);
+    			if ($format == 2) $value=($maxlength?dol_trunc($arraytypes['label'], $maxlength):$arraytypes['label']);
     			if ($format == 3) $value=$arraytypes['code'];
     			print $value?$value:'&nbsp;';
     			print '</option>';
     		}
     	}
     	print '</select>';
-    	if ($user->admin && ! $noadmininfo) print info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"),1);
+    	if ($user->admin && ! $noadmininfo) print info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);
     }
 }

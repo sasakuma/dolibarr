@@ -69,7 +69,7 @@ class Members extends DolibarrApi
             throw new RestException(404, 'member not found');
         }
 
-        if( ! DolibarrApi::_checkAccessToResource('adherent',$member->id)) {
+        if( ! DolibarrApi::_checkAccessToResource('adherent', $member->id)) {
             throw new RestException(401, 'Access not allowed for login '.DolibarrApiAccess::$user->login);
         }
 
@@ -199,7 +199,7 @@ class Members extends DolibarrApi
             throw new RestException(404, 'member not found');
         }
 
-        if( ! DolibarrApi::_checkAccessToResource('member',$member->id)) {
+        if( ! DolibarrApi::_checkAccessToResource('member', $member->id)) {
             throw new RestException(401, 'Access not allowed for login '.DolibarrApiAccess::$user->login);
         }
 
@@ -213,7 +213,7 @@ class Members extends DolibarrApi
                     if ($result < 0) {
                         throw new RestException(500, 'Error when resiliating member: '.$member->error);
                     }
-                } else if ($value == '1') {
+                } elseif ($value == '1') {
                     $result = $member->validate(DolibarrApiAccess::$user);
                     if ($result < 0) {
                         throw new RestException(500, 'Error when validating member: '.$member->error);
@@ -253,12 +253,12 @@ class Members extends DolibarrApi
             throw new RestException(404, 'member not found');
         }
 
-        if( ! DolibarrApi::_checkAccessToResource('member',$member->id)) {
+        if( ! DolibarrApi::_checkAccessToResource('member', $member->id)) {
             throw new RestException(401, 'Access not allowed for login '.DolibarrApiAccess::$user->login);
         }
 
         if (! $member->delete($member->id, DolibarrApiAccess::$user)) {
-            throw new RestException(401,'error when deleting member');
+            throw new RestException(401, 'error when deleting member');
         }
 
         return array(
@@ -361,7 +361,7 @@ class Members extends DolibarrApi
      *
      * @url POST {id}/subscriptions
      */
-    function createSubscription($id, $start_date, $end_date, $amount, $label='')
+    function createSubscription($id, $start_date, $end_date, $amount, $label = '')
     {
         if(! DolibarrApiAccess::$user->rights->adherent->cotisation->creer) {
             throw new RestException(401);

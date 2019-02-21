@@ -58,20 +58,20 @@ $object = new Ticket($db);
 $extrafields = new ExtraFields($db);
 // Fetch optionals attributes and labels
 $extralabels = $extrafields->fetch_name_optionals_label($object->table_element);
-$search_array_options=$extrafields->getOptionalsFromPost($object->table_element,'','search_');
+$search_array_options=$extrafields->getOptionalsFromPost($object->table_element, '', 'search_');
 
 // Initialize array of search criterias
-$search_all=trim(GETPOST("search_all",'alpha'));
+$search_all=trim(GETPOST("search_all", 'alpha'));
 $search=array();
 foreach($object->fields as $key => $val)
 {
-	if (GETPOST('search_'.$key,'alpha')) $search[$key]=GETPOST('search_'.$key,'alpha');
+	if (GETPOST('search_'.$key, 'alpha')) $search[$key]=GETPOST('search_'.$key, 'alpha');
 }
 
 if (empty($action) && empty($id) && empty($ref)) $action='view';
 
 //Select mail models is same action as add_message
-if (GETPOST('modelselected','alpha')) {
+if (GETPOST('modelselected', 'alpha')) {
     $action = 'add_message';
 }
 
@@ -107,7 +107,7 @@ $now = dol_now();
  */
 
 $parameters=array();
-$reshook=$hookmanager->executeHooks('doActions',$parameters,$object,$action);    // Note that $action and $object may have been modified by some hooks
+$reshook=$hookmanager->executeHooks('doActions', $parameters, $object, $action);    // Note that $action and $object may have been modified by some hooks
 if ($reshook < 0) setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 
 if ($cancel)
@@ -126,10 +126,10 @@ $actionobject->doActions($action, $object);
 // Action to update one extrafield
 if ($action == "update_extras" && ! empty($permissiontoadd))
 {
-	$object->fetch(GETPOST('id','int'), '', GETPOST('track_id','alpha'));
-	$attributekey = GETPOST('attribute','alpha');
+	$object->fetch(GETPOST('id', 'int'), '', GETPOST('track_id', 'alpha'));
+	$attributekey = GETPOST('attribute', 'alpha');
 	$attributekeylong = 'options_'.$attributekey;
-	$object->array_options['options_'.$attributekey] = GETPOST($attributekeylong,' alpha');
+	$object->array_options['options_'.$attributekey] = GETPOST($attributekeylong, ' alpha');
 
 	$result = $object->insertExtraFields(empty($triggermodname)?'':$triggermodname, $user);
 	if ($result > 0)
@@ -144,13 +144,13 @@ if ($action == "update_extras" && ! empty($permissiontoadd))
 	}
 }
 
-if ($action == "change_property" && GETPOST('btn_update_ticket_prop','alpha') && $user->rights->ticket->write)
+if ($action == "change_property" && GETPOST('btn_update_ticket_prop', 'alpha') && $user->rights->ticket->write)
 {
-	$object->fetch(GETPOST('id','int'), '', GETPOST('track_id','alpha'));
+	$object->fetch(GETPOST('id', 'int'), '', GETPOST('track_id', 'alpha'));
 
-	$object->type_code = GETPOST('update_value_type','az09');
-	$object->category_code = GETPOST('update_value_category','az09');
-	$object->severity_code = GETPOST('update_value_severity','az09');
+	$object->type_code = GETPOST('update_value_type', 'az09');
+	$object->severity_code = GETPOST('update_value_severity', 'az09');
+	$object->category_code = GETPOST('update_value_category', 'az09');
 
 	$ret = $object->update($user);
 	if ($ret > 0) {
@@ -426,7 +426,7 @@ if (empty($action) || $action == 'view' || $action == 'addlink' || $action == 'd
         }
 
         // Show user list to assignate one if status is "read"
-        if (GETPOST('set','alpha') == "assign_ticket" && $object->fk_statut < 8 && !$user->societe_id && $user->rights->ticket->write) {
+        if (GETPOST('set', 'alpha') == "assign_ticket" && $object->fk_statut < 8 && !$user->societe_id && $user->rights->ticket->write) {
             print '<form method="post" name="ticket" enctype="multipart/form-data" action="' . $url_page_current . '">';
             print '<input type="hidden" name="token" value="' . $_SESSION['newtoken'] . '">';
             print '<input type="hidden" name="action" value="assign_user">';
@@ -436,7 +436,7 @@ if (empty($action) || $action == 'view' || $action == 'addlink' || $action == 'd
             print ' <input class="button" type="submit" name="btn_assign_user" value="' . $langs->trans("Validate") . '" />';
             print '</form>';
         }
-        if ($object->fk_statut < 8 && GETPOST('set','alpha') != "assign_ticket" && $user->rights->ticket->manage) {
+        if ($object->fk_statut < 8 && GETPOST('set', 'alpha') != "assign_ticket" && $user->rights->ticket->manage) {
             print '<a href="' . $url_page_current . '?track_id=' . $object->track_id . '&action=view&set=assign_ticket">' . img_picto('', 'edit') . ' ' . $langs->trans('Modify') . '</a>';
         }
         print '</td></tr>';
@@ -444,7 +444,7 @@ if (empty($action) || $action == 'view' || $action == 'addlink' || $action == 'd
         // Progression
         print '<tr><td>';
         print '<table class="nobordernopadding" width="100%"><tr><td class="nowrap">';
-        print $langs->trans('Progression') . '</td><td align="left">';
+        print $langs->trans('Progression') . '</td><td class="left">';
         print '</td>';
         if ($action != 'progression' && $object->fk_statut < 8 && !$user->societe_id) {
             print '<td align="right"><a href="' . $url_page_current . '?action=progression&amp;track_id=' . $object->track_id . '">' . img_edit($langs->trans('Modify')) . '</a></td>';
@@ -521,7 +521,7 @@ if (empty($action) || $action == 'view' || $action == 'addlink' || $action == 'd
         print $langs->trans('Properties');
         print '</td>';
         print '<td>';
-        if (GETPOST('set','alpha') == 'properties' && $user->rights->ticket->write) {
+        if (GETPOST('set', 'alpha') == 'properties' && $user->rights->ticket->write) {
         	print '<input class="button" type="submit" name="btn_update_ticket_prop" value="' . $langs->trans("Modify") . '" />';
         }
         else {
@@ -532,7 +532,7 @@ if (empty($action) || $action == 'view' || $action == 'addlink' || $action == 'd
         }
         print '</td>';
         print '</tr>';
-        if (GETPOST('set','alpha') == 'properties' && $user->rights->ticket->write) {
+        if (GETPOST('set', 'alpha') == 'properties' && $user->rights->ticket->write) {
             print '<tr>';
             print '<td class="titlefield">';
             print $langs->trans('TicketChangeType');
@@ -542,16 +542,16 @@ if (empty($action) || $action == 'view' || $action == 'addlink' || $action == 'd
             print '</tr>';
             print '<tr>';
             print '<td>';
-            print $langs->trans('TicketChangeCategory');
+            print $langs->trans('TicketChangeSeverity');
             print '</td><td>';
-            print $formticket->selectCategoriesTickets($object->category_code, 'update_value_category', '', 2);
+            print $formticket->selectSeveritiesTickets($object->severity_code, 'update_value_severity', '', 2);
             print '</td>';
             print '</tr>';
             print '<tr>';
             print '<td>';
-            print $langs->trans('TicketChangeSeverity');
+            print $langs->trans('TicketChangeCategory');
             print '</td><td>';
-            print $formticket->selectSeveritiesTickets($object->severity_code, 'update_value_severity', '', 2);
+            print $formticket->selectAnalyticCodesTickets($object->category_code, 'update_value_category', '', 2);
             print '</td>';
             print '</tr>';
         } else {
@@ -563,20 +563,20 @@ if (empty($action) || $action == 'view' || $action == 'addlink' || $action == 'd
             }*/
             print '</td></tr>';
 
-            // Category
-            print '<tr><td>' . $langs->trans("Category") . '</td><td>';
-            print $langs->getLabelFromKey($db, $object->category_code, 'c_ticket_category', 'code', 'label');
-            /*if ($user->admin && !$noadmininfo) {
-                print info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);
-            }*/
-            print '</td></tr>';
-
             // Severity
             print '<tr><td>' . $langs->trans("TicketSeverity") . '</td><td>';
             print $langs->getLabelFromKey($db, $object->severity_code, 'c_ticket_severity', 'code', 'label');
             /*if ($user->admin && !$noadmininfo) {
                 print info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);
             }*/
+            print '</td></tr>';
+
+            // Category
+            print '<tr><td>' . $langs->trans("AnalyticCode") . '</td><td>';
+            print $langs->getLabelFromKey($db, $object->category_code, 'c_ticket_category', 'code', 'label');
+            /*if ($user->admin && !$noadmininfo) {
+             print info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);
+             }*/
             print '</td></tr>';
         }
         print '</table>'; // End table actions
@@ -715,7 +715,7 @@ if (empty($action) || $action == 'view' || $action == 'addlink' || $action == 'd
 		if ($action != 'presend' && $action != 'editline') {
 			print '<div class="tabsAction">'."\n";
 			$parameters=array();
-			$reshook=$hookmanager->executeHooks('addMoreActionsButtons',$parameters,$object,$action);    // Note that $action and $object may have been modified by hook
+			$reshook=$hookmanager->executeHooks('addMoreActionsButtons', $parameters, $object, $action);    // Note that $action and $object may have been modified by hook
 			if ($reshook < 0) setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 
 			if (empty($reshook))
@@ -728,7 +728,7 @@ if (empty($action) || $action == 'view' || $action == 'addlink' || $action == 'd
 		        // Link to create an intervention
 		        // socid is needed otherwise fichinter ask it and forgot origin after form submit :\
 		        if (!$object->fk_soc && $user->rights->ficheinter->creer) {
-		            print '<div class="inline-block divButAction"><a class="butActionRefused" href="#" title="' . $langs->trans('UnableToCreateInterIfNoSocid') . '">' . $langs->trans('TicketAddIntervention') . '</a></div>';
+		            print '<div class="inline-block divButAction"><a class="butActionRefused classfortooltip" href="#" title="' . $langs->trans('UnableToCreateInterIfNoSocid') . '">' . $langs->trans('TicketAddIntervention') . '</a></div>';
 		        }
 		        if ($object->fk_soc > 0 && $object->fk_statut < 8 && $user->rights->ficheinter->creer) {
 		            print '<div class="inline-block divButAction"><a class="butAction" href="' . dol_buildpath('/fichinter/card.php', 1) . '?action=create&socid=' . $object->fk_soc . '&origin=ticket_ticket&originid=' . $object->id . '">' . $langs->trans('TicketAddIntervention') . '</a></div>';
@@ -824,8 +824,9 @@ if (empty($action) || $action == 'view' || $action == 'addlink' || $action == 'd
 			$formticket->substit['__TICKETSUP_REF__'] = $object->ref;
 			$formticket->substit['__TICKETSUP_SUBJECT__'] = $object->subject;
 			$formticket->substit['__TICKETSUP_TYPE__'] = $object->type_code;
-			$formticket->substit['__TICKETSUP_CATEGORY__'] = $object->category_code;
 			$formticket->substit['__TICKETSUP_SEVERITY__'] = $object->severity_code;
+			$formticket->substit['__TICKETSUP_CATEGORY__'] = $object->category_code;         // For backward compatibility
+			$formticket->substit['__TICKETSUP_ANALYTIC_CODE__'] = $object->category_code;
 			$formticket->substit['__TICKETSUP_MESSAGE__'] = $object->message;
 			$formticket->substit['__TICKETSUP_PROGRESSION__'] = $object->progress;
 			if ($object->fk_user_assign > 0) {

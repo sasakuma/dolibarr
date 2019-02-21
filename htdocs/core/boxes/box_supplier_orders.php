@@ -40,7 +40,7 @@ class box_supplier_orders extends ModeleBoxes
      * @var DoliDB Database handler.
      */
     public $db;
-    
+
     var $param;
     var $info_box_head = array();
     var $info_box_contents = array();
@@ -52,7 +52,7 @@ class box_supplier_orders extends ModeleBoxes
      *  @param  DoliDB  $db         Database handler
      *  @param  string  $param      More parameters
      */
-    function __construct($db,$param)
+    function __construct($db, $param)
     {
         global $user;
 
@@ -141,12 +141,12 @@ class box_supplier_orders extends ModeleBoxes
 
 					$this->info_box_contents[$line][] = array(
                         'td' => 'class="right"',
-                        'text' => dol_print_date($date,'day'),
+                        'text' => dol_print_date($date, 'day'),
                     );
 
                     $this->info_box_contents[$line][] = array(
-                        'td' => 'align="right" width="18"',
-                        'text' => $supplierorderstatic->LibStatut($objp->fk_statut,3),
+                        'td' => 'class="right" width="18"',
+                        'text' => $supplierorderstatic->LibStatut($objp->fk_statut, 3),
                     );
 
                     $line++;
@@ -154,7 +154,7 @@ class box_supplier_orders extends ModeleBoxes
 
                 if ($num == 0)
                     $this->info_box_contents[$line][] = array(
-                        'td' => 'align="center"',
+                        'td' => 'class="center"',
                         'text' => $langs->trans("NoSupplierOrder"),
                     );
 
@@ -170,7 +170,7 @@ class box_supplier_orders extends ModeleBoxes
         else
         {
             $this->info_box_contents[0][] = array(
-                'td' => 'align="left" class="nohover opacitymedium"',
+                'td' => 'class="nohover opacitymedium left"',
                 'text' => $langs->trans("ReadPermissionNotAllowed")
             );
         }
@@ -184,9 +184,8 @@ class box_supplier_orders extends ModeleBoxes
 	 *  @param	int		$nooutput	No print, only return string
 	 *	@return	string
 	 */
-    function showBox($head = null, $contents = null, $nooutput=0)
+    function showBox($head = null, $contents = null, $nooutput = 0)
     {
         return parent::showBox($this->info_box_head, $this->info_box_contents, $nooutput);
     }
 }
-

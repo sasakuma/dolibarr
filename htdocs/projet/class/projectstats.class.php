@@ -159,7 +159,7 @@ class ProjectStats extends Stats
 		// Get list of project id allowed to user (in a string list separated by coma)
 		$object = new Project($this->db);
 		$projectsListId='';
-		if (! $user->rights->projet->all->lire) $projectsListId = $object->getProjectsAuthorizedForUser($user,0,1,$user->socid);
+		if (! $user->rights->projet->all->lire) $projectsListId = $object->getProjectsAuthorizedForUser($user, 0, 1, $user->socid);
 
 		$sqlwhere[] = ' t.entity IN (' . getEntity('project') . ')';
 
@@ -193,7 +193,7 @@ class ProjectStats extends Stats
 	 * @param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 * @return 	array 				Array of values
 	 */
-	function getNbByMonth($year, $format=0)
+	function getNbByMonth($year, $format = 0)
 	{
 		global $user;
 
@@ -222,7 +222,7 @@ class ProjectStats extends Stats
 	 * @param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 * @return 	array 				Array with amount by month
 	 */
-	function getAmountByMonth($year, $format=0)
+	function getAmountByMonth($year, $format = 0)
 	{
 		global $user;
 
@@ -253,7 +253,7 @@ class ProjectStats extends Stats
 	 * @param   int     $wonlostfilter  Add a filter on status won/lost
 	 * @return 	array					Array of values
 	 */
-	function getWeightedAmountByMonthWithPrevYear($endyear,$startyear,$cachedelay=0,$wonlostfilter=1)
+	function getWeightedAmountByMonthWithPrevYear($endyear, $startyear, $cachedelay = 0, $wonlostfilter = 1)
 	{
 		global $conf,$user,$langs;
 
@@ -300,7 +300,7 @@ class ProjectStats extends Stats
 			$year=$startyear;
 			while($year <= $endyear)
 			{
-				$datay[$year] = $this->getWeightedAmountByMonth($year,$wonlostfilter);
+				$datay[$year] = $this->getWeightedAmountByMonth($year, $wonlostfilter);
 				$year++;
 			}
 
@@ -346,7 +346,7 @@ class ProjectStats extends Stats
 	 * @param  int $wonlostfilter      Add a filter on status won/lost
 	 * @return array                   Array with amount by month
 	 */
-	function getWeightedAmountByMonth($year, $wonlostfilter=1)
+	function getWeightedAmountByMonth($year, $wonlostfilter = 1)
 	{
 		global $user;
 
@@ -456,7 +456,7 @@ class ProjectStats extends Stats
 	 * @param	int		$format		0=Label of absiss is a translated text, 1=Label of absiss is month number, 2=Label of absiss is first letter of month
 	 * @return 	array 				Array with amount by month
 	 */
-	function getTransformRateByMonth($year, $format=0)
+	function getTransformRateByMonth($year, $format = 0)
 	{
 		global $user;
 

@@ -107,7 +107,7 @@ abstract class CommonStickerGenerator
 	 *	@param	string		$outputdir			Output directory for pdf file
 	 *  @return int             				1=OK, 0=KO
 	 */
-	abstract function write_file($arrayofrecords,$outputlangs,$srctemplatepath,$outputdir='');
+	abstract function write_file($arrayofrecords, $outputlangs, $srctemplatepath, $outputdir = '');
     // phpcs:enable
 
 	/**
@@ -118,7 +118,7 @@ abstract class CommonStickerGenerator
 	 * @param   array     	$param          Associative array containing label content and optional parameters
 	 * @return  void
 	 */
-	abstract function addSticker(&$pdf,$outputlangs,$param);
+	abstract function addSticker(&$pdf, $outputlangs, $param);
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
 	/**
@@ -129,13 +129,13 @@ abstract class CommonStickerGenerator
 	 * @param    int        $pt    point
 	 * @return   void
 	 */
-	function Set_Char_Size(&$pdf,$pt)
+	function Set_Char_Size(&$pdf, $pt)
 	{
         // phpcs:enable
 		if ($pt > 3) {
 			$this->_Char_Size = $pt;
 			$this->_Line_Height = $this->_Get_Height_Chars($pt);
-			$pdf->SetFont('','',$pt);
+			$pdf->SetFont('', '', $pt);
 		}
 	}
 
@@ -152,7 +152,7 @@ abstract class CommonStickerGenerator
 	 * @param 	int		$nbPointilles		Nb pointilles
 	 * @return	void
 	 */
-    function _Pointille(&$pdf,$x1=0,$y1=0,$x2=210,$y2=297,$epaisseur=1,$nbPointilles=15)
+    function _Pointille(&$pdf, $x1 = 0, $y1 = 0, $x2 = 210, $y2 = 297, $epaisseur = 1, $nbPointilles = 15)
 	{
         // phpcs:enable
 		$pdf->SetLineWidth($epaisseur);
@@ -167,16 +167,16 @@ abstract class CommonStickerGenerator
 		for($i=$x1;$i<=$x2;$i+=$Pointilles+$Pointilles) {
 			for($j=$i;$j<=($i+$Pointilles);$j++) {
 				if($j<=($x2-1)) {
-		$pdf->Line($j,$y1,$j+1,$y1); // on trace le pointill? du haut, point par point
-		$pdf->Line($j,$y2,$j+1,$y2); // on trace le pointill? du bas, point par point
+		$pdf->Line($j, $y1, $j+1, $y1); // on trace le pointill? du haut, point par point
+		$pdf->Line($j, $y2, $j+1, $y2); // on trace le pointill? du bas, point par point
 				}
 			}
 		}
 		for($i=$y1;$i<=$y2;$i+=$Pointilles+$Pointilles) {
 			for($j=$i;$j<=($i+$Pointilles);$j++) {
 				if($j<=($y2-1)) {
-		$pdf->Line($x1,$j,$x1,$j+1); // on trace le pointill? du haut, point par point
-		$pdf->Line($x2,$j,$x2,$j+1); // on trace le pointill? du bas, point par point
+		$pdf->Line($x1, $j, $x1, $j+1); // on trace le pointill? du haut, point par point
+		$pdf->Line($x2, $j, $x2, $j+1); // on trace le pointill? du bas, point par point
 				}
 			}
 		}
@@ -195,27 +195,27 @@ abstract class CommonStickerGenerator
 	 * @param int	$taille             Size
 	 * @return void
 	 */
-	function _Croix(&$pdf,$x1=0,$y1=0,$x2=210,$y2=297,$epaisseur=1,$taille=4)
+	function _Croix(&$pdf, $x1 = 0, $y1 = 0, $x2 = 210, $y2 = 297, $epaisseur = 1, $taille = 4)
 	{
         // phpcs:enable
-		$pdf->SetDrawColor(192,192,192);
+		$pdf->SetDrawColor(192, 192, 192);
 
 		$pdf->SetLineWidth($epaisseur);
 		$lg=$taille/2;
 		// croix haut gauche
-		$pdf->Line($x1,$y1-$lg,$x1,$y1+$lg);
-		$pdf->Line($x1-$lg,$y1,$x1+$lg,$y1);
+		$pdf->Line($x1, $y1-$lg, $x1, $y1+$lg);
+		$pdf->Line($x1-$lg, $y1, $x1+$lg, $y1);
 		// croix bas gauche
-		$pdf->Line($x1,$y2-$lg,$x1,$y2+$lg);
-		$pdf->Line($x1-$lg,$y2,$x1+$lg,$y2);
+		$pdf->Line($x1, $y2-$lg, $x1, $y2+$lg);
+		$pdf->Line($x1-$lg, $y2, $x1+$lg, $y2);
 		// croix haut droit
-		$pdf->Line($x2,$y1-$lg,$x2,$y1+$lg);
-		$pdf->Line($x2-$lg,$y1,$x2+$lg,$y1);
+		$pdf->Line($x2, $y1-$lg, $x2, $y1+$lg);
+		$pdf->Line($x2-$lg, $y1, $x2+$lg, $y1);
 		// croix bas droit
-		$pdf->Line($x2,$y2-$lg,$x2,$y2+$lg);
-		$pdf->Line($x2-$lg,$y2,$x2+$lg,$y2);
+		$pdf->Line($x2, $y2-$lg, $x2, $y2+$lg);
+		$pdf->Line($x2-$lg, $y2, $x2+$lg, $y2);
 
-		$pdf->SetDrawColor(0,0,0);
+		$pdf->SetDrawColor(0, 0, 0);
 	}
 
 	/**

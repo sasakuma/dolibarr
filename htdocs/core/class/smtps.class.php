@@ -310,7 +310,7 @@ class SMTPs
      * @param	boolean		$_part		Variant
      * @return	string					Errors to
      */
-	function getErrorsTo($_part = true )
+	function getErrorsTo($_part = true)
 	{
 		$_retValue = '';
 
@@ -328,7 +328,7 @@ class SMTPs
 	 * @param	boolean		$_vDebug		Value for debug
 	 * @return 	void
 	 */
-	function setDebug($_vDebug = false )
+	function setDebug($_vDebug = false)
 	{
 		$this->_debug = $_vDebug;
 	}
@@ -360,11 +360,11 @@ class SMTPs
 		// This is done here because '@fsockopen' will not give me this
 		// information if it failes to connect because it can't find the HOST
 		$host=$this->getHost();
-		$usetls = preg_match('@tls://@i',$host);
+		$usetls = preg_match('@tls://@i', $host);
 
-		$host=preg_replace('@tcp://@i','',$host);	// Remove prefix
-		$host=preg_replace('@ssl://@i','',$host);	// Remove prefix
-		$host=preg_replace('@tls://@i','',$host);	// Remove prefix
+		$host=preg_replace('@tcp://@i', '', $host);	// Remove prefix
+		$host=preg_replace('@ssl://@i', '', $host);	// Remove prefix
+		$host=preg_replace('@tls://@i', '', $host);	// Remove prefix
 
 		// @CHANGE LDR
 		include_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
@@ -377,14 +377,13 @@ class SMTPs
 		else
 		{
 			//See if we can connect to the SMTP server
-			if ($this->socket = @fsockopen(
-    			preg_replace('@tls://@i','',$this->getHost()),       // Host to 'hit', IP or domain
+            if ($this->socket = @fsockopen(
+    			preg_replace('@tls://@i', '', $this->getHost()),       // Host to 'hit', IP or domain
     			$this->getPort(),       // which Port number to use
     			$this->errno,           // actual system level error
     			$this->errstr,          // and any text that goes with the error
-    			$this->_smtpTimeout
-			))  // timeout for reading/writing data over the socket
-			{
+    			$this->_smtpTimeout     // timeout for reading/writing data over the socket
+			)) {
 				// Fix from PHP SMTP class by 'Chris Ryan'
 				// Sometimes the SMTP server takes a little longer to respond
 				// so we will give it a longer timeout for the first read
@@ -423,11 +422,11 @@ class SMTPs
 		// This improvment as provided by 'SirSir' to
 		// accomodate both SMTP AND ESMTP capable servers
 		$host=$this->getHost();
-		$usetls = preg_match('@tls://@i',$host);
+		$usetls = preg_match('@tls://@i', $host);
 
-		$host=preg_replace('@tcp://@i','',$host);	// Remove prefix
-		$host=preg_replace('@ssl://@i','',$host);	// Remove prefix
-		$host=preg_replace('@tls://@i','',$host);	// Remove prefix
+		$host=preg_replace('@tcp://@i', '', $host);	// Remove prefix
+		$host=preg_replace('@ssl://@i', '', $host);	// Remove prefix
+		$host=preg_replace('@tls://@i', '', $host);	// Remove prefix
 
 		if ($usetls) $host='tls://'.$host;
 
@@ -549,11 +548,11 @@ class SMTPs
 			{
 				// Send the RFC821 specified HELO.
 				$host=$this->getHost();
-				$usetls = preg_match('@tls://@i',$host);
+				$usetls = preg_match('@tls://@i', $host);
 
-				$host=preg_replace('@tcp://@i','',$host);	// Remove prefix
-				$host=preg_replace('@ssl://@i','',$host);	// Remove prefix
-				$host=preg_replace('@tls://@i','',$host);	// Remove prefix
+				$host=preg_replace('@tcp://@i', '', $host);	// Remove prefix
+				$host=preg_replace('@ssl://@i', '', $host);	// Remove prefix
+				$host=preg_replace('@tls://@i', '', $host);	// Remove prefix
 
 				$hosth = $host;
 
@@ -580,7 +579,7 @@ class SMTPs
 				// 'RCPT TO:' must be given a single address, so this has to loop
 				// through the list of addresses, regardless of TO, CC or BCC
 				// and send it out "single file"
-				foreach ( $this->get_RCPT_list() as $_address )
+				foreach ($this->get_RCPT_list() as $_address)
 				{
 				    /* Note:
 				     * BCC email addresses must be listed in the RCPT TO command list,
@@ -990,7 +989,7 @@ class SMTPs
 		$aryHost = $this->_msgRecipients;
 
 		// Only run this if we have something
-		if ( !empty ($_addrList ))
+		if ( !empty ($_addrList))
 		{
 			// $_addrList can be a STRING or an array
 			if ( is_string($_addrList) )
@@ -1006,7 +1005,7 @@ class SMTPs
 			}
 
 			// take the array of addresses and split them further
-			foreach ( $_addrList as $_strAddr )
+			foreach ($_addrList as $_strAddr)
 			{
 				// Strip off the end '>'
 				$_strAddr = str_replace('>', '', $_strAddr);
@@ -1110,11 +1109,11 @@ class SMTPs
 		$_RCPT_list=array();
 
 		// walk down Recipients array and pull just email addresses
-		foreach ( $this->_msgRecipients as $_host => $_list )
+		foreach ($this->_msgRecipients as $_host => $_list)
 		{
-			foreach ( $_list as $_subList )
+			foreach ($_list as $_subList)
 			{
-				foreach ( $_subList as $_name => $_addr )
+				foreach ($_subList as $_name => $_addr)
 				{
 					// build RCPT list
 					$_RCPT_list[] = $_name . '@' . $_host;
@@ -1143,11 +1142,11 @@ class SMTPs
 			{
 				$_RCPT_list=array();
 				// walk down Recipients array and pull just email addresses
-				foreach ( $this->_msgRecipients as $_host => $_list )
+				foreach ($this->_msgRecipients as $_host => $_list)
 				{
 					if ( $this->_msgRecipients[$_host][$_which] )
 					{
-						foreach ( $this->_msgRecipients[$_host][$_which] as $_addr => $_realName )
+						foreach ($this->_msgRecipients[$_host][$_which] as $_addr => $_realName)
 						{
 							if ( $_realName )	// @CHANGE LDR
 							{
@@ -1292,11 +1291,11 @@ class SMTPs
         */
 
 		$host=$this->getHost();
-		$usetls = preg_match('@tls://@i',$host);
+		$usetls = preg_match('@tls://@i', $host);
 
-		$host=preg_replace('@tcp://@i','',$host);	// Remove prefix
-		$host=preg_replace('@ssl://@i','',$host);	// Remove prefix
-		$host=preg_replace('@tls://@i','',$host);	// Remove prefix
+		$host=preg_replace('@tcp://@i', '', $host);	// Remove prefix
+		$host=preg_replace('@ssl://@i', '', $host);	// Remove prefix
+		$host=preg_replace('@tls://@i', '', $host);	// Remove prefix
 
 		$host=dol_getprefix('email');
 
@@ -1370,7 +1369,7 @@ class SMTPs
 		if ($strType == 'html')
 		{
 			// Similar code to forge a text from html is also in CMailFile.class.php
-			$strContentAltText = preg_replace("/<br\s*[^>]*>/"," ", $strContent);
+			$strContentAltText = preg_replace("/<br\s*[^>]*>/", " ", $strContent);
 			$strContentAltText = html_entity_decode(strip_tags($strContentAltText));
 			$strContentAltText = rtrim(wordwrap($strContentAltText, 75, "\r\n"));
 		}
@@ -1413,7 +1412,7 @@ class SMTPs
 		die ("Sorry, no content");
 
 		// If we have ONE, we can use the simple format
-		else if( $keyCount === 1 && empty($conf->global->MAIN_MAIL_USE_MULTI_PART))
+		elseif( $keyCount === 1 && empty($conf->global->MAIN_MAIL_USE_MULTI_PART))
 		{
 			$_msgData = $this->_msgContent;
 			$_msgData = $_msgData[$_types[0]];
@@ -1431,7 +1430,7 @@ class SMTPs
 		}
 
 		// If we have more than ONE, we use the multi-part format
-		else if( $keyCount >= 1 || ! empty($conf->global->MAIN_MAIL_USE_MULTI_PART))
+		elseif( $keyCount >= 1 || ! empty($conf->global->MAIN_MAIL_USE_MULTI_PART))
 		{
 			// Since this is an actual multi-part message
 			// We need to define a content message Boundary
@@ -1459,12 +1458,12 @@ class SMTPs
 
 
 			// Loop through message content array
-			foreach ($this->_msgContent as $type => $_content )
+			foreach ($this->_msgContent as $type => $_content)
 			{
 				if ( $type == 'attachment' )
 				{
 					// loop through all attachments
-					foreach ( $_content as $_file => $_data )
+					foreach ($_content as $_file => $_data)
 					{
 						$content .= "--" . $this->_getBoundary('mixed') . "\r\n"
 						.  'Content-Disposition: attachment; filename="' . $_data['fileName'] . '"' . "\r\n"
@@ -1479,10 +1478,10 @@ class SMTPs
 					}
 				}
 				// @CHANGE LDR
-				else if ( $type == 'image' )
+				elseif ( $type == 'image' )
 				{
 					// loop through all images
-					foreach ( $_content as $_image => $_data )
+					foreach ($_content as $_image => $_data)
 					{
 						$content .= "--" . $this->_getBoundary('related') . "\r\n";  // always related for an inline image
 
@@ -1659,7 +1658,7 @@ class SMTPs
 	 * @param 	integer 	$_value 	Message Priority
 	 * @return 	void
 	 */
-	function setPriority( $_value = 3 )
+	function setPriority($_value = 3)
 	{
 		if ( ( is_numeric($_value) ) &&
 		( ( $_value >= 0 ) && ( $_value <= 5 ) ) )
@@ -1748,11 +1747,11 @@ class SMTPs
 	 * @param  string $type				Type of boundary
 	 * @return string $_smtpsBoundary 	MIME message Boundary
 	 */
-	function _getBoundary($type='mixed')
+	function _getBoundary($type = 'mixed')
 	{
 		if ($type == 'mixed') return $this->_smtpsBoundary;
-		else if ($type == 'related') return $this->_smtpsRelatedBoundary;
-		else if ($type == 'alternative') return $this->_smtpsAlternativeBoundary;
+		elseif ($type == 'related') return $this->_smtpsRelatedBoundary;
+		elseif ($type == 'alternative') return $this->_smtpsAlternativeBoundary;
 	}
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
@@ -1778,7 +1777,7 @@ class SMTPs
         // avoid infinite loop
         $limit=0;
 
-		while (substr($server_response,3,1) != ' ' && $limit<100)
+		while (substr($server_response, 3, 1) != ' ' && $limit<100)
 		{
 			if (! ($server_response = fgets($socket, 256)))
 			{
@@ -1807,7 +1806,7 @@ class SMTPs
 	 * @param 	string		$CRLF			CRLF
 	 * @return 	boolean|null						True or false
 	 */
-	function socket_send_str( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
+	function socket_send_str($_strSend, $_returnCode = null, $CRLF = "\r\n")
 	{
         // phpcs:enable
 		if ($this->_debug) $this->log.=$_strSend;	// @CHANGE LDR for log
@@ -1828,7 +1827,7 @@ class SMTPs
 	 * @param  string $_errMsg  Error Message
 	 * @return void
      */
-    function _setErr( $_errNum, $_errMsg )
+    function _setErr($_errNum, $_errMsg)
     {
         $this->_smtpsErrors[] = array(
             'num' => $_errNum,
@@ -1847,7 +1846,7 @@ class SMTPs
 
 		if (is_array($this->_smtpsErrors))
 		{
-			foreach ( $this->_smtpsErrors as $_err => $_info )
+			foreach ($this->_smtpsErrors as $_err => $_info)
 			{
 				$_errMsg[] = 'Error [' . $_info['num'] .']: '. $_info['msg'];
 			}

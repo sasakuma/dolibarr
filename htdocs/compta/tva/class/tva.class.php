@@ -1,7 +1,7 @@
 <?php
 /* Copyright (C) 2002-2003  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
  * Copyright (C) 2004-2008  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2011-2017  Alexandre Spangaro      <aspangaro@zendsi.com>
+ * Copyright (C) 2011-2017  Alexandre Spangaro      <aspangaro@open-dsi.fr>
  * Copyright (C) 2018       Philippe Grand          <philippe.grand@atoo-net.com>
  * Copyright (C) 2018       Frédéric France         <frederic.france@netlogic.fr>
  *
@@ -143,7 +143,7 @@ class Tva extends CommonObject
             $this->id = $this->db->last_insert_id(MAIN_DB_PREFIX."tva");
 
             // Call trigger
-            $result=$this->call_trigger('TVA_CREATE',$user);
+            $result=$this->call_trigger('TVA_CREATE', $user);
             if ($result < 0) $error++;
             // End call triggers
 
@@ -173,7 +173,7 @@ class Tva extends CommonObject
      * @param	int		$notrigger	    0=no, 1=yes (no update trigger)
      * @return  int         			<0 if KO, >0 if OK
      */
-    function update($user, $notrigger=0)
+    function update($user, $notrigger = 0)
     {
     	global $conf, $langs;
 
@@ -216,7 +216,7 @@ class Tva extends CommonObject
 		if (! $error && ! $notrigger)
 		{
             // Call trigger
-            $result=$this->call_trigger('TVA_MODIFY',$user);
+            $result=$this->call_trigger('TVA_MODIFY', $user);
             if ($result < 0) $error++;
             // End call triggers
     	}
@@ -241,7 +241,7 @@ class Tva extends CommonObject
      *  @param  User	$user       User that load
      *  @return int         		<0 if KO, >0 if OK
      */
-    function fetch($id, $user=null)
+    function fetch($id, $user = null)
     {
     	global $langs;
         $sql = "SELECT";
@@ -316,7 +316,7 @@ class Tva extends CommonObject
 		$error=0;
 
 		// Call trigger
-		$result=$this->call_trigger('TVA_DELETE',$user);
+		$result=$this->call_trigger('TVA_DELETE', $user);
 		if ($result < 0) return -1;
 		// End call triggers
 
@@ -528,22 +528,22 @@ class Tva extends CommonObject
         // Check parameters
 		if (! $this->label)
 		{
-			$this->error=$langs->trans("ErrorFieldRequired",$langs->transnoentities("Label"));
+			$this->error=$langs->trans("ErrorFieldRequired", $langs->transnoentities("Label"));
 			return -3;
 		}
         if ($this->amount == '')
         {
-            $this->error=$langs->trans("ErrorFieldRequired",$langs->transnoentities("Amount"));
+            $this->error=$langs->trans("ErrorFieldRequired", $langs->transnoentities("Amount"));
             return -4;
         }
         if (! empty($conf->banque->enabled) && (empty($this->accountid) || $this->accountid <= 0))
         {
-            $this->error=$langs->trans("ErrorFieldRequired",$langs->transnoentities("Account"));
+            $this->error=$langs->trans("ErrorFieldRequired", $langs->transnoentities("Account"));
             return -5;
         }
         if (! empty($conf->banque->enabled) && (empty($this->type_payment) || $this->type_payment <= 0))
         {
-            $this->error=$langs->trans("ErrorFieldRequired",$langs->transnoentities("PaymentMode"));
+            $this->error=$langs->trans("ErrorFieldRequired", $langs->transnoentities("PaymentMode"));
             return -5;
         }
 
@@ -583,7 +583,7 @@ class Tva extends CommonObject
 
             // Call trigger
             //XXX: Should be done just befor commit no ?
-            $result=$this->call_trigger('TVA_ADDPAYMENT',$user);
+            $result=$this->call_trigger('TVA_ADDPAYMENT', $user);
             if ($result < 0)
             {
             	$this->id = 0;
@@ -687,7 +687,7 @@ class Tva extends CommonObject
      *  @param	string	$morecss			More CSS
 	 *	@return	string					Chaine with URL
 	 */
-	function getNomUrl($withpicto=0, $option='', $notooltip=0, $morecss='')
+	function getNomUrl($withpicto = 0, $option = '', $notooltip = 0, $morecss = '')
 	{
 		global $langs, $conf;
 
@@ -813,9 +813,9 @@ class Tva extends CommonObject
 	 * @param	int		$mode       0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 * @return  string				Libelle
 	 */
-	function getLibStatut($mode=0)
+	function getLibStatut($mode = 0)
 	{
-	    return $this->LibStatut($this->statut,$mode);
+	    return $this->LibStatut($this->statut, $mode);
 	}
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
@@ -826,7 +826,7 @@ class Tva extends CommonObject
 	 * @param   int		$mode       0=libelle long, 1=libelle court, 2=Picto + Libelle court, 3=Picto, 4=Picto + Libelle long, 5=Libelle court + Picto
 	 * @return	string  		    Libelle du statut
 	 */
-    function LibStatut($status,$mode=0)
+    function LibStatut($status, $mode = 0)
     {
         // phpcs:enable
         global $langs;	// TODO Renvoyer le libelle anglais et faire traduction a affichage

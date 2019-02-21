@@ -1,5 +1,5 @@
 <?php
-/* Copyright (C) 2014-2018  Alexandre Spangaro   <aspangaro@zendsi.com>
+/* Copyright (C) 2014-2018  Alexandre Spangaro   <aspangaro@open-dsi.fr>
  * Copyright (C) 2015-2018  Frederic France      <frederic.france@netlogic.fr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -273,7 +273,7 @@ class PaymentLoan extends CommonObject
 	 *  @param  int		$notrigger	    0=launch triggers after, 1=disable triggers
 	 *  @return int         			<0 if KO, >0 if OK
 	 */
-	function update($user=0, $notrigger=0)
+	function update($user = 0, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -361,7 +361,7 @@ class PaymentLoan extends CommonObject
 	 *  @param  int		$notrigger		0=launch triggers after, 1=disable triggers
 	 *  @return int						<0 if KO, >0 if OK
 	 */
-	function delete($user, $notrigger=0)
+	function delete($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;
@@ -452,7 +452,7 @@ class PaymentLoan extends CommonObject
 			if ($mode == 'payment_loan') $total=-$total;
 
 			// Insert payment into llx_bank
-			$bank_line_id = $acc->addline(
+$bank_line_id = $acc->addline(
 				$this->datep,
 				$this->paymenttype,  // Payment mode id or code ("CHQ or VIR for example")
 				$label,
@@ -491,7 +491,7 @@ class PaymentLoan extends CommonObject
 				// Add link 'loan' in bank_url between invoice and bank transaction (for each invoice concerned by payment)
 				if ($mode == 'payment_loan')
 				{
-					$result=$acc->add_url_line($bank_line_id, $fk_loan, DOL_URL_ROOT.'/loan/card.php?id=', ($this->label?$this->label:''),'loan');
+					$result=$acc->add_url_line($bank_line_id, $fk_loan, DOL_URL_ROOT.'/loan/card.php?id=', ($this->label?$this->label:''), 'loan');
 					if ($result <= 0) dol_print_error($this->db);
 				}
 			}
@@ -529,6 +529,7 @@ class PaymentLoan extends CommonObject
 		$result = $this->db->query($sql);
 		if ($result)
 		{
+		    $this->fk_bank = $id_bank;
 			return 1;
 		}
 		else
@@ -545,7 +546,7 @@ class PaymentLoan extends CommonObject
 	 * 	@param	int		$maxlen			Max length label
 	 *	@return	string					Chaine with URL
 	 */
-	function getNomUrl($withpicto=0,$maxlen=0)
+	function getNomUrl($withpicto = 0, $maxlen = 0)
 	{
 		global $langs;
 
@@ -558,9 +559,9 @@ class PaymentLoan extends CommonObject
 			$link = '<a href="'.DOL_URL_ROOT.'/loan/payment/card.php?id='.$this->id.'">';
 			$linkend='</a>';
 
-			if ($withpicto) $result.=($link.img_object($langs->trans("ShowPayment").': '.$this->ref,'payment').$linkend.' ');
+			if ($withpicto) $result.=($link.img_object($langs->trans("ShowPayment").': '.$this->ref, 'payment').$linkend.' ');
 			if ($withpicto && $withpicto != 2) $result.=' ';
-			if ($withpicto != 2) $result.=$link.($maxlen?dol_trunc($this->ref,$maxlen):$this->ref).$linkend;
+			if ($withpicto != 2) $result.=$link.($maxlen?dol_trunc($this->ref, $maxlen):$this->ref).$linkend;
 		}
 
 		return $result;

@@ -73,7 +73,7 @@ class Import
 	 *  @param  	string	$filter		Load a particular dataset only. Index will start to 0.
  	 *  @return		int					<0 if KO, >0 if OK
 	 */
-	function load_arrays($user,$filter='')
+	function load_arrays($user, $filter = '')
 	{
         // phpcs:enable
 		global $langs,$conf;
@@ -94,13 +94,13 @@ class Import
 			// Search module files
 			while (($file = readdir($handle))!==false)
 			{
-				if (! preg_match("/^(mod.*)\.class\.php/i",$file,$reg)) continue;
+				if (! preg_match("/^(mod.*)\.class\.php/i", $file, $reg)) continue;
 
 				$modulename=$reg[1];
 
 				// Defined if module is enabled
 				$enabled=true;
-				$part=strtolower(preg_replace('/^mod/i','',$modulename));
+				$part=strtolower(preg_replace('/^mod/i', '', $modulename));
 				if (empty($conf->$part->enabled)) $enabled=false;
 
 				if (empty($enabled)) continue;
@@ -196,7 +196,7 @@ class Import
 	 *  @param		string	$datatoimport		Dataset to import
 	 *  @return		string						<0 if KO, >0 if OK
 	 */
-	function build_example_file($model, $headerlinefields, $contentlinevalues,$datatoimport)
+	function build_example_file($model, $headerlinefields, $contentlinevalues, $datatoimport)
 	{
         // phpcs:enable
 		global $conf,$langs;
@@ -210,7 +210,7 @@ class Import
 		$file = "import_".$model.".modules.php";
 		$classname = "Import".$model;
 		require_once $dir.$file;
-		$objmodel = new $classname($this->db,$datatoimport);
+		$objmodel = new $classname($this->db, $datatoimport);
 
 		$outputlangs=$langs;	// Lang for output
 		$s='';
@@ -219,10 +219,10 @@ class Import
 		$s.=$objmodel->write_header_example($outputlangs);
 
 		// Genere ligne de titre
-		$s.=$objmodel->write_title_example($outputlangs,$headerlinefields);
+		$s.=$objmodel->write_title_example($outputlangs, $headerlinefields);
 
 		// Genere ligne de titre
-		$s.=$objmodel->write_record_example($outputlangs,$contentlinevalues);
+		$s.=$objmodel->write_record_example($outputlangs, $contentlinevalues);
 
 		// Genere pied de page
 		$s.=$objmodel->write_footer_example($outputlangs);
@@ -316,7 +316,7 @@ class Import
 	 *  @param      int		$notrigger	    0=launch triggers after, 1=disable triggers
 	 *	@return		int						<0 if KO, >0 if OK
 	 */
-	function delete($user, $notrigger=0)
+	function delete($user, $notrigger = 0)
 	{
 		global $conf, $langs;
 		$error=0;

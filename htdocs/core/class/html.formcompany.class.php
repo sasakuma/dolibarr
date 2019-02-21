@@ -60,7 +60,7 @@ class FormCompany
 	 *      @param  string	$filter     Add a SQL filter to select
 	 *    	@return array      			Array of types
 	 */
-	function typent_array($mode=0, $filter='')
+	function typent_array($mode = 0, $filter = '')
 	{
         // phpcs:enable
 		global $langs,$mysoc;
@@ -103,7 +103,7 @@ class FormCompany
 	 *	@param  string	$filter     Add a SQL filter to select
 	 *  @return array				Array of types d'effectifs
 	 */
-	function effectif_array($mode=0, $filter='')
+	function effectif_array($mode = 0, $filter = '')
 	{
         // phpcs:enable
 		$effs = array();
@@ -145,7 +145,7 @@ class FormCompany
 	 *	@param	int		$empty			Add empty value in list
 	 *	@return	void
 	 */
-	function form_prospect_level($page, $selected='', $htmlname='prospect_level_id', $empty=0)
+	function form_prospect_level($page, $selected = '', $htmlname = 'prospect_level_id', $empty = 0)
 	{
         // phpcs:enable
 		global $user, $langs;
@@ -154,7 +154,7 @@ class FormCompany
 		print '<input type="hidden" name="action" value="setprospectlevel">';
 		print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 
-		dol_syslog(get_class($this).'::form_prospect_level',LOG_DEBUG);
+		dol_syslog(get_class($this).'::form_prospect_level', LOG_DEBUG);
 		$sql = "SELECT code, label";
 		$sql.= " FROM ".MAIN_DB_PREFIX."c_prospectlevel";
 		$sql.= " WHERE active > 0";
@@ -181,7 +181,7 @@ class FormCompany
 			print Form::selectarray($htmlname, $options, $selected);
 		}
 		else dol_print_error($this->db);
-		if (! empty($htmlname) && $user->admin) print ' '.info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"),1);
+		if (! empty($htmlname) && $user->admin) print ' '.info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);
 		print '<input type="submit" class="button valignmiddle" value="'.$langs->trans("Modify").'">';
 		print '</form>';
 	}
@@ -199,10 +199,10 @@ class FormCompany
 	 *   @param     string	$htmlname			Id of department
 	 *   @return	void
 	 */
-	function select_departement($selected='',$country_codeid=0, $htmlname='state_id')
+	function select_departement($selected = '', $country_codeid = 0, $htmlname = 'state_id')
 	{
         // phpcs:enable
-		print $this->select_state($selected,$country_codeid, $htmlname);
+		print $this->select_state($selected, $country_codeid, $htmlname);
 	}
 
     // phpcs:disable PEAR.NamingConventions.ValidFunctionName.NotCamelCaps
@@ -219,12 +219,12 @@ class FormCompany
 	 * 	  @return	string						String with HTML select
 	 *    @see select_country
 	 */
-	function select_state($selected='',$country_codeid=0, $htmlname='state_id')
+	function select_state($selected = '', $country_codeid = 0, $htmlname = 'state_id')
 	{
         // phpcs:enable
 		global $conf,$langs,$user;
 
-		dol_syslog(get_class($this)."::select_departement selected=".$selected.", country_codeid=".$country_codeid,LOG_DEBUG);
+		dol_syslog(get_class($this)."::select_departement selected=".$selected.", country_codeid=".$country_codeid, LOG_DEBUG);
 
 		$langs->load("dict");
 
@@ -246,7 +246,7 @@ class FormCompany
 			if ($country_codeid) $out.= '<option value="0">&nbsp;</option>';
 			$num = $this->db->num_rows($result);
 			$i = 0;
-			dol_syslog(get_class($this)."::select_departement num=".$num,LOG_DEBUG);
+			dol_syslog(get_class($this)."::select_departement num=".$num, LOG_DEBUG);
 			if ($num)
 			{
 				$country='';
@@ -303,7 +303,7 @@ class FormCompany
 				}
 			}
 			if (! empty($htmlname)) $out.= '</select>';
-			if (! empty($htmlname) && $user->admin) $out.= ' '.info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"),1);
+			if (! empty($htmlname) && $user->admin) $out.= ' '.info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);
 		}
 		else
 		{
@@ -332,7 +332,7 @@ class FormCompany
 	 *   @param		string		$htmlname		Name of HTML select field
 	 *   @return	void
 	 */
-	function select_region($selected='',$htmlname='region_id')
+	function select_region($selected = '', $htmlname = 'region_id')
 	{
         // phpcs:enable
 		global $conf,$langs;
@@ -398,7 +398,7 @@ class FormCompany
 	 *  @param  string  $morecss        Add more css on SELECT element
 	 *  @return	string					String with HTML select
 	 */
-	function select_civility($selected='',$htmlname='civility_id',$morecss='maxwidth100')
+	function select_civility($selected = '', $htmlname = 'civility_id', $morecss = 'maxwidth100')
 	{
         // phpcs:enable
 		global $conf,$langs,$user;
@@ -437,7 +437,7 @@ class FormCompany
 				}
 			}
 			$out.= '</select>';
-			if ($user->admin) $out.= info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"),1);
+			if ($user->admin) $out.= info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);
 		}
 		else
 		{
@@ -459,7 +459,7 @@ class FormCompany
 	 *    @deprecated Use print xxx->select_juridicalstatus instead
 	 *    @see select_juridicalstatus()
 	 */
-	function select_forme_juridique($selected='', $country_codeid=0, $filter='')
+	function select_forme_juridique($selected = '', $country_codeid = 0, $filter = '')
 	{
         // phpcs:enable
 		print $this->select_juridicalstatus($selected, $country_codeid, $filter);
@@ -476,7 +476,7 @@ class FormCompany
      *    @param	string		$htmlname			HTML name of select
      *    @return	string							String with HTML select
 	 */
-	function select_juridicalstatus($selected='', $country_codeid=0, $filter='', $htmlname='forme_juridique_code')
+	function select_juridicalstatus($selected = '', $country_codeid = 0, $filter = '', $htmlname = 'forme_juridique_code')
 	{
         // phpcs:enable
 		global $conf,$langs,$user;
@@ -551,7 +551,7 @@ class FormCompany
 				}
 			}
 			$out.= '</select>';
-			if ($user->admin) $out.= ' '.info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"),1);
+			if ($user->admin) $out.= ' '.info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);
 
 		    // Make select dynamic
         	include_once DOL_DOCUMENT_ROOT . '/core/lib/ajax.lib.php';
@@ -581,7 +581,7 @@ class FormCompany
      *  @param	string		$morecss		More CSS on select component
 	 * 	@return int 						The selected third party ID
 	 */
-	function selectCompaniesForNewContact($object, $var_id, $selected='', $htmlname='newcompany', $limitto='', $forceid=0, $moreparam='', $morecss='')
+	function selectCompaniesForNewContact($object, $var_id, $selected = '', $htmlname = 'newcompany', $limitto = '', $forceid = 0, $moreparam = '', $morecss = '')
 	{
 		global $conf, $langs;
 
@@ -609,7 +609,7 @@ class FormCompany
 			// Add an entry htmlname to say which element we must change once url is called
 			// Add entry params => array('cssid' => 'attr') to say to remov or add attribute attr if answer of url return  0 or >0 lines
 			// To refresh contacts list on thirdparty list change
-			$events[]=array('method' => 'getContacts', 'url' => dol_buildpath('/core/ajax/contacts.php',1), 'htmlname' => 'contactid', 'params' => array('add-customer-contact' => 'disabled'));
+			$events[]=array('method' => 'getContacts', 'url' => dol_buildpath('/core/ajax/contacts.php', 1), 'htmlname' => 'contactid', 'params' => array('add-customer-contact' => 'disabled'));
 
 			if (count($events))	// If there is some ajax events to run once selection is done, we add code here to run events
 			{
@@ -622,8 +622,8 @@ class FormCompany
 								runJsCodeForEvent'.$htmlname.'(values);
 							}
 						});
-						/* Clean contact */
-						$("div#s2id_contactid>a>span").html(\'\');
+
+						$(this).trigger("blur");
 					});
 
 					// Function used to execute events when search_htmlname change
@@ -677,7 +677,7 @@ class FormCompany
 			// For ajax search we limit here. For combo list, we limit later
 			if (is_array($limitto) && count($limitto))
 			{
-				$sql.= " AND s.rowid IN (".join(',',$limitto).")";
+				$sql.= " AND s.rowid IN (".join(',', $limitto).")";
 			}
 			$sql.= " ORDER BY s.nom ASC";
 
@@ -700,19 +700,19 @@ class FormCompany
 						$obj = $this->db->fetch_object($resql);
 						if ($i == 0) $firstCompany = $obj->rowid;
 						$disabled=0;
-						if (is_array($limitto) && count($limitto) && ! in_array($obj->rowid,$limitto)) $disabled=1;
+						if (is_array($limitto) && count($limitto) && ! in_array($obj->rowid, $limitto)) $disabled=1;
 						if ($selected > 0 && $selected == $obj->rowid)
 						{
 							print '<option value="'.$obj->rowid.'"';
 							if ($disabled) print ' disabled';
-							print ' selected>'.dol_trunc($obj->name,24).'</option>';
+							print ' selected>'.dol_trunc($obj->name, 24).'</option>';
 							$firstCompany = $obj->rowid;
 						}
 						else
 						{
 							print '<option value="'.$obj->rowid.'"';
 							if ($disabled) print ' disabled';
-							print '>'.dol_trunc($obj->name,24).'</option>';
+							print '>'.dol_trunc($obj->name, 24).'</option>';
 						}
 						$i ++;
 					}
@@ -740,7 +740,7 @@ class FormCompany
      *  @param  string      $morecss        Add more css to select component
      *  @return	void
      */
-	function selectTypeContact($object, $selected, $htmlname = 'type', $source='internal', $sortorder='position', $showempty=0, $morecss='')
+	function selectTypeContact($object, $selected, $htmlname = 'type', $source = 'internal', $sortorder = 'position', $showempty = 0, $morecss = '')
 	{
 	    global $user, $langs;
 
@@ -756,7 +756,10 @@ class FormCompany
 				print '>'.$value.'</option>';
 			}
 			print "</select>";
-			if ($user->admin) print ' '.info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"),1);
+			if ($user->admin) print ' '.info_admin($langs->trans("YouCanChangeValuesForThisListFromDictionarySetup"), 1);
+
+			print ajax_combobox($htmlname);
+
 			print "\n";
 		}
 	}
@@ -774,7 +777,7 @@ class FormCompany
 	 *    @param    string      $morecss                More css
 	 *    @return	string
 	 */
-	function select_ziptown($selected='', $htmlname='zipcode', $fields='', $fieldsize=0, $disableautocomplete=0, $moreattrib='',$morecss='')
+	function select_ziptown($selected = '', $htmlname = 'zipcode', $fields = '', $fieldsize = 0, $disableautocomplete = 0, $moreattrib = '', $morecss = '')
 	{
         // phpcs:enable
 		global $conf;
@@ -786,7 +789,7 @@ class FormCompany
 
 		if ($conf->use_javascript_ajax && empty($disableautocomplete))
 		{
-			$out.= ajax_multiautocompleter($htmlname,$fields,DOL_URL_ROOT.'/core/ajax/ziptown.php')."\n";
+			$out.= ajax_multiautocompleter($htmlname, $fields, DOL_URL_ROOT.'/core/ajax/ziptown.php')."\n";
 			$moreattrib.=' autocomplete="off"';
 		}
 		$out.= '<input id="'.$htmlname.'" class="maxwidthonsmartphone'.($morecss?' '.$morecss:'').'" type="text"'.($moreattrib?' '.$moreattrib:'').' name="'.$htmlname.'" '.$size.' value="'.$selected.'">'."\n";
@@ -805,7 +808,7 @@ class FormCompany
      *  @param  string  $morecss        More css
      *  @return	string					HTML string with prof id
      */
-    function get_input_id_prof($idprof,$htmlname,$preselected,$country_code,$morecss='maxwidth100onsmartphone quatrevingtpercent')
+    function get_input_id_prof($idprof, $htmlname, $preselected, $country_code, $morecss = 'maxwidth100onsmartphone quatrevingtpercent')
     {
         // phpcs:enable
         global $conf,$langs;
@@ -816,12 +819,12 @@ class FormCompany
         	{
         		if (isset($idprof)) {
         			if ($idprof==1) $formlength=9;
-        			else if ($idprof==2) $formlength=14;
-        			else if ($idprof==3) $formlength=5;      // 4 chiffres et 1 lettre depuis janvier
-        			else if ($idprof==4) $formlength=32;     // No maximum as we need to include a town name in this id
+        			elseif ($idprof==2) $formlength=14;
+        			elseif ($idprof==3) $formlength=5;      // 4 chiffres et 1 lettre depuis janvier
+        			elseif ($idprof==4) $formlength=32;     // No maximum as we need to include a town name in this id
         		}
         	}
-        	else if ($country_code == 'ES')
+        	elseif ($country_code == 'ES')
         	{
         		if ($idprof==1) $formlength=9;  //CIF/NIF/NIE 9 digits
         		if ($idprof==2) $formlength=12; //NASS 12 digits without /
@@ -833,9 +836,9 @@ class FormCompany
         $selected=$preselected;
         if (! $selected && isset($idprof)) {
         	if ($idprof==1 && ! empty($this->idprof1)) $selected=$this->idprof1;
-        	else if ($idprof==2 && ! empty($this->idprof2)) $selected=$this->idprof2;
-        	else if ($idprof==3 && ! empty($this->idprof3)) $selected=$this->idprof3;
-        	else if ($idprof==4 && ! empty($this->idprof4)) $selected=$this->idprof4;
+        	elseif ($idprof==2 && ! empty($this->idprof2)) $selected=$this->idprof2;
+        	elseif ($idprof==3 && ! empty($this->idprof3)) $selected=$this->idprof3;
+        	elseif ($idprof==4 && ! empty($this->idprof4)) $selected=$this->idprof4;
         }
 
         $maxlength=$formlength;
@@ -887,5 +890,56 @@ class FormCompany
     			print'</select>';
     		}
     	}
+    }
+
+    /**
+     * Return a HTML select for thirdparty type
+     *
+     * @param int $selected selected value
+     * @param string $htmlname HTML select name
+     * @param string $htmlidname HTML select id
+     * @param string $typeinput HTML output
+     * @param string $morecss More css
+     * @return string HTML string
+     */
+    function selectProspectCustomerType($selected, $htmlname = 'client', $htmlidname = 'customerprospect', $typeinput = 'form', $morecss = '')
+    {
+
+    	global $conf,$langs;
+
+    	$out = '<select class="flat '.$morecss.'" name="'.$htmlname.'" id="'.$htmlidname.'">';
+    	if ($typeinput=='form') {
+	    	if ($selected == '') $out .= '<option value="-1">&nbsp;</option>';
+	    	if (empty($conf->global->SOCIETE_DISABLE_PROSPECTS)) {
+	    		$out .= '<option value="2"'.($selected==2?' selected':'').'>'.$langs->trans('Prospect').'</option>';
+	    	}
+	    	if (empty($conf->global->SOCIETE_DISABLE_PROSPECTS) && empty($conf->global->SOCIETE_DISABLE_CUSTOMERS) && empty($conf->global->SOCIETE_DISABLE_PROSPECTSCUSTOMERS)) {
+	    		$out .= '<option value="3"'.($selected==3?' selected':'').'>'.$langs->trans('ProspectCustomer').'</option>';
+	    	}
+	    	if (empty($conf->global->SOCIETE_DISABLE_CUSTOMERS)) {
+	    		$out .= '<option value="1"'.($selected==1?' selected':'').'>'.$langs->trans('Customer').'</option>';
+	    	}
+	    	$out .= '<option value="0"'.((string) $selected == '0'?' selected':'').'>'.$langs->trans('NorProspectNorCustomer').'</option>';
+    	} elseif ($typeinput=='list') {
+    		$out .=  '<option value="-1"'.($selected==''?' selected':'').'>&nbsp;</option>';
+    		if (empty($conf->global->SOCIETE_DISABLE_CUSTOMERS)) {
+    			$out .=  '<option value="1,3"'.($selected=='1,3'?' selected':'').'>'.$langs->trans('Customer').'</option>';
+    		}
+    		if (empty($conf->global->SOCIETE_DISABLE_PROSPECTS)) {
+    			$out .=  '<option value="2,3"'.($selected=='2,3'?' selected':'').'>'.$langs->trans('Prospect').'</option>';
+    		}
+    		$out .=  '<option value="4"'.($selected=='4'?' selected':'').'>'.$langs->trans('Supplier').'</option>';
+    		$out .=  '<option value="0"'.($selected=='0'?' selected':'').'>'.$langs->trans('Others').'</option>';
+    	} elseif ($typeinput=='admin') {
+    		if (empty($conf->global->SOCIETE_DISABLE_PROSPECTS) && empty($conf->global->SOCIETE_DISABLE_CUSTOMERS) && empty($conf->global->SOCIETE_DISABLE_PROSPECTSCUSTOMERS)) {
+    			$out .= '<option value="3"'.($selected==3?' selected':'').'>'.$langs->trans('ProspectCustomer').'</option>';
+    		}
+    		if (empty($conf->global->SOCIETE_DISABLE_CUSTOMERS)) {
+    			$out .= '<option value="1"'.($selected==1?' selected':'').'>'.$langs->trans('Customer').'</option>';
+    		}
+    	}
+    	$out .= '</select>';
+
+    	return $out;
     }
 }

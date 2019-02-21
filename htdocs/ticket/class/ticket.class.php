@@ -183,23 +183,23 @@ class Ticket extends CommonObject
     	'ref' => array('type'=>'varchar(128)', 'label'=>'Ref', 'visible'=>1, 'enabled'=>1, 'position'=>10, 'notnull'=>1, 'index'=>1, 'searchall'=>1, 'comment'=>"Reference of object", 'css'=>''),
 	    'track_id' => array('type'=>'varchar(255)', 'label'=>'TrackID', 'visible'=>0, 'enabled'=>1, 'position'=>11, 'notnull'=>-1, 'searchall'=>1, 'help'=>"Help text"),
 	    'fk_user_create' => array('type'=>'integer:User:user/class/user.class.php', 'label'=>'Author', 'visible'=>1, 'enabled'=>1, 'position'=>15, 'notnull'=>1, 'css'=>'nowraponall'),
-    	'origin_email' => array('type'=>'mail', 'label'=>'OriginEmail', 'visible'=>1, 'enabled'=>1, 'position'=>16, 'notnull'=>1, 'index'=>1, 'searchall'=>1, 'comment'=>"Reference of object"),
+    	'origin_email' => array('type'=>'mail', 'label'=>'OriginEmail', 'visible'=>-2, 'enabled'=>1, 'position'=>16, 'notnull'=>1, 'index'=>1, 'searchall'=>1, 'comment'=>"Reference of object"),
     	'subject' => array('type'=>'varchar(255)', 'label'=>'Subject', 'visible'=>1, 'enabled'=>1, 'position'=>18, 'notnull'=>-1, 'searchall'=>1, 'help'=>""),
     	'type_code' => array('type'=>'varchar(32)', 'label'=>'Type', 'visible'=>1, 'enabled'=>1, 'position'=>20, 'notnull'=>-1, 'searchall'=>1, 'help'=>"", 'css'=>'maxwidth100'),
-    	'category_code' => array('type'=>'varchar(32)', 'label'=>'Category', 'visible'=>1, 'enabled'=>1, 'position'=>21, 'notnull'=>-1, 'searchall'=>1, 'help'=>"", 'css'=>'maxwidth100'),
+    	'category_code' => array('type'=>'varchar(32)', 'label'=>'Category', 'visible'=>-1, 'enabled'=>1, 'position'=>21, 'notnull'=>-1, 'searchall'=>1, 'help'=>"", 'css'=>'maxwidth100'),
 	    'severity_code' => array('type'=>'varchar(32)', 'label'=>'Severity', 'visible'=>1, 'enabled'=>1, 'position'=>22, 'notnull'=>-1, 'searchall'=>1, 'help'=>"", 'css'=>'maxwidth100'),
     	'fk_soc' => array('type'=>'integer:Societe:societe/class/societe.class.php', 'label'=>'ThirdParty', 'visible'=>1, 'enabled'=>1, 'position'=>50, 'notnull'=>-1, 'index'=>1, 'searchall'=>1, 'help'=>"LinkToThirparty"),
-	    'notify_tiers_at_create' => array('type'=>'integer', 'label'=>'NotifyThirdparty', 'visible'=>-2, 'enabled'=>0, 'position'=>51, 'notnull'=>1, 'index'=>1),
-    	'fk_project' => array('type'=>'integer:Project:projet/class/project.class.php', 'label'=>'Project', 'visible'=>1, 'enabled'=>1, 'position'=>52, 'notnull'=>-1, 'index'=>1, 'searchall'=>1, 'help'=>"LinkToProject"),
-        'fk_user_assign' => array('type'=>'integer:User:user/class/user.class.php', 'label'=>'AssignedTo', 'visible'=>1, 'enabled'=>1, 'position'=>510, 'notnull'=>1),
-        'message' => array('type'=>'text', 'label'=>'Message', 'visible'=>-2, 'enabled'=>1, 'position'=>60, 'notnull'=>-1,),
-        'progress' => array('type'=>'varchar(100)', 'label'=>'Progression', 'visible'=>1, 'enabled'=>1, 'position'=>41, 'notnull'=>-1, 'searchall'=>1, 'css'=>'right', 'help'=>""),
+	    'notify_tiers_at_create' => array('type'=>'integer', 'label'=>'NotifyThirdparty', 'visible'=>-1, 'enabled'=>0, 'position'=>51, 'notnull'=>1, 'index'=>1),
+    	'fk_project' => array('type'=>'integer:Project:projet/class/project.class.php', 'label'=>'Project', 'visible'=>-1, 'enabled'=>1, 'position'=>52, 'notnull'=>-1, 'index'=>1, 'searchall'=>1, 'help'=>"LinkToProject"),
         'timing' => array('type'=>'varchar(20)', 'label'=>'Timing', 'visible'=>-1, 'enabled'=>1, 'position'=>42, 'notnull'=>-1, 'searchall'=>1, 'help'=>""),
-        'datec' => array('type'=>'datetime', 'label'=>'DateCreation', 'visible'=>-2, 'enabled'=>1, 'position'=>500, 'notnull'=>1),
-        'date_read' => array('type'=>'datetime', 'label'=>'TicketReadOn', 'visible'=>-2, 'enabled'=>1, 'position'=>500, 'notnull'=>1),
-        'date_close' => array('type'=>'datetime', 'label'=>'TicketCloseOn', 'visible'=>-2, 'enabled'=>1, 'position'=>500, 'notnull'=>1),
-        'tms' => array('type'=>'timestamp', 'label'=>'DateModification', 'visible'=>-2, 'enabled'=>1, 'position'=>501, 'notnull'=>1),
-	    'resolution' => array('type'=>'integer', 'label'=>'Resolution', 'visible'=>-2, 'enabled'=>1, 'position'=>550, 'notnull'=>1),
+        'datec' => array('type'=>'datetime', 'label'=>'DateCreation', 'visible'=>1, 'enabled'=>1, 'position'=>500, 'notnull'=>1),
+        'date_read' => array('type'=>'datetime', 'label'=>'TicketReadOn', 'visible'=>1, 'enabled'=>1, 'position'=>500, 'notnull'=>1),
+        'fk_user_assign' => array('type'=>'integer:User:user/class/user.class.php', 'label'=>'AssignedTo', 'visible'=>1, 'enabled'=>1, 'position'=>505, 'notnull'=>1),
+        'date_close' => array('type'=>'datetime', 'label'=>'TicketCloseOn', 'visible'=>1, 'enabled'=>1, 'position'=>510, 'notnull'=>1),
+        'tms' => array('type'=>'timestamp', 'label'=>'DateModification', 'visible'=>-1, 'enabled'=>1, 'position'=>520, 'notnull'=>1),
+        'message' => array('type'=>'text', 'label'=>'Message', 'visible'=>-2, 'enabled'=>1, 'position'=>540, 'notnull'=>-1,),
+        'progress' => array('type'=>'varchar(100)', 'label'=>'Progression', 'visible'=>-1, 'enabled'=>1, 'position'=>540, 'notnull'=>-1, 'searchall'=>1, 'css'=>'right', 'help'=>""),
+        'resolution' => array('type'=>'integer', 'label'=>'Resolution', 'visible'=>-1, 'enabled'=>1, 'position'=>550, 'notnull'=>1),
     	'fk_statut' => array('type'=>'integer', 'label'=>'Status', 'visible'=>1, 'enabled'=>1, 'position'=>600, 'notnull'=>1, 'index'=>1, 'arrayofkeyval'=>array(0 => 'Unread', 1 => 'Read', 3 => 'Answered', 4 => 'Assigned', 5 => 'InProgress', 6 => 'Waiting', 8 => 'Closed', 9 => 'Deleted'))
     );
 
@@ -902,11 +902,6 @@ class Ticket extends CommonObject
         }
 
         if (!$error) {
-        	$sql = "DELETE FROM " . MAIN_DB_PREFIX . "ticket_logs";
-        	$sql .= " WHERE fk_track_id = '" . $this->db->escape($this->track_id) . "'";
-        	$resql = $this->db->query($sql);
-        }
-        if (!$error) {
         	$sql = "DELETE FROM " . MAIN_DB_PREFIX . "ticket_msg";
         	$sql .= " WHERE fk_track_id = '" . $this->db->escape($this->track_id) . "'";
         	$resql = $this->db->query($sql);
@@ -971,6 +966,7 @@ class Ticket extends CommonObject
         // Clear fields
         // ...
         // Create clone
+        $object->context['createfromclone'] = 'createfromclone';
         $result = $object->create($user);
 
         // Other options
@@ -981,6 +977,8 @@ class Ticket extends CommonObject
 
         if (!$error) {
         }
+
+        unset($object->context['createfromclone']);
 
         // End
         if (!$error) {
@@ -1033,6 +1031,8 @@ class Ticket extends CommonObject
     {
         print Form::selectarray('search_fk_statut', $this->statuts_short, $selected, $show_empty = 1, $key_in_label = 0, $value_as_key = 0, $option = '', $translate = 1, $maxlen = 0, $disabled = 0, $sort = '', $morecss = '');
     }
+
+
     /**
      *      Charge dans cache la liste des types de tickets (paramétrable dans dictionnaire)
      *
@@ -1331,7 +1331,7 @@ class Ticket extends CommonObject
      *  @param  int     $save_lastsearch_value    	-1=Auto, 0=No save of lastsearch_values when clicking, 1=Save lastsearch_values whenclicking
      *	@return	string								String with URL
      */
-    function getNomUrl($withpicto=0, $option='', $notooltip=0, $morecss='', $save_lastsearch_value=-1)
+    function getNomUrl($withpicto = 0, $option = '', $notooltip = 0, $morecss = '', $save_lastsearch_value = -1)
     {
     	global $db, $conf, $langs;
     	global $dolibarr_main_authentication, $dolibarr_main_demo;
@@ -1348,13 +1348,13 @@ class Ticket extends CommonObject
     	$label.= '<b>' . $langs->trans('TicketTrackId') . ':</b> ' . $this->track_id.'<br>';
     	$label.= '<b>' . $langs->trans('Subject') . ':</b> ' . $this->subject;
 
-    	$url = dol_buildpath('/ticket/card.php',1).'?id='.$this->id;
+    	$url = dol_buildpath('/ticket/card.php', 1).'?id='.$this->id;
 
     	if ($option != 'nolink')
     	{
     		// Add param to save lastsearch_values or not
     		$add_save_lastsearch_values=($save_lastsearch_value == 1 ? 1 : 0);
-    		if ($save_lastsearch_value == -1 && preg_match('/list\.php/',$_SERVER["PHP_SELF"])) $add_save_lastsearch_values=1;
+    		if ($save_lastsearch_value == -1 && preg_match('/list\.php/', $_SERVER["PHP_SELF"])) $add_save_lastsearch_values=1;
     		if ($add_save_lastsearch_values) $url.='&save_lastsearch_values=1';
     	}
 
@@ -1668,7 +1668,7 @@ class Ticket extends CommonObject
             dol_syslog(get_class($this) . "::loadCacheLogsTicket " . $this->error, LOG_ERR);
             return -1;
         }*/
-        
+
         return 0;
     }
 

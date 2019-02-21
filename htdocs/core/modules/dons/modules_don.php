@@ -47,7 +47,7 @@ abstract class ModeleDon extends CommonDocGenerator
      *  @param  integer $maxfilenamelength  Max length of value to show
      *  @return	array						List of templates
      */
-    static function liste_modeles($db,$maxfilenamelength=0)
+    static function liste_modeles($db, $maxfilenamelength = 0)
     {
         // phpcs:enable
         global $conf;
@@ -56,7 +56,7 @@ abstract class ModeleDon extends CommonDocGenerator
         $liste=array();
 
         include_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
-        $liste=getListOfModels($db,$type,$maxfilenamelength);
+        $liste=getListOfModels($db, $type, $maxfilenamelength);
 
         return $liste;
     }
